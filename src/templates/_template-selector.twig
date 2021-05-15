@@ -1,0 +1,25 @@
+<div class="sp-template-selector">
+    {% for template in templates %}
+        <input
+            type="radio"
+            name="{{ field.handle }}"
+            value="{{ template.id }}"
+            id="preview-template-{{ template.id }}"
+            {{ template.id == value ? 'checked' : '' }}
+        >
+    {% endfor %}
+    <ul>
+        {% for template in templates %}
+            <li>
+                <label for="preview-template-{{ template.id }}">
+                    <span class="image-wrapper">
+                        <img src="{{ template.preview }}" alt="" />
+                    </span>
+                    <span class="name">
+                        {{ template.name }}
+                    </span>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
