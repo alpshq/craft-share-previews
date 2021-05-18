@@ -3,6 +3,9 @@
 namespace alps\sharepreviews;
 
 use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
+use alps\sharepreviews\models\Image;
+use alps\sharepreviews\services\ImageDiffer;
+use alps\sharepreviews\services\Urls;
 use Craft;
 use craft\base\Plugin;
 use craft\elements\Entry;
@@ -28,12 +31,14 @@ use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
 
 /**
- * @property-read Settings $settings
- * @property-read FileHandler   $fileHandler
- * @property-read FontFetcher   $fontFetcher
- * @property-read Images   $images
- * @property-read Renderer   $renderer
+ * @property-read Settings    $settings
+ * @property-read FileHandler $fileHandler
+ * @property-read FontFetcher $fontFetcher
+ * @property-read Images      $images
+ * @property-read Renderer    $renderer
  * @property-read Templates   $templates
+ * @property-read ImageDiffer $imageDiffer
+ * @property-read Urls $urls
  * @method Settings getSettings
  */
 class SharePreviews extends Plugin
@@ -50,6 +55,8 @@ class SharePreviews extends Plugin
             'images' => Images::class,
             'renderer' => Renderer::class,
             'templates' => Templates::class,
+            'imageDiffer' => ImageDiffer::class,
+            'urls' => Urls::class,
         ]);
 
         $this

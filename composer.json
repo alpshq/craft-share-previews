@@ -17,6 +17,7 @@
     "docs": "https://github.com/alpshq/craft-share-preview/blob/master/README.md"
   },
   "require": {
+    "ext-json": "*",
     "craftcms/cms": "^3.1.0",
     "illuminate/collections": "^8.0.0"
   },

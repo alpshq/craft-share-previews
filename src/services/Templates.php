@@ -2,6 +2,13 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\models\ColorLayer;
+use alps\sharepreviews\models\GradientLayer;
+use alps\sharepreviews\models\Image;
+use alps\sharepreviews\models\ImageLayer;
+use alps\sharepreviews\models\LineLayer;
+use alps\sharepreviews\models\TextLayer;
+use Craft;
 use craft\elements\Asset;
 use craft\elements\Entry;
 use alps\sharepreviews\Config;
@@ -15,65 +22,7 @@ class Templates extends Component
     {
         return [
             1 => 'Variant A',
-            2 => 'Variant B',
-            3 => 'Variant C',
         ];
-    }
-
-    public function hasImage(int $templateId): bool
-    {
-        return $templateId !== 3;
-    }
-
-    public function applyTemplateConfig(int $templateId, Config $config): Config
-    {
-        if ($templateId === 1) {
-            return $config->setFromArray([
-                'contentPadding' => [
-                    'left' => 40,
-                    'top' => 40,
-                    'right' => 475,
-                    'bottom' => 180,
-                ],
-                'imagePadding' => [
-                    'left' => 755,
-                    'top' => 40,
-                    'right' => 40,
-                    'bottom' => 180,
-                ],
-                'backgroundImagePath' => 'share-previews/1.png',
-                'font' => [
-                    'color' => [255,255,255],
-                    'size' => 55,
-                ],
-            ]);
-        }
-
-        if ($templateId === 2) {
-            return $config->setFromArray([
-                'contentPadding' => [
-                    'left' => 70,
-                    'top' => 175,
-                    'right' => 530,
-                    'bottom' => 240,
-                ],
-                'backgroundImagePath' => 'share-previews/2.png',
-            ]);
-        }
-
-        if ($templateId === 3) {
-            return $config->setFromArray([
-                'contentPadding' => [
-                    'left' => 70,
-                    'top' => 185,
-                    'right' => 70,
-                    'bottom' => 280,
-                ],
-                'backgroundImagePath' => 'share-previews/3.png',
-            ]);
-        }
-
-        return $config;
     }
 
     public function isValidTemplateId(?int $id): bool
@@ -89,14 +38,75 @@ class Templates extends Component
         return in_array($id, $templateIds);
     }
 
-    public function getTemplateIdFromEntry(Entry $entry): int
+    public function getDefaultTemplate(): Image
     {
-        $id = (int) $entry->previewTemplateId;
+        return $this->getTemplate(self::DEFAULT_TEMPLATE_ID);
+    }
 
-        if ($this->isValidTemplateId($id)) {
-            return $id;
+    public function getTemplateOrDefault(?int $id): Image
+    {
+        if ($id === null) {
+            return $this->getDefaultTemplate();
         }
 
-        return self::DEFAULT_TEMPLATE_ID;
+        return $this->getTemplate($id) ?? $this->getDefaultTemplate();
+    }
+
+    public function getTemplate(int $id): ?Image
+    {
+        if ($id !== 1) {
+            return null;
+        }
+
+        $layers = [
+            new GradientLayer([
+                'from' => [195,130,250],
+                'to' => [240,70,70],
+                'angle' => 45,
+            ]),
+            new LineLayer([
+                'color' => [255,255,255,0.5],
+                'from' => [40, 630-150],
+                'to' => [1200-40, 630-150],
+            ]),
+            new TextLayer([
+                'content' => 'ECG-Liste.at',
+                'horizontalAlign' => TextLayer::HORIZONTAL_ALIGN_LEFT,
+                'padding' => [40, 630-150+50, 40, 50],
+                'color' => [255,255,255,0.8],
+                'maxFontSize' => 30,
+            ]),
+            new ImageLayer([
+                'path' => Craft::getAlias('@webroot/assets/logos/logo-mtv.png'),
+                'padding' => [40, 630-150+50, 40, 50],
+                'horizontalAlign' => ImageLayer::HORIZONTAL_ALIGN_RIGHT,
+            ]),
+            new ColorLayer([
+                'color' => [255,255,255,0.8],
+                'padding' => [40,120,400,280],
+                'borderRadius' => 5,
+            ]),
+            new TextLayer([
+                'content' => 'This could be a blog entry title: {{ entry.title }}',
+                'horizontalAlign' => TextLayer::HORIZONTAL_ALIGN_LEFT,
+                'color' => [50,50,50,0.5],
+                'padding' => [70,150,430,310]
+            ]),
+            new ImageLayer([
+                'path' => Craft::getAlias('@webroot/assets/images/testimonials-background.jpg'),
+                'padding' => [1200-400+80,120,40,280],
+                'horizontalAlign' => ImageLayer::HORIZONTAL_ALIGN_RIGHT,
+                'borderWidth' => 15,
+                'borderColor' => [255,255,255,0.5],
+            ]),
+        ];
+
+        return new Image([
+            'layers' => $layers,
+            'templateId' => $id,
+//            'entry' => Entry::find()->one(),
+//            'width' => 1200/2,
+//            'height' => 630/2,
+        ]);
     }
 }

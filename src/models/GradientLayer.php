@@ -8,7 +8,7 @@ use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 
-class GradientLayer extends AbstractLayer
+class GradientLayer extends AbstractRectangleLayer
 {
     public array $from = [0,0,0];
     public array $to = [100,100,100];
@@ -23,13 +23,16 @@ class GradientLayer extends AbstractLayer
         $width = $this->width - $this->paddingLeft - $this->paddingRight;
         $height = $this->height - $this->paddingTop - $this->paddingBottom;
 
-        $gradientImage = (new Imagine)->create(new Box($width + 2, $height + 2));
+        $transparent = $this->toColor([0,0,0,0]);
+
+        $gradientImage = (new Imagine)
+            ->create(new Box($width + 2, $height + 2), $transparent);
 
         if ($angle !== 0) {
             $gradientImage->rotate($angle * -1);
         }
 
-        $fill = new Horizontal($width, $from, $to);
+        $fill = new Horizontal($gradientImage->getSize()->getWidth(), $from, $to);
 
         $gradientImage->fill($fill);
 

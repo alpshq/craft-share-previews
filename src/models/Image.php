@@ -6,6 +6,7 @@ use alps\sharepreviews\SharePreviews;
 use BadMethodCallException;
 use Craft;
 use craft\base\Model;
+use craft\elements\Entry;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
 use Imagine\Gd\Imagine;
@@ -19,17 +20,20 @@ class Image extends Model
 {
     public int $width = 1200;
     public int $height = 630;
+    public ?int $templateId = null;
 
     /** @var AbstractLayer[] */
     private array $layers = [];
 
-//    private Settings $settings;
+    private ?Entry $entry = null;
 
-    private ?ImageInterface $image = null;
-
-    public function __construct($config = [])
+    public static function fromEncodedDiff(string $diff): self
     {
-        parent::__construct($config);
+        $differ = SharePreviews::getInstance()->imageDiffer;
+
+        $data = $differ->decodeDiff($diff);
+
+        return $differ->createFromDiff($data);
     }
 
     /**
@@ -40,7 +44,48 @@ class Image extends Model
         $this->layers = [];
 
         foreach ($layers as $layer) {
-            $this->layers[]= $layer->scaleTo($this->width, $this->height);
+            $this->layers[] = $layer->scaleTo($this->width, $this->height);
+        }
+
+        $this->layers = $layers;
+
+        return $this;
+    }
+
+    public function getLayers(): array
+    {
+        return $this->layers;
+    }
+
+    public function setEntry(?Entry $entry): self
+    {
+        $this->entry = $entry;
+
+        return $this;
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'layers',
+        ]);
+    }
+
+    public function toArray(array $fields = [], array $expand = [], $recursive = true)
+    {
+        $this->willRender();
+
+        return parent::toArray($fields, $expand, $recursive);
+    }
+
+    private function willRender(): self
+    {
+        if (!$this->entry) {
+            return $this;
+        }
+
+        foreach ($this->layers as $layer) {
+            $layer->willRender($this->entry);
         }
 
         return $this;
@@ -48,10 +93,6 @@ class Image extends Model
 
     public function render(): ImageInterface
     {
-        if ($this->image) {
-            return $this->image;
-        }
-
         foreach ($this->layers as $layer) {
             $layer->scaleTo($this->width, $this->height);
         }
@@ -60,10 +101,39 @@ class Image extends Model
             new Box($this->width, $this->height)
         );
 
+        $this->willRender();
+
         foreach ($this->layers as $layer) {
             $image = $layer->apply($image);
         }
 
-        return $this->image = $image;
+        return $image;
+    }
+
+    private function getTemplate(): ?self
+    {
+        if ($this->templateId === null) {
+            return null;
+        }
+
+        return SharePreviews::getInstance()->templates->getTemplate($this->templateId);
+    }
+
+    public function getHash(): string
+    {
+        return hash('crc32', json_encode($this->toArray()));
+    }
+
+    public function getUrl(): string
+    {
+        $differ = SharePreviews::getInstance()->imageDiffer;
+
+        $diff = $differ->getDiff($this);
+
+        $template = $this->getTemplate() ?? $this;
+
+        $encoded = $differ->encodeDiff($template->getHash(), $diff);
+
+        return SharePreviews::getInstance()->urls->createUrl($encoded);
     }
 }

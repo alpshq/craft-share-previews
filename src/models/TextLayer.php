@@ -3,12 +3,15 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\SharePreviews;
+use Craft;
+use craft\elements\Entry;
 use Imagine\Gd\Font;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Point;
+use Laminas\Feed\Reader\Entry\EntryInterface;
 
-class TextLayer extends AbstractAlignableLayer
+class TextLayer extends AbstractRectangleLayer
 {
     public string $content;
     public string $fontFamily = 'Roboto';
@@ -105,5 +108,12 @@ class TextLayer extends AbstractAlignableLayer
         return $fileHandler
             ->saveFont($family, $variant, $contents)
             ->getFontPath($family, $variant);
+    }
+
+    public function willRender(Entry $entry)
+    {
+        $this->content = Craft::$app->getView()->renderString($this->content, [
+            'entry' => $entry,
+        ]);
     }
 }

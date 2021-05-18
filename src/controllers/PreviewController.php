@@ -7,6 +7,7 @@ use alps\sharepreviews\models\ColorLayer;
 use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\ImageLayer;
+use alps\sharepreviews\models\LineLayer;
 use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use craft\elements\Entry;
@@ -31,40 +32,35 @@ class PreviewController extends Controller
 
     public function actionIndex(string $data)
     {
+        $image = Image::fromEncodedDiff($data);
+
+        $image->render()->show('png', [
+            'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
+        ]);
+
         $plugin = SharePreviews::getInstance();
 
-        $layers = [
-            new ColorLayer([
-                'color' => [100,100,100],
-            ]),
-            new ColorLayer([
-                'color' => [50,50,50],
-                'padding' => 25,
-            ]),
-            new GradientLayer([
-                'from' => [0,0,0],
-                'to' => [255,255,255],
-                'angle' => 45,
-                'padding' => 50,
-            ]),
-            new ImageLayer([
-                'path' => Craft::getAlias('@webroot/assets/images/testimonials-background.jpg'),
-                'padding' => 75,
-                'verticalAlign' => ImageLayer::VERTICAL_ALIGN_TOP,
-                'horizontalAlign' => ImageLayer::HORIZONTAL_ALIGN_LEFT,
-            ]),
-            new TextLayer([
-                'content' => 'This is an awesome text. Keep going! This is an awesome text. Keep going! This is an awesome text. Keep going! This is an awesome text. Keep going!',
-                'padding' => 100,
-                'color' => [255,0,0],
-            ]),
-        ];
+        $entry = Entry::find()->one();
+        $imageFactory = $plugin->imageDiffer;
+        $templates = $plugin->templates;
 
-        $image = new Image([
-            'layers' => $layers,
-//            'width' => 1200/2,
-//            'height' => 630/2,
-        ]);
+        $image = $templates->getDefaultTemplate()->setEntry($entry);
+
+        dd($image->getUrl());
+
+        $diff = $imageFactory->getDiff($imageFactory->getTemplate(), $image);
+
+        $image = $imageFactory->createFromDiff($diff);
+
+        // /preview/1234/90i3030ii0.png
+
+        $encoded = $imageFactory->encodeDiff($diff);
+        $decoded = $imageFactory->decodeDiff($encoded);
+//        $zipped = gzdeflate($encoded, 9);
+        dd(
+            $image->toArray(), $diff, json_encode($diff), $encoded, $decoded,
+            strlen($encoded),
+        );
 
         $image->render()->show('png', [
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
