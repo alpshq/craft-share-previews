@@ -2,17 +2,26 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\behaviors\HasColors;
+use Craft;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Fill\Gradient\Horizontal;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 
+/**
+ * @property array $from
+ * @property array $to
+ */
 class GradientLayer extends AbstractRectangleLayer
 {
-    public array $from = [0,0,0];
-    public array $to = [100,100,100];
     public int $angle = 0;
+
+    public function getTitle(): string
+    {
+        return Craft::t('share-previews', 'Gradient Layer');
+    }
 
     public function apply(ImageInterface $image): ImageInterface
     {
@@ -46,5 +55,20 @@ class GradientLayer extends AbstractRectangleLayer
         $gradientImage->crop(new Point($x, $y), new Box($width, $height));
 
         return $image->paste($gradientImage, new Point($this->paddingLeft, $this->paddingTop));
+    }
+
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getColorAttributes(),
+        );
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            ['class' => HasColors::class, 'properties' => ['from', 'to']],
+        ]);
     }
 }

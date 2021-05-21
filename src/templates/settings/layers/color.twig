@@ -1,0 +1,43 @@
+{% extends 'share-previews/settings/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a color layer to add a colored area to your image.'|t('share-previews') }}
+{% endblock %}
+
+{% block fields %}
+<div class="grid grid-cols-2 gap-6">
+    <div>
+        {{ forms.field({
+            label: 'Color'|t('share-previews'),
+        }, forms.color({
+            name: namePrefix ~ '[color]',
+            value: '#fff',
+        })) }}
+    </div>
+    <div>
+        {{ forms.field({
+            label: 'Color Opacity'|t('share-previews'),
+        }, forms.text({
+            name: namePrefix ~ '[colorOpacity]',
+            type: 'number',
+            min: 0,
+            max: 100,
+            unit: '%',
+            placeholder: 100,
+        })) }}
+    </div>
+    <div>
+        {{ forms.field({
+            label: 'Border Radius'|t('share-previews'),
+        }, forms.text({
+            name: namePrefix ~ '[borderRadius]',
+            type: 'number',
+            min: 0,
+            max: 1000,
+            placeholder: 0,
+            unit: 'px'
+        })) }}
+    </div>
+</div>
+{% endblock %}

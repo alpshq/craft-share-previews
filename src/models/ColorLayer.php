@@ -2,7 +2,10 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\imagefilters\BorderRadiusFilter;
+use alps\sharepreviews\models\concerns\TransformsColors;
+use Craft;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Gd\Imagine;
@@ -13,10 +16,18 @@ use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Palette\Color\RGB as RGBColor;
 use Imagine\Image\Point;
 
+/** @property array $color
+ * @method getColorAttributes()
+ */
 class ColorLayer extends AbstractRectangleLayer
 {
-    public array $color = [0,0,0];
+//    private array $color = [0,0,0];
     public int $borderRadius = 0;
+
+    public function getTitle(): string
+    {
+        return Craft::t('share-previews', 'Color Layer');
+    }
 
     public function apply(ImageInterface $image): ImageInterface
     {
@@ -46,6 +57,21 @@ class ColorLayer extends AbstractRectangleLayer
     {
         return array_merge(parent::getScalableProperties(), [
             'borderRadius' => 'width',
+        ]);
+    }
+
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getColorAttributes(),
+        );
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            ['class' => HasColors::class, 'properties' => ['color']],
         ]);
     }
 }

@@ -11,7 +11,7 @@ class ControlPanelAssets extends AssetBundle
     {
         parent::init();
 
-        $this->sourcePath = '@share-previews/resources';
+        $this->sourcePath = '@share-previews/../dist/build/resources';
 
         $this->depends = [CpAsset::class];
 
@@ -20,7 +20,7 @@ class ControlPanelAssets extends AssetBundle
         ];
 
         $this->js = [
-            'preview-update.js',
+            'app.js',
         ];
     }
 }

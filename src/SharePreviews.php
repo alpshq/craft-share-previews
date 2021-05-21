@@ -43,6 +43,8 @@ use yii\console\Application as ConsoleApplication;
  */
 class SharePreviews extends Plugin
 {
+    public $hasCpSettings = true;
+
     public function init()
     {
         Craft::setAlias('@share-previews', __DIR__);
@@ -71,6 +73,14 @@ class SharePreviews extends Plugin
     protected function createSettingsModel()
     {
         return new Settings;
+    }
+
+    protected function settingsHtml()
+    {
+//        dd($this->getSettings()->templates[0]->layers[0]);
+        return Craft::$app->getView()->renderTemplate('share-previews/settings', [
+            'settings' => $this->getSettings(),
+        ]);
     }
 
     private function registerRoutes(): self

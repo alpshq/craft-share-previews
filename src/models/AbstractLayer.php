@@ -3,6 +3,8 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\models\concerns\ScalesProperties;
+use alps\sharepreviews\validators\FilterValidator;
 use craft\base\Model;
 use craft\elements\Entry;
 use Imagine\Image\ImageInterface;
@@ -12,16 +14,13 @@ use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
 use Laminas\Feed\Reader\Entry\EntryInterface;
 use phpDocumentor\Reflection\Types\Static_;
+use ReflectionClass;
+use ReflectionProperty;
+use yii\debug\components\search\Filter;
 
 abstract class AbstractLayer extends Model
 {
-    public ?int $width = 1200;
-    public ?int $height = 630;
-
-    public int $paddingTop = 0;
-    public int $paddingBottom = 0;
-    public int $paddingLeft = 0;
-    public int $paddingRight = 0;
+    use ScalesProperties;
 
     public static function getTypes(): array
     {
@@ -31,7 +30,26 @@ abstract class AbstractLayer extends Model
             'image' => ImageLayer::class,
             'line' => LineLayer::class,
             'text' => TextLayer::class,
+            'asset' => AssetLayer::class,
         ];
+    }
+
+    public static function make(array $attributes): self
+    {
+        $instance = self::makeFromType($attributes['type']);
+
+        unset($attributes['type']);
+
+        $attributes = $instance->castAttributes($attributes);
+
+        foreach ($attributes as $prop => $value) {
+            if ($instance->hasProperty($prop)) {
+                $instance->{$prop} = $value;
+            }
+        }
+//        $instance->setAttributes($attributes, false);
+
+        return $instance;
     }
 
     public static function makeFromType(string $type): self
@@ -41,11 +59,13 @@ abstract class AbstractLayer extends Model
         return new $className;
     }
 
+    abstract public function getTitle(): string;
+
     abstract public function apply(ImageInterface $image): ImageInterface;
 
-    public function fields()
+    public function attributes()
     {
-        return array_merge(parent::fields(), [
+        return array_merge(parent::attributes(), [
             'type'
         ]);
     }
@@ -57,58 +77,9 @@ abstract class AbstractLayer extends Model
         return $types[static::class];
     }
 
-    protected function getScalableProperties(): array
-    {
-        return [
-            'paddingLeft' => 'width',
-            'paddingTop' => 'height',
-            'paddingRight' => 'width',
-            'paddingBottom' => 'height',
-        ];
-    }
-
-    public function scaleTo(int $width, int $height): self
-    {
-        if ($this->width === null) {
-            $this->width = $width;
-        }
-
-        if ($this->height === null) {
-            $this->height = $height;
-        }
-
-        $props = $this->getScalableProperties();
-
-        foreach ($props as $prop => $scaleBase) {
-            if ($this->{$prop} === null) {
-                continue;
-            }
-
-            $target = $scaleBase === 'width' ? $width : $height;
-
-            $this->{$prop} = $this->scaleProperty($this->{$scaleBase}, $target, $this->{$prop});
-        }
-
-        $this->width = $width;
-        $this->height = $height;
-
-        return $this;
-    }
-
     public function willRender(Entry $entry)
     {
         //
-    }
-
-    protected function scaleProperty(int $source, int $target, int $property): int
-    {
-        if ($source === $target) {
-            return $property;
-        }
-
-        $multiplier = $target / $source;
-
-        return round($property * $multiplier);
     }
 
     protected function toColor($color): RGB
@@ -128,29 +99,60 @@ abstract class AbstractLayer extends Model
         return (new RGBPalette)->color($color, $alpha);
     }
 
-    public function setPadding(int $padding): self
-    {
-        $this->paddingTop = $padding;
-        $this->paddingBottom = $padding;
-        $this->paddingLeft = $padding;
-        $this->paddingRight = $padding;
-
-        return $this;
-    }
-
     /**
      * @return int[]
      */
     protected function getCanvasDimensions(): array
     {
         return [
-            $this->width - $this->paddingLeft - $this->paddingRight,
-            $this->height - $this->paddingTop - $this->paddingBottom,
+            $this->width,
+            $this->height,
         ];
     }
 
     public function copy(): self
     {
         return new static($this);
+    }
+
+//    public function setAttributes($values, $safeOnly = true)
+//    {
+//        $casted = [];
+//
+//        $reflection = new ReflectionClass($this);
+//
+//        foreach ($values as $prop => $value) {
+//            if ($value !== null && $reflection->hasProperty($prop)) {
+//                $reflectionProperty = $reflection->getProperty($prop);
+//
+//                if ($reflectionProperty->isPublic() && $reflectionProperty->hasType()) {
+//                    settype($value, $reflectionProperty->getType()->getName());
+//                }
+//            }
+//
+//            $casted[$prop] = $value;
+//        }
+//
+//        parent::setAttributes($casted, $safeOnly);
+//    }
+    private function castAttributes(array $attributes)
+    {
+        $reflection = new ReflectionClass($this);
+
+        $casted = [];
+
+        foreach ($attributes as $prop => $value) {
+            if ($value !== null && $reflection->hasProperty($prop)) {
+                $reflectionProperty = $reflection->getProperty($prop);
+
+                if ($reflectionProperty->isPublic() && $reflectionProperty->hasType()) {
+                    settype($value, $reflectionProperty->getType()->getName());
+                }
+            }
+
+            $casted[$prop] = $value;
+        }
+
+        return $casted;
     }
 }

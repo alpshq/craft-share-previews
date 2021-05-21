@@ -33,6 +33,8 @@ class Image extends Model
 
         $data = $differ->decodeDiff($diff);
 
+//        dd($data);
+
         return $differ->createFromDiff($data);
     }
 
@@ -44,10 +46,12 @@ class Image extends Model
         $this->layers = [];
 
         foreach ($layers as $layer) {
+            if (!$layer instanceof AbstractLayer) {
+                $layer = AbstractLayer::make($layer);
+            }
+
             $this->layers[] = $layer->scaleTo($this->width, $this->height);
         }
-
-        $this->layers = $layers;
 
         return $this;
     }

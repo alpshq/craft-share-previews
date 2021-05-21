@@ -38,6 +38,8 @@ class PreviewController extends Controller
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
         ]);
 
+        return;
+
         $plugin = SharePreviews::getInstance();
 
         $entry = Entry::find()->one();

@@ -30,7 +30,7 @@ class ImageDiffer extends Component
     public function getDiff(Image $image): array
     {
         if ($image->templateId === null) {
-            return $image->toArray();
+            return array_filter($image->toArray());
         }
 
         $template = $this->templatesService->getTemplateOrDefault($image->templateId);
@@ -83,12 +83,15 @@ class ImageDiffer extends Component
         $image = null;
 
         $templateId = $diff['templateId'] ?? null;
-        $image = $templatesService->getTemplateOrDefault($templateId);
+
+        $image = $templatesService->getTemplate((int) $templateId) ?? new Image;
 
         $image->width = $diff['width'] ?? $image->width;
         $image->height = $diff['height'] ?? $image->height;
 
         $diffLayers = $diff['layers'] ?? [];
+
+//        dd($diffLayers);
 
         if (empty($diffLayers)) {
             return $image;
@@ -97,10 +100,15 @@ class ImageDiffer extends Component
         $layers = $image->layers;
 
         foreach ($diffLayers as $idx => $diffLayer) {
-            $baseLayer = $layers[$idx] ?? AbstractLayer::makeFromType($diffLayer['type']);
+            $baseLayer = $layers[$idx] ?? AbstractLayer::make($diffLayer);
+            unset($diffLayer['type']);
+//            $baseLayer->setAttributes($diffLayer);
 
+//            $layers[$idx] = $baseLayer;
             $layers[$idx] = $this->createLayerFromDiff($baseLayer, $diffLayer);
         }
+
+        $image->layers = $layers;
 
         return $image;
     }
@@ -108,7 +116,9 @@ class ImageDiffer extends Component
     private function createLayerFromDiff(AbstractLayer $layer, $diff): AbstractLayer
     {
         foreach ($diff as $prop => $value) {
-            $layer->{$prop} = $value;
+            if ($layer->hasProperty($prop)) {
+                $layer->{$prop} = $value;
+            }
         }
 
         return $layer;

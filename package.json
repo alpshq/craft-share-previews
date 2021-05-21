@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "scripts": {
+    "webpack:dev": "webpack --mode development --watch",
+    "webpack:build": "webpack --mode production",
+    "postcss:dev": "postcss ./src/resources/**/*.scss --base ./src --dir ./dist/build --ext css",
+    "postcss:watch": "npm run postcss:dev -- --watch",
+    "postcss:build": "npm run postcss:dev -- --env production",
+    "browser-sync": "browser-sync 'http://craft-plugin-dev.nitro' './src' -w",
+    "dev": "npm run postcss:dev && concurrently 'npm run postcss:watch' 'npm run webpack:dev'",
+    "build": "npm run webpack:build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/register": "^7.13.16",
+    "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
+    "babel-register": "^6.26.0",
+    "browser-sync": "^2.26.14",
+    "concurrently": "^6.1.0",
+    "css-loader": "^5.2.4",
+    "cssnano": "^5.0.2",
+    "node-sass": "^6.0.0",
+    "postcss": "^8.2.15",
+    "postcss-cli": "^8.3.1",
+    "postcss-loader": "^5.3.0",
+    "postcss-scss": "^3.0.5",
+    "sass-loader": "^11.1.1",
+    "style-loader": "^2.0.0",
+    "tailwindcss": "^2.1.2",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}

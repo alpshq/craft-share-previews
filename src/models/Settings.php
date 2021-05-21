@@ -15,74 +15,57 @@ class Settings extends \craft\base\Model
 
     public string $fontCachePath = '';
 
-//    public array $renderer = [
-//        'content' => [
-//            'padding' => [
-//                'left' => 70,
-//                'top' => 175,
-//                'right' => 530,
-//                'bottom' => 240,
-//            ],
-//        ],
-//
-//        'background' => [
-//            'type' => 'image',
-//            'type' => 'color',
-//
-//            'color' => [195,130,250],
-//
-//            'gradient' => [
-//                'from' => [195,130,250],
-//                'to' => [240,70,70],
-//                'angle' => 45,
-//            ],
-//
-//            'image' => [
-//                'path' => 'share-previews/2.png',
-//                'path' => null,
-//            ],
-//        ],
-//
-//        'image' => [
-//            'public_path' => null,
-//            'position' => 'right',
-//            'max_width' => 430,
-//            'max_height' => 630,
-//            'border' => 15,
-//            'border_color' => [255,255,255],
-//
-//            'padding' => [
-//                'left' => 740,
-//                'top' => 145,
-//                'right' => 40,
-//                'bottom' => 210,
-//            ],
-//        ],
-//
-//        'font' => [
-//            'family' => 'Roboto',
-//            'weight' => '700',
-//            'color' => [50,50,50],
-//            'size' => 60,
-//        ],
-//    ];
-
-    public Image $image;
+    private array $templates = [];
 
     public function __construct($config = [])
     {
         parent::__construct($config);
 
         $this->fontCachePath = Craft::$app->path->getRuntimePath() . '/spfonts';
+    }
 
-        $image = new Image([
-//            'layers' => [
-//                new ColorLayer([
-//                    'color' => [0,0,0],
-//                ]),
-//            ],
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+           'templates',
         ]);
+    }
 
-        $this->image = $image;
+    public function getTemplates(): array
+    {
+        return $this->templates;
+    }
+
+    public function setTemplates(array $templates): self
+    {
+//        $templates[0]['layers'][0] = array_merge($templates[0]['layers'][0], [
+//            'color' => 'fff',
+//            'colorOpacity' => 50,
+//            'paddingTop' => '12',
+//            'borderRadius' => '5',
+//            'colorOpacity' => '50',
+//        ]);
+//
+//        $templates[0]['layers'][4] = array_merge($templates[0]['layers'][4], [
+//            'type' => 'text',
+////            'color' => 'fff',
+////            'colorOpacity' => 50,
+////            'paddingTop' => '12',
+////            'borderRadius' => '5',
+////            'colorOpacity' => '50',
+//        ]);
+//
+//        $templates[0]['layers'] = [$templates[0]['layers'][4]];
+//
+//        dd(
+//            $templates[0]['layers'][0],
+//            (new Image($templates[0]))->layers[0],
+//            (new Image($templates[0]))->layers[0]->toArray(),
+//        );
+        $this->templates = array_map(function($template) {
+            return new Image($template);
+        }, $templates);
+
+        return $this;
     }
 }

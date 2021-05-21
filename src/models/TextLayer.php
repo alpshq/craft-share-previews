@@ -20,6 +20,11 @@ class TextLayer extends AbstractRectangleLayer
     public int $maxFontSize = 60;
     public bool $shrinkToFit = true;
 
+    public function getTitle(): string
+    {
+        return Craft::t('share-previews', 'Text Layer');
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         if (empty($this->content)) {

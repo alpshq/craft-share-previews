@@ -2,7 +2,9 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\Config;
+use Craft;
 use Imagine\Filter\Advanced\Border;
 use Imagine\Filter\Transformation;
 use Imagine\Gd\Imagine;
@@ -16,15 +18,25 @@ class ImageLayer extends AbstractRectangleLayer
     const FILL_MODE_CONTAIN = 'contain';
     const FILL_MODE_COVER = 'cover';
 
-    public string $path;
+    public ?string $path = null;
 
     public int $borderWidth = 0;
-    public array $borderColor = [255,255,255];
 
     public string $fillMode = self::FILL_MODE_CONTAIN;
 
+    public function getTitle(): string
+    {
+        return Craft::t('share-previews', 'Image Layer');
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
+        $path = $this->getPath();
+
+        if (empty($path) || !file_exists($path)) {
+            return $image;
+        }
+
         [$maxWidth, $maxHeight] = $this->getCanvasDimensions();
 
         $settings = $this->fillMode === self::FILL_MODE_CONTAIN
@@ -32,7 +44,7 @@ class ImageLayer extends AbstractRectangleLayer
             : ManipulatorInterface::THUMBNAIL_OUTBOUND;
 
         $openedImage = (new Imagine)
-            ->open($this->path)
+            ->open($path)
             ->thumbnail(new Box($maxWidth, $maxHeight), $settings);
 
         $size = $openedImage->getSize();
@@ -43,6 +55,11 @@ class ImageLayer extends AbstractRectangleLayer
 
         return $image
             ->paste($openedImage, $this->getAlignedOriginPoint($width, $height));
+    }
+
+    protected function getPath(): ?string
+    {
+        return $this->path;
     }
 
     private function applyBorder(ImageInterface $image, int $width, int $height): ImageInterface
@@ -84,6 +101,21 @@ class ImageLayer extends AbstractRectangleLayer
     {
         return array_merge(parent::getScalableProperties(), [
             'borderWidth' => 'width',
+        ]);
+    }
+
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getColorAttributes(),
+        );
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            ['class' => HasColors::class, 'properties' => ['borderColor']],
         ]);
     }
 }

@@ -3,15 +3,26 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\models\concerns\HasPadding;
+use alps\sharepreviews\models\concerns\HidesFields;
+use alps\sharepreviews\models\concerns\ScalesProperties;
+use alps\sharepreviews\validators\FilterValidator;
 use craft\base\Model;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
+use yii\debug\components\search\Filter;
 
+/**
+ * @property-read int[] $canvasDimensions
+ * @property-read array $scalableProperties
+ */
 abstract class AbstractRectangleLayer extends AbstractLayer
 {
+    use HidesFields, HasPadding;
+
     const HORIZONTAL_ALIGN_LEFT = 'hl';
     const HORIZONTAL_ALIGN_RIGHT = 'hr';
     const HORIZONTAL_ALIGN_CENTER = 'hc';
@@ -23,35 +34,20 @@ abstract class AbstractRectangleLayer extends AbstractLayer
     public ?int $width = 1200;
     public ?int $height = 630;
 
-    public int $paddingTop = 0;
-    public int $paddingBottom = 0;
-    public int $paddingLeft = 0;
-    public int $paddingRight = 0;
-
     public string $horizontalAlign = self::HORIZONTAL_ALIGN_CENTER;
     public string $verticalAlign = self::VERTICAL_ALIGN_MIDDLE;
 
-    abstract public function apply(ImageInterface $image): ImageInterface;
-
-    public function setPadding($padding): self
+    public function getHiddenFields(): array
     {
-        if (!is_array($padding)) {
-            $padding = (int) $padding;
+        return $this->getHiddenPaddingFields();
+    }
 
-            $this->paddingLeft = $padding;
-            $this->paddingTop = $padding;
-            $this->paddingRight = $padding;
-            $this->paddingBottom = $padding;
-
-            return $this;
-        }
-
-        $this->paddingLeft = $padding[0] ? (int) $padding[0] : $this->paddingLeft;
-        $this->paddingTop = $padding[1] ? (int) $padding[1] : $this->paddingTop;
-        $this->paddingRight = $padding[2] ? (int) $padding[2] : $this->paddingRight;
-        $this->paddingBottom = $padding[3] ? (int) $padding[3] : $this->paddingBottom;
-
-        return $this;
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getPaddingAttributes(),
+        );
     }
 
     /**
@@ -89,5 +85,13 @@ abstract class AbstractRectangleLayer extends AbstractLayer
         $y = max(0, $y);
 
         return new Point($x, $y);
+    }
+
+    protected function getScalableProperties(): array
+    {
+        return array_merge(
+            parent::getScalableProperties(),
+            $this->getScalablePaddingProperties(),
+        );
     }
 }

@@ -1,0 +1,61 @@
+{% import "_includes/forms" as forms %}
+{% set templates = settings.templates %}
+
+<div class="text-red-500">
+    settings!
+</div>
+
+<button id="btn-preview">
+    Preview!
+</button>
+
+{% for templateIdx, template in templates %}
+    <div class="flex items-start">
+        <div class="w-1/2 flex-none">
+
+            <div class="space-y-8">
+                {% for layerIdx, layer in template.layers|reverse %}
+                    {{ include('share-previews/settings/layers/' ~ layer.type, {
+                        template,
+                        layer,
+                        templateIdx,
+                        layerIdx,
+                        namePrefix: 'templates[' ~ templateIdx ~ '][layers][' ~ layerIdx ~ ']'
+                    }, with_context = false) }}
+                {% endfor %}
+{#                {% include "share-previews/settings/layers/color" %}#}
+{#                {% include "share-previews/settings/layers/gradient" %}#}
+{#                {% include "share-previews/settings/layers/line" %}#}
+{#                {% include "share-previews/settings/layers/image" %}#}
+{#                {% include "share-previews/settings/layers/text" %}#}
+            </div>
+
+            <br><br><br>
+
+            {{ forms.text({
+                type: "range",
+            }) }}
+            {{ forms.field({
+                label: "foo2",
+                type: "range",
+                instructions: "Foo",
+                input: forms.select({
+
+                }),
+                tip : "tip",
+                warning: "warning"
+            }, forms.select({
+
+            })) }}
+        </div>
+        <div class="bg-blue-gray-100 flex-grow">
+            <div class="sticky">
+                <div class="relative" style="padding-top: 52.5%;">
+                    <a class="absolute inset-0 block" href="{{ templates[0].getUrl() }}" target="_blank">
+                        <img class="max-w-full w-full h-auto" src="{{ templates[0].getUrl() }}" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

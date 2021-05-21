@@ -1,0 +1,103 @@
+{% extends 'share-previews/settings/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a text layer to add an area with text to your template.'|t('share-previews') }}
+{% endblock %}
+
+{% block fields %}
+    <div class='space-y-6'>
+        <div>
+            {{ forms.field({
+                label: 'Content'|t('share-previews'),
+                tip: 'Use twig: {{ entry.title }}',
+            }, forms.text({
+                name: namePrefix ~ '[content]',
+            })) }}
+        </div>
+
+        <div class='grid grid-cols-3 gap-x-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Font Family'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fontFamily]',
+                    options: {
+                        'roboto': 'Roboto'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Font Weight'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fontWeight]',
+                    options: {
+                        '400': 'Bold'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+        </div>
+
+        <div>
+            {{ forms.field({
+                label: 'Font Size'|t('share-previews'),
+            }, forms.text({
+                name: namePrefix ~ '[fontSize]',
+                type: 'number',
+                min: 10,
+                max: 100,
+                unit: 'px'
+            })) }}
+        </div>
+
+        <div class='grid grid-cols-2 gap-x-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[color]',
+                    value: '#fff',
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[colorOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                })) }}
+            </div>
+        </div>
+        <div class='grid grid-cols-2 gap-x-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Horizontal Alignment'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[horizontalAlign]',
+                    options: {
+                        'left': 'Left'|t('share-previews'),
+                        'center': 'Center'|t('share-previews'),
+                        'right': 'Right'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Vertical Alignment'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[verticalAlign]',
+                    options: {
+                        'top': 'Top'|t('share-previews'),
+                        'middle': 'Middle'|t('share-previews'),
+                        'bottom': 'Bottom'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
