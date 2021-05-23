@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\elements\Entry;
@@ -13,16 +14,20 @@ use Laminas\Feed\Reader\Entry\EntryInterface;
 
 class TextLayer extends AbstractRectangleLayer
 {
-    public string $content;
+    public string $content = '';
     public string $fontFamily = 'Roboto';
     public string $fontWeight = '700';
-    public array $color = [50,50,50];
     public int $maxFontSize = 60;
     public bool $shrinkToFit = true;
 
     public function getTitle(): string
     {
         return Craft::t('share-previews', 'Text Layer');
+    }
+
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return true;
     }
 
     public function apply(ImageInterface $image): ImageInterface
@@ -119,6 +124,21 @@ class TextLayer extends AbstractRectangleLayer
     {
         $this->content = Craft::$app->getView()->renderString($this->content, [
             'entry' => $entry,
+        ]);
+    }
+
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getColorAttributes(),
+        );
+    }
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            ['class' => HasColors::class, 'properties' => ['color']],
         ]);
     }
 }

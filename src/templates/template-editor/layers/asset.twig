@@ -1,0 +1,66 @@
+{% extends 'share-previews/template-editor/layers/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use an asset layer to add an area where an image will be placed.'|t('share-previews') }}
+{% endblock %}
+
+{% block content %}
+    {% apply tabs_section(tabId, 'Asset'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Image Fill Mode'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fillMode]',
+                    value: layer.fillMode,
+                    options: {
+                        'contain': 'Contain: Make sure the image fits within the area'|t('share-previews'),
+                        'cover': 'Cover: The image covers the complete area'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Border'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Border Width'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[borderWidth]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: 'px',
+                    value: layer.borderWidth,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Border Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[borderColor]',
+                    value: layer.borderColor|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Border Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[borderColorOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.borderColor|rgba_to_opacity,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% include 'share-previews/template-editor/layers/_alignment' %}
+    {% include 'share-previews/template-editor/layers/_padding' %}
+{% endblock %}

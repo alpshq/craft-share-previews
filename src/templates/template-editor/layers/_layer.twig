@@ -1,0 +1,34 @@
+{% import '_includes/forms' as forms %}
+
+<div class="p-4 bg-blue-gray-100 rounded" data-layer="{{ layerIdx }}" data-type="{{ layer.type }}">
+    <h3 class="m-0 mb-2">
+        {{ layer.getTitle() }}
+    </h3>
+    <div class="mb-6">
+        {% block description %}{% endblock %}
+    </div>
+
+    <div class="my-6">
+        <button class="btn delete-layer" name="{{ namePrefix }}[delete]">
+            {{ 'Delete this layer'|t('share-previews') }}
+        </button>
+        <button class="btn delete-layer" name="{{ namePrefix }}[move]" value="up">
+            {{ 'Move up'|t('share-previews') }}
+        </button>
+        <button class="btn delete-layer" name="{{ namePrefix }}[move]" value="down">
+            {{ 'Move down'|t('share-previews') }}
+        </button>
+    </div>
+
+
+    {{ forms.hidden({
+        name: namePrefix ~ '[type]',
+        value: layer.type,
+    }) }}
+
+    {% set tabId = tabs_create() %}
+
+    {% block content %}{% endblock %}
+
+    {{ tabs_render(tabId) }}
+</div>

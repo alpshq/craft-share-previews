@@ -1,0 +1,92 @@
+{% extends 'share-previews/template-editor/layers/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a text layer to add an area with text to your template.'|t('share-previews') }}
+{% endblock %}
+
+{% block content %}
+    {% apply tabs_section(tabId, 'Text'|t('share-previews')) %}
+        <div class='space-y-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Content'|t('share-previews'),
+                    tip: 'Use twig: {{ entry.title }}',
+                }, forms.text({
+                    name: namePrefix ~ '[content]',
+                    value: layer.content,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Font'|t('share-previews')) %}
+        <div class='grid grid-cols-3 gap-x-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Font Family'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fontFamily]',
+                    value: layer.fontFamily,
+                    options: {
+                        'roboto': 'Roboto'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Font Weight'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fontWeight]',
+                    value: layer.fontWeight,
+                    options: {
+                        '400': 'Bold'|t('share-previews'),
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Font Size'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[maxFontSize]',
+                    type: 'number',
+                    min: 10,
+                    max: 100,
+                    unit: 'px',
+                    value: layer.maxFontSize,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
+        <div class='space-y-6'>
+            <div class='grid grid-cols-2 gap-x-6'>
+                <div>
+                    {{ forms.field({
+                        label: 'Color'|t('share-previews'),
+                    }, forms.color({
+                        name: namePrefix ~ '[color]',
+                        value: layer.color|rgb_to_hex,
+                    })) }}
+                </div>
+                <div>
+                    {{ forms.field({
+                        label: 'Color Opacity'|t('share-previews'),
+                    }, forms.text({
+                        name: namePrefix ~ '[colorOpacity]',
+                        type: 'number',
+                        min: 0,
+                        max: 100,
+                        unit: '%',
+                        placeholder: 100,
+                        value: layer.color|rgba_to_opacity,
+                    })) }}
+                </div>
+            </div>
+        </div>
+    {% endapply %}
+
+    {% include 'share-previews/template-editor/layers/_alignment' %}
+    {% include 'share-previews/template-editor/layers/_padding' %}
+{% endblock %}

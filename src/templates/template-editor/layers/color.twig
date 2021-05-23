@@ -1,0 +1,54 @@
+{% extends 'share-previews/template-editor/layers/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a color layer to add a colored area to your image.'|t('share-previews') }}
+{% endblock %}
+
+{% block content %}
+    {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[color]',
+                    value: layer.color|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[colorOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.color|rgba_to_opacity,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Border Radius'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Border Radius'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[borderRadius]',
+                    type: 'number',
+                    min: 0,
+                    max: 1000,
+                    placeholder: 0,
+                    unit: 'px',
+                    value: layer.borderRadius,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% include 'share-previews/template-editor/layers/_padding' %}
+{% endblock %}

@@ -63,6 +63,8 @@ abstract class AbstractLayer extends Model
 
     abstract public function apply(ImageInterface $image): ImageInterface;
 
+    abstract public function isAvailableInTemplateEditor(): bool;
+
     public function attributes()
     {
         return array_merge(parent::attributes(), [

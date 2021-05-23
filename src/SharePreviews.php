@@ -6,6 +6,7 @@ use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\services\ImageDiffer;
 use alps\sharepreviews\services\Urls;
+use alps\sharepreviews\twig\TabsExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\elements\Entry;
@@ -106,6 +107,8 @@ class SharePreviews extends Plugin
             function (RegisterUrlRulesEvent $event) {
                 $event->rules = array_merge($event->rules, [
                     'share-previews/draft' => 'share-previews/preview/draft',
+                    'POST share-previews/template-editor' => 'share-previews/template-editor/post',
+                    'GET share-previews/template-editor' => 'share-previews/template-editor/edit',
                 ]);
             }
         );
@@ -140,7 +143,10 @@ class SharePreviews extends Plugin
 
     private function registerTwigVariables(): self
     {
-        Craft::$app->getView()->registerTwigExtension(new PreviewExtension);
+        $view = Craft::$app->getView();
+
+        $view->registerTwigExtension(new PreviewExtension);
+        $view->registerTwigExtension(new TabsExtension);
 
         return $this;
     }

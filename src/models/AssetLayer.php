@@ -19,6 +19,16 @@ class AssetLayer extends ImageLayer
 
     private ?Asset $asset;
 
+    public function getTitle(): string
+    {
+        return Craft::t('share-previews', 'Asset Layer');
+    }
+
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return true;
+    }
+
     private function getAsset(): ?Asset
     {
         if (!$this->assetId) {

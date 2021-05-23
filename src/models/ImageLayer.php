@@ -29,6 +29,11 @@ class ImageLayer extends AbstractRectangleLayer
         return Craft::t('share-previews', 'Image Layer');
     }
 
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return false;
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         $path = $this->getPath();

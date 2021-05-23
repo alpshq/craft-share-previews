@@ -23,6 +23,11 @@ class GradientLayer extends AbstractRectangleLayer
         return Craft::t('share-previews', 'Gradient Layer');
     }
 
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return true;
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         $angle = $this->angle;

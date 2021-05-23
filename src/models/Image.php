@@ -43,6 +43,10 @@ class Image extends Model
      */
     public function setLayers(array $layers): self
     {
+        ksort($layers);
+
+        $layers = array_values($layers);
+
         $this->layers = [];
 
         foreach ($layers as $layer) {
@@ -58,7 +62,9 @@ class Image extends Model
 
     public function getLayers(): array
     {
-        return $this->layers;
+        return array_map(function(AbstractLayer $layer) {
+            return AbstractLayer::make($layer->toArray());
+        }, $this->layers);
     }
 
     public function setEntry(?Entry $entry): self

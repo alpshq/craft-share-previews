@@ -1,0 +1,100 @@
+{% extends 'share-previews/template-editor/layers/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a line layer to add a single line to your image.'|t('share-previews') }}
+{% endblock %}
+
+{% block content %}
+    {% apply tabs_section(tabId, 'Line'|t('share-previews')) %}
+        <div class='grid grid-cols-2 gap-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Start from Left'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[from][0]',
+                    type: 'number',
+                    min: 0,
+                    max: 1200,
+                    unit: 'px',
+                    value: layer.from[0],
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Start from Top'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[from][1]',
+                    type: 'number',
+                    min: 0,
+                    max: 630,
+                    unit: 'px',
+                    value: layer.from[1],
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+
+            <div>
+                {{ forms.field({
+                    label: 'End from Left'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[to][0]',
+                    type: 'number',
+                    min: 0,
+                    max: 1200,
+                    unit: 'px',
+                    value: layer.to[0],
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'End from Top'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[to][1]',
+                    type: 'number',
+                    min: 0,
+                    max: 630,
+                    unit: 'px',
+                    value: layer.to[1],
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
+        <div class='grid grid-cols-2 gap-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[color]',
+                    value: layer.color|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[colorOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.color|rgba_to_opacity,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+{% endblock %}

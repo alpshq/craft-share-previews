@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.tabs {
+  @apply relative;
+
+  > ul {
+    @apply overflow-hidden relative mb-4;
+
+    &::before {
+      content: ' ';
+      @apply absolute block left-0 right-0 bottom-0 h-px bg-gray-200;
+    }
+
+    li {
+      @apply block float-left;
+
+      label {
+        @apply relative block px-4 py-4 text-gray-500 cursor-pointer;
+
+        &::before {
+          content: ' ';
+          @apply absolute hidden left-0 right-0 bottom-0 h-0.5 bg-indigo-500;
+        }
+      }
+    }
+  }
+
+  > div[data-tab] {
+    @apply hidden;
+  }
+
+  > input {
+    @apply absolute left-0 top-0 invisible;
+  }
+
+  > input[value="0"]:checked ~ ul label[data-tab="0"],
+  > input[value="1"]:checked ~ ul label[data-tab="1"],
+  > input[value="2"]:checked ~ ul label[data-tab="2"],
+  > input[value="3"]:checked ~ ul label[data-tab="3"],
+  > input[value="4"]:checked ~ ul label[data-tab="4"],
+  > input[value="5"]:checked ~ ul label[data-tab="5"],
+  > input[value="6"]:checked ~ ul label[data-tab="6"],
+  > input[value="7"]:checked ~ ul label[data-tab="7"],
+  > input[value="8"]:checked ~ ul label[data-tab="8"],
+  > input[value="9"]:checked ~ ul label[data-tab="9"] {
+    @apply text-indigo-500 font-bold;
+  }
+
+  > input[value="0"]:checked ~ ul label[data-tab="0"]::before,
+  > input[value="1"]:checked ~ ul label[data-tab="1"]::before,
+  > input[value="2"]:checked ~ ul label[data-tab="2"]::before,
+  > input[value="3"]:checked ~ ul label[data-tab="3"]::before,
+  > input[value="4"]:checked ~ ul label[data-tab="4"]::before,
+  > input[value="5"]:checked ~ ul label[data-tab="5"]::before,
+  > input[value="6"]:checked ~ ul label[data-tab="6"]::before,
+  > input[value="7"]:checked ~ ul label[data-tab="7"]::before,
+  > input[value="8"]:checked ~ ul label[data-tab="8"]::before,
+  > input[value="9"]:checked ~ ul label[data-tab="9"]::before {
+    @apply block;
+  }
+
+  > input[value="0"]:checked ~ div[data-tab="0"],
+  > input[value="1"]:checked ~ div[data-tab="1"],
+  > input[value="2"]:checked ~ div[data-tab="2"],
+  > input[value="3"]:checked ~ div[data-tab="3"],
+  > input[value="4"]:checked ~ div[data-tab="4"],
+  > input[value="5"]:checked ~ div[data-tab="5"],
+  > input[value="6"]:checked ~ div[data-tab="6"],
+  > input[value="7"]:checked ~ div[data-tab="7"],
+  > input[value="8"]:checked ~ div[data-tab="8"],
+  > input[value="9"]:checked ~ div[data-tab="9"] {
+    @apply block;
+  }
+}

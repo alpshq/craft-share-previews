@@ -29,6 +29,11 @@ class ColorLayer extends AbstractRectangleLayer
         return Craft::t('share-previews', 'Color Layer');
     }
 
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return true;
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         [$width, $height] = $this->getCanvasDimensions();

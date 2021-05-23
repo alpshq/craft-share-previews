@@ -1,0 +1,74 @@
+{% extends 'share-previews/template-editor/layers/_layer' %}
+{% import '_includes/forms' as forms %}
+
+{% block description %}
+    {{ 'Use a gradient layer to add a gradient area to your image.'|t('share-previews') }}
+{% endblock %}
+
+{% block content %}
+    {% apply tabs_section(tabId, 'Gradient'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Starting Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[from]',
+                    value: layer.from|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Starting Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[fromOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.from|rgba_to_opacity,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Ending Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[to]',
+                    value: layer.to|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Ending Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[toOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.to|rgba_to_opacity,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% apply tabs_section(tabId, 'Angle'|t('share-previews')) %}
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Angle'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[angle]',
+                    type: 'number',
+                    min: -359,
+                    max: 359,
+                    unit: 'degrees'|t('share-previews'),
+                    value: layer.angle,
+                })) }}
+            </div>
+        </div>
+    {% endapply %}
+
+    {% include 'share-previews/template-editor/layers/_padding' %}
+{% endblock %}

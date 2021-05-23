@@ -17,6 +17,11 @@ class LineLayer extends AbstractLayer
         return Craft::t('share-previews', 'Line Layer');
     }
 
+    public function isAvailableInTemplateEditor(): bool
+    {
+        return true;
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         $from = new Point(...$this->from);

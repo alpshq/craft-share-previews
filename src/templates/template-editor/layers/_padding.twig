@@ -1,0 +1,77 @@
+{% import '_includes/forms' as forms %}
+
+{% apply tabs_section(tabId, 'Padding'|t('share-previews')) %}
+    <div class="field">
+        <div class="heading font-bold">
+            {{ "Padding"|t('share-previews') }}
+        </div>
+        <div class="instructions mb-6">
+            <p>{{ "Set the padding for each side. Set each side to 0 if you want the area to go from edge to edge." }}</p>
+        </div>
+
+        <div class="text-center">
+            <div class="flex justify-center">
+                {{ forms.field({
+                    label: "Top"|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[paddingTop]',
+                    type: 'number',
+                    min: 0,
+                    max: 1200,
+                    unit: 'px',
+                    value: layer.paddingTop,
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+            <div class="flex justify-center">
+                <div class="pr-16">
+                    {{ forms.field({
+                        label: "Left"|t('share-previews'),
+                    }, forms.text({
+                        name: namePrefix ~ '[paddingLeft]',
+                        type: 'number',
+                        min: 0,
+                        max: 1200,
+                        unit: 'px',
+                        value: layer.paddingLeft,
+                        inputAttributes: {
+                            'data-features': 'calc',
+                        },
+                    })) }}
+                </div>
+                <div>
+                    {{ forms.field({
+                        label: "Right"|t('share-previews'),
+                    }, forms.text({
+                        name: namePrefix ~ '[paddingRight]',
+                        type: 'number',
+                        min: 0,
+                        max: 1200,
+                        unit: 'px',
+                        value: layer.paddingRight,
+                        inputAttributes: {
+                            'data-features': 'calc',
+                        },
+                    })) }}
+                </div>
+            </div>
+            <div class="flex justify-center">
+                {{ forms.field({
+                    label: "Bottom"|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[paddingBottom]',
+                    type: 'number',
+                    min: 0,
+                    max: 1200,
+                    unit: 'px',
+                    value: layer.paddingBottom,
+                    inputAttributes: {
+                        'data-features': 'calc',
+                    },
+                })) }}
+            </div>
+        </div>
+    </div>
+{% endapply %}

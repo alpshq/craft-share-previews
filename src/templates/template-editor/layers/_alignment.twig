@@ -1,0 +1,30 @@
+{% import '_includes/forms' as forms %}
+
+{% apply tabs_section(tabId, 'Alignment'|t('share-previews')) %}
+    <div class='grid grid-cols-2 gap-x-6'>
+        <div>
+            {{ forms.field({
+                label: 'Horizontal Alignment'|t('share-previews'),
+            }, forms.select({
+                name: namePrefix ~ '[horizontalAlign]',
+                options: {
+                    'left': 'Left'|t('share-previews'),
+                    'center': 'Center'|t('share-previews'),
+                    'right': 'Right'|t('share-previews'),
+                },
+            })) }}
+        </div>
+        <div>
+            {{ forms.field({
+                label: 'Vertical Alignment'|t('share-previews'),
+            }, forms.select({
+                name: namePrefix ~ '[verticalAlign]',
+                options: {
+                    'top': 'Top'|t('share-previews'),
+                    'middle': 'Middle'|t('share-previews'),
+                    'bottom': 'Bottom'|t('share-previews'),
+                },
+            })) }}
+        </div>
+    </div>
+{% endapply %}

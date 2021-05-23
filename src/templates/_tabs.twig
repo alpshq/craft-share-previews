@@ -1,0 +1,25 @@
+<div class="tabs">
+    {% for idx in sections|keys %}
+        <input
+            type="radio"
+            id="tab-{{ id }}-{{ idx }}"
+            name="_tabs[{{ id }}]"
+            value="{{ idx }}"
+            {{ selected == idx ? 'checked' : '' }}
+        />
+    {% endfor %}
+
+    <ul>
+        {% for idx, section in sections %}
+            <li>
+                <label data-tab="{{ idx }}" for="tab-{{ id }}-{{ idx }}">{{ section.name }}</label>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% for idx, section in sections %}
+        <div data-tab="{{ idx }}">
+            {{ section.markup }}
+        </div>
+    {% endfor %}
+</div>

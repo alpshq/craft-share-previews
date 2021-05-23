@@ -6,7 +6,7 @@
     "postcss:dev": "postcss ./src/resources/**/*.scss --base ./src --dir ./dist/build --ext css",
     "postcss:watch": "npm run postcss:dev -- --watch",
     "postcss:build": "npm run postcss:dev -- --env production",
-    "browser-sync": "browser-sync 'http://craft-plugin-dev.nitro' './src' -w",
+    "browser-sync": "browser-sync start -p craft-plugin-dev.nitro -f './src/**/*.php' './src/**/*.twig' './dist/build' -w --no-inject-changes",
     "dev": "npm run postcss:dev && concurrently 'npm run postcss:watch' 'npm run webpack:dev'",
     "build": "npm run webpack:build"
   },
@@ -25,6 +25,7 @@
     "postcss": "^8.2.15",
     "postcss-cli": "^8.3.1",
     "postcss-loader": "^5.3.0",
+    "postcss-nested": "^5.0.5",
     "postcss-scss": "^3.0.5",
     "sass-loader": "^11.1.1",
     "style-loader": "^2.0.0",
