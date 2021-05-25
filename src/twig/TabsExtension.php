@@ -3,8 +3,6 @@
 namespace alps\sharepreviews\twig;
 
 use Craft;
-use craft\elements\Entry;
-use alps\sharepreviews\Plugin;
 use Twig\Environment;
 use Twig\Markup;
 use Twig\TwigFilter;
@@ -33,14 +31,22 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
         ];
     }
 
-    public function create(): int
+    public function create($id = null)
     {
-        $this->tabs[]= [];
+        if ($id === null) {
+            $id = count($this->tabs) - 1;
+        }
 
-        return count($this->tabs) - 1;
+        if (is_numeric($id)) {
+            $id = (int) $id;
+        }
+
+        $this->tabs[$id]= [];
+
+        return $id;
     }
 
-    public function setSection(Markup $markup, int $id, string $name)
+    public function setSection(Markup $markup, $id, string $name)
     {
         $this->tabs[$id][]= [
             'name' => $name,
@@ -50,7 +56,7 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
         return null;
     }
 
-    public function render(Environment $env, int $id, int $selected = null)
+    public function render(Environment $env, $id, int $selected = null)
     {
         $data = [
             'id' => $id,
@@ -61,7 +67,7 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
         return $env->render('share-previews/_tabs', $data);
     }
 
-    private function getSelectedSection(int $id, ?int $selected): int
+    private function getSelectedSection($id, $selected)
     {
         if ($selected !== null) {
             return $selected;
@@ -70,6 +76,8 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
         $request = Craft::$app->request;
         $param = $request->getParam('_tabs', []);
 
-        return (int) ($param[$id] ?? 0);
+        $selected = $param[$id] ?? 0;
+
+        return isset($this->tabs[$id][$selected]) ? $selected : 0;
     }
 }

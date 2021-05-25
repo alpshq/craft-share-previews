@@ -7,10 +7,11 @@
                 label: 'Horizontal Alignment'|t('share-previews'),
             }, forms.select({
                 name: namePrefix ~ '[horizontalAlign]',
+                value: layer.horizontalAlign,
                 options: {
-                    'left': 'Left'|t('share-previews'),
-                    'center': 'Center'|t('share-previews'),
-                    'right': 'Right'|t('share-previews'),
+                    'hl': 'Left'|t('share-previews'),
+                    'hc': 'Center'|t('share-previews'),
+                    'hr': 'Right'|t('share-previews'),
                 },
             })) }}
         </div>
@@ -19,10 +20,11 @@
                 label: 'Vertical Alignment'|t('share-previews'),
             }, forms.select({
                 name: namePrefix ~ '[verticalAlign]',
+                value: layer.verticalAlign,
                 options: {
-                    'top': 'Top'|t('share-previews'),
-                    'middle': 'Middle'|t('share-previews'),
-                    'bottom': 'Bottom'|t('share-previews'),
+                    'vt': 'Top'|t('share-previews'),
+                    'vm': 'Middle'|t('share-previews'),
+                    'vb': 'Bottom'|t('share-previews'),
                 },
             })) }}
         </div>

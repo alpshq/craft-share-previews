@@ -16,7 +16,7 @@
 
 {% block actionButton %}
 {#    <div class="btngroup">#}
-    <button class="btn" name="cancel">
+    <button class="btn" name="op" value="cancel">
         {{ 'Cancel'|t('app') }}
     </button>
 
@@ -24,10 +24,20 @@
         {{ 'Refresh preview'|t('share-previews') }}
     </button>
 
-    <button class="btn submit" type="submit" name="save">
+    <button class="btn submit" type="submit" name="op" value="save">
         {{ 'Save'|t('app') }}
     </button>
 {#    </div>#}
+{% endblock %}
+
+{% block foot %}
+    {{ parent() }}
+
+    <script>
+        window._alps = window._alps || {};
+        window._alps.previewUrl = '{{ actionUrl('share-previews/template-editor/preview') }}';
+        window._alps.actionUrl = '{{ actionUrl('share-previews/template-editor/post') }}';
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -35,40 +45,22 @@
 {#    {{ hiddenInput('pluginHandle', plugin.handle) }}#}
     {{ redirectInput('settings/plugins/share-previews') }}
 
-    {{ hiddenInput('templateId', id) }}
+    {{ hiddenInput('template[id]', template.id) }}
 
-    <div class="template-editor">
-        <div class="flex items-start">
-            <div class="w-1/2 flex-none">
+    <div class="sp-template-editor">
+        <div class="flex items-stretch">
+            <div class="flex-1 pr-8">
+                <h2>{{ 'Layers'|t('share-previews') }}</h2>
 
-                <div class="space-y-8">
-                    {% for layerIdx, layer in template.layers|reverse(true) %}
-                        {{ include('share-previews/template-editor/_add-layers', {
-                            layers: availableLayers,
-                            position: layerIdx + 1,
-                        }) }}
-
-                        {{ include('share-previews/template-editor/layers/' ~ layer.type, {
-                            template,
-                            layer,
-                            layerIdx,
-                            namePrefix: 'template[layers][' ~ layerIdx ~ ']'
-                        }, with_context = false) }}
-                    {% endfor %}
-
-                    {{ include('share-previews/template-editor/_add-layers', {
-                        layers: availableLayers,
-                        position: 0,
-                    }) }}
+                <div class="fields-pane">
+                    {{ include('share-previews/template-editor/_fields') }}
                 </div>
             </div>
-            <div class="bg-blue-gray-100 flex-grow">
-                <div class="sticky">
-                    <div class="relative" style="padding-top: 52.5%;">
-                        <a class="absolute inset-0 block" href="{{ template.getUrl() }}" target="_blank">
-                            <img class="max-w-full w-full h-auto" src="{{ template.getUrl() }}" />
-                        </a>
-                    </div>
+            <div class="w-1/2 flex-none">
+                <h2>{{ 'Live Preview'|t('share-previews') }}</h2>
+
+                <div class="preview-pane sticky top-16">
+                    {{ include('share-previews/template-editor/_preview') }}
                 </div>
             </div>
         </div>

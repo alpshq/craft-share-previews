@@ -78,7 +78,6 @@ class SharePreviews extends Plugin
 
     protected function settingsHtml()
     {
-//        dd($this->getSettings()->templates[0]->layers[0]);
         return Craft::$app->getView()->renderTemplate('share-previews/settings', [
             'settings' => $this->getSettings(),
         ]);
@@ -109,6 +108,7 @@ class SharePreviews extends Plugin
                     'share-previews/draft' => 'share-previews/preview/draft',
                     'POST share-previews/template-editor' => 'share-previews/template-editor/post',
                     'GET share-previews/template-editor' => 'share-previews/template-editor/edit',
+                    'POST share-previews/template-editor/preview' => 'share-previews/template-editor/preview',
                 ]);
             }
         );

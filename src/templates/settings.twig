@@ -10,6 +10,8 @@
         Preview!
     </button>
 
+    <a href="{{ actionUrl('share-previews/template-editor/edit') }}">New Template</a>
+
     {% for templateIdx, template in templates %}
         <div class="flex items-start" data-template="{{ templateIdx }}">
             <div class="w-1/2 flex-none">

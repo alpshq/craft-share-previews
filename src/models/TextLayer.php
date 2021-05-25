@@ -14,7 +14,7 @@ use Laminas\Feed\Reader\Entry\EntryInterface;
 
 class TextLayer extends AbstractRectangleLayer
 {
-    public string $content = '';
+    public string $content = '{{ entry.title }}';
     public string $fontFamily = 'Roboto';
     public string $fontWeight = '700';
     public int $maxFontSize = 60;

@@ -53,7 +53,7 @@ class HasColors extends \yii\base\Behavior
             return;
         }
 
-        if (!is_int($value) && empty($value)) {
+        if (!is_int($value) && empty($value) && $value !== '0') {
             $value = 100;
         }
 

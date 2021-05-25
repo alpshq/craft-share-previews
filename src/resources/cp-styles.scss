@@ -75,3 +75,36 @@
     @apply block;
   }
 }
+
+
+.sp-template-editor {
+  .preview-pane {
+    .updating-message {
+      div:first-child {
+        display: none;
+      }
+    }
+
+    &.loading {
+      #preview-image {
+        opacity: 0.5;
+      }
+
+      .updating-message {
+        div:first-child {
+          display: block;
+
+          + div {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .fields-pane {
+    &.loading {
+      opacity: 0.5;
+    }
+  }
+}

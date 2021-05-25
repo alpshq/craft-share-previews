@@ -10,6 +10,31 @@
         <div class="grid grid-cols-2 gap-6">
             <div>
                 {{ forms.field({
+                    label: 'Default Asset'|t('share-previews'),
+                }, forms.elementSelect({
+                    elements: [layer.getAsset()]|filter,
+                    name: namePrefix ~ '[assetId]',
+                    elementType: 'craft\\elements\\Asset',
+                    limit: 1,
+                })) }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
+                    label: 'Replace default image'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[fieldId]',
+                    value: layer.fieldId,
+                    options: layer.getAvailableAssetFieldsAsOptions(),
+                })) }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                {{ forms.field({
                     label: 'Image Fill Mode'|t('share-previews'),
                 }, forms.select({
                     name: namePrefix ~ '[fillMode]',

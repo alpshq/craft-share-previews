@@ -9,6 +9,7 @@ use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\ImageLayer;
 use alps\sharepreviews\models\LineLayer;
+use alps\sharepreviews\models\Template;
 use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use craft\elements\Entry;
@@ -20,29 +21,61 @@ use alps\sharepreviews\services\Renderer;
 use alps\youtube\Client;
 use Craft;
 use craft\web\Controller;
+use craft\web\Request;
+use craft\web\Response;
 use League\OAuth2\Client\Provider\Google;
 use yii\web\HttpException;
+use yii\web\JqueryAsset;
 
 class TemplateEditorController extends Controller
 {
     public function actionEdit()
     {
-        $template = SharePreviews::getInstance()->getSettings()->getTemplates()[0];
+        $id = $this->request->getParam('id');
 
-        return $this->renderEditor($template, $this->request->getParam('id'));
+        $template = $id === null
+            ? new Template()
+            : SharePreviews::getInstance()->getSettings()->getTemplates()[0];
+
+        return $this->renderEditor($template, $id);
     }
 
     public function actionPost()
     {
-        $shouldCancel = $this->request->getParam('cancel', false) !== false;
+        $op = $this->request->getParam('op', '');
 
-        if ($shouldCancel) {
+        if ($op === 'cancel') {
             return $this->redirectToPostedUrl();
         }
 
-        $id = $this->request->getBodyParam('templateId');
-        $template = $this->request->getBodyParam('template', []);
+        $template = $this->createTemplateFromParam(
+            $this->request->getBodyParam('template', [])
+        );
 
+        if ($op === 'save') {
+            return $this->handleSave($template);
+        }
+
+        return $this->renderEditor($template);
+    }
+
+    public function actionPreview()
+    {
+        $template = $this->createTemplateFromParam(
+            $this->request->getBodyParam('template', [])
+        );
+
+        $preview = $this->request->getBodyParam('preview');
+
+        $template = $this->attachEntry($template, $preview);
+
+        $template->render()->show('png', [
+            'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
+        ]);
+    }
+
+    private function createTemplateFromParam(array $template): Template
+    {
         $layers = $template['layers'] ?? [];
 
         ksort($layers);
@@ -52,23 +85,34 @@ class TemplateEditorController extends Controller
         $layers = $this->moveLayers($layers);
 
         $template['layers'] = $layers;
-        $template = new Image($template);
 
-        $shouldSave = $this->request->getParam('save', false) !== false;
-
-        if ($shouldSave) {
-            return $this->handleSave($id, $template);
-        }
-
-        return $this->renderEditor($template, $id);
+        return new Template($template);
     }
 
-    private function renderEditor(Image $template, ?int $id)
+    private function renderEditor(Template $template)
     {
-        return $this->renderTemplate('share-previews/template-editor/edit', [
+        $data = [
             'template' => $template,
             'availableLayers' => $this->getAvailableLayers(),
-            'id' => $id,
+        ];
+
+        $isFetch = $this->request->getHeaders()->get('x-requested-with') === 'fetch';
+
+        if (!$isFetch) {
+            return $this->renderTemplate('share-previews/template-editor/edit', $data);
+        }
+
+        $view = $this->getView();
+
+        $view->startJsBuffer();
+
+        $html = $view->renderTemplate('share-previews/template-editor/_fields', $data);
+
+        $js = $view->clearJsBuffer(false);
+
+        return $this->asJson([
+            'html' => $html,
+            'js' => !empty($js) ? $js : null,
         ]);
     }
 
@@ -126,7 +170,7 @@ class TemplateEditorController extends Controller
         return $layers;
     }
 
-    private function handleSave(int $id, Image $template)
+    private function handleSave(Template $template)
     {
         $pluginService = Craft::$app->getPlugins();
         $plugin = SharePreviews::getInstance();
@@ -165,5 +209,28 @@ class TemplateEditorController extends Controller
         });
 
         return array_values($layers);
+    }
+
+    private function attachEntry(Template $template, ?array $preview): Template
+    {
+        if (!$preview) {
+            return $template;
+        }
+
+        $entryId = (int) ($preview['entryId'][0] ?? 0);
+
+        if ($entryId < 1) {
+            return $template;
+        }
+
+        $entry = Entry::findOne($entryId);
+
+        if (!$entry) {
+            return $template;
+        }
+
+        $template->setEntry($entry);
+
+        return $template;
     }
 }

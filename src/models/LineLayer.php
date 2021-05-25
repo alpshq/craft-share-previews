@@ -9,8 +9,8 @@ use Imagine\Image\Point;
 
 class LineLayer extends AbstractLayer
 {
-    private array $from = [0,0];
-    private array $to = [1200,630];
+    private array $from = [0,630/2];
+    private array $to = [1200,630/2];
 
     public function getTitle(): string
     {

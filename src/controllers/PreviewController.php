@@ -32,9 +32,19 @@ class PreviewController extends Controller
 
     public function actionIndex(string $data)
     {
+        $plugin = SharePreviews::getInstance();
+
         $image = Image::fromEncodedDiff($data);
 
-        $image->render()->show('png', [
+        $settings = $plugin->getSettings();
+
+        $image = $image->render();
+//
+//        if ($settings->disableImageCache !== true) {
+//            $plugin->fileHandler->saveImage($image, $data);
+//        }
+
+        $image->show('png', [
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
         ]);
 

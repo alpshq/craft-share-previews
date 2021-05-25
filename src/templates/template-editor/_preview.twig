@@ -1,0 +1,41 @@
+{% import '_includes/forms' as forms %}
+
+<div class="relative bg-blue-gray-100" style="padding-top: 52.5%;">
+    <a
+        id="preview-anchor"
+        class="absolute inset-0 block overflow-hidden"
+        href="{{ template.getUrl() }}"
+        target="_blank"
+    >
+        <img
+            id="preview-image"
+            class="max-w-full w-full h-auto"
+            src="{{ template.getUrl() }}"
+        />
+    </a>
+</div>
+
+<div class="updating-message mt-2 text-gray-400 text-sm">
+    <div>{{ 'Regenerating preview ...' }}</div>
+    <div>
+        <p class="flex flex-nowrap">
+            <span class="flex-1">
+                {{ 'Preview up to date.' }}
+            </span>
+            <span>
+                <a id="refresh-preview-anchor" href="#">{{ 'Refresh?'|t('share-previews') }}</a>
+            </span>
+        </p>
+    </div>
+</div>
+
+<div class="mt-8">
+    {{ forms.field({
+        label: 'Preview Entry'|t('share-previews'),
+        instructions: 'Render the above preview based on the selected entry.'|t('share-previews'),
+    }, forms.elementSelect({
+        name: 'preview[entryId]',
+        elementType: 'craft\\elements\\Entry',
+        limit: 1,
+    })) }}
+</div>
