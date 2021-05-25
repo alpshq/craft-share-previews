@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\models\concerns\HasLayers;
 use alps\sharepreviews\SharePreviews;
 use BadMethodCallException;
 use Craft;
@@ -18,12 +19,11 @@ use ReflectionProperty;
 
 class Image extends Model
 {
+    use HasLayers;
+
     public int $width = 1200;
     public int $height = 630;
     public ?int $templateId = null;
-
-    /** @var AbstractLayer[] */
-    private array $layers = [];
 
     private ?Entry $entry = null;
 
@@ -33,38 +33,7 @@ class Image extends Model
 
         $data = $differ->decodeDiff($diff);
 
-//        dd($data);
-
         return $differ->createFromDiff($data);
-    }
-
-    /**
-     * @param AbstractLayer[] $layers
-     */
-    public function setLayers(array $layers): self
-    {
-        ksort($layers);
-
-        $layers = array_values($layers);
-
-        $this->layers = [];
-
-        foreach ($layers as $layer) {
-            if (!$layer instanceof AbstractLayer) {
-                $layer = AbstractLayer::make($layer);
-            }
-
-            $this->layers[] = $layer->scaleTo($this->width, $this->height);
-        }
-
-        return $this;
-    }
-
-    public function getLayers(): array
-    {
-        return array_map(function(AbstractLayer $layer) {
-            return AbstractLayer::make($layer->toArray());
-        }, $this->layers);
     }
 
     public function setEntry(?Entry $entry): self
@@ -76,9 +45,10 @@ class Image extends Model
 
     public function attributes()
     {
-        return array_merge(parent::attributes(), [
-            'layers',
-        ]);
+        return array_merge(
+            parent::attributes(),
+            $this->getLayersAttributes(),
+        );
     }
 
     public function toArray(array $fields = [], array $expand = [], $recursive = true)

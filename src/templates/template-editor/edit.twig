@@ -50,14 +50,49 @@
     <div class="sp-template-editor">
         <div class="flex items-stretch">
             <div class="flex-1 pr-8">
-                <h2>{{ 'Layers'|t('share-previews') }}</h2>
+                <i class="fas fa-user"></i>
+                {{ forms.field({
+                    label: 'Name'|t('share-previews'),
+                    instructions: 'The name of your template helps you to recognize it in template selection menus.
+Most people have more than one active template. Use a name which corresponds to the entry types you want to use the template with.'|t('share-previews'),
+                    tip: 'Good starting points are `General`, `Blog` or `News`.'|translate('share-previews'),
+                }, forms.text({
+                    name: 'template[name]',
+                    value: template.name,
+                    placeholder: 'Blog',
+                })) }}
 
+                {{ forms.field({
+                    label: 'Default'|t('share-previews'),
+                    instructions: 'Do you want this template to be default one?'|t('share-previews'),
+                    tip: 'Since this is your first template, it\'ll automatically be your default template.'|translate('share-previews'),
+                }, forms.lightswitch({
+                    name: 'template[isDefault]',
+                    value: true,
+                    on: template.isDefault,
+                })) }}
+
+
+                <h2>{{ 'Layers'|t('share-previews') }}</h2>
+                <p>
+                    {{ 'Your template consists of layers. Each layer is painted on the previous one. Layers give you the ability to compose your share previews step by step.'|t('share-previews') }}
+                </p>
+                <p>
+                    {{ 'The layers will be rendered from bottom to top. If a layer does not appear in the preview, make sure it\'s not covered by a following layer. **Remember**: Rendering is from bottom to top.'|t('share-previews')|md }}
+                </p>
+                <p>
+                    {{ 'If you\'re not sure how to start, add a **Color Layer** first.'|t('share-previews')|md }}
+                </p>
                 <div class="fields-pane">
                     {{ include('share-previews/template-editor/_fields') }}
                 </div>
             </div>
             <div class="w-1/2 flex-none">
                 <h2>{{ 'Live Preview'|t('share-previews') }}</h2>
+
+                <p>
+                    {{ 'The preview is rendered in real time and based on the layers you\'ve specified on the left side.'|t('share-previews') }}
+                </p>
 
                 <div class="preview-pane sticky top-16">
                     {{ include('share-previews/template-editor/_preview') }}

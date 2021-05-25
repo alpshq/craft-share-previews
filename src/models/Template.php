@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\models\concerns\HasLayers;
 use alps\sharepreviews\SharePreviews;
 use BadMethodCallException;
 use Craft;
@@ -18,9 +19,14 @@ use ReflectionProperty;
 
 class Template extends Model
 {
-    public ?int $id = null;
-    public string $name;
-    public ?Image $image = null;
+    use HasLayers;
+
+    private int $width = 1200;
+    private int $height = 630;
+
+    private ?int $id = null;
+    public ?string $name = null;
+    public bool $isDefault = false;
 
 //    public function attributes()
 //    {
@@ -28,4 +34,42 @@ class Template extends Model
 //            'layers',
 //        ]);
 //    }
+
+    public function setId($id): self
+    {
+        $id = (int) $id;
+
+        if ($id < 1) {
+            $id = null;
+        }
+
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function toImage(): Image
+    {
+        return new Image([
+            'layers' => $this->layers,
+        ]);
+    }
+
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getLayersAttributes(),
+            [
+                'id',
+                'layers',
+            ]
+        );
+    }
+
 }

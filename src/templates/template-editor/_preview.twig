@@ -4,13 +4,13 @@
     <a
         id="preview-anchor"
         class="absolute inset-0 block overflow-hidden"
-        href="{{ template.getUrl() }}"
+        href="{{ template.toImage().getUrl() }}"
         target="_blank"
     >
         <img
             id="preview-image"
             class="max-w-full w-full h-auto"
-            src="{{ template.getUrl() }}"
+            src="{{ template.toImage().getUrl() }}"
         />
     </a>
 </div>
