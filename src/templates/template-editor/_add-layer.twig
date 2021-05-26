@@ -1,0 +1,71 @@
+{% set icons = {
+    color: 'palette',
+    gradient: 'swatchbook',
+    line: 'horizontal-rule',
+    text: 'text',
+    asset: 'image',
+} %}
+
+{% if availableLayers %}
+    <div class="my-6">
+        <p class="
+            m-0 mb-2
+            text-center text-gray-500 uppercase tracking-wide text-sm
+        ">
+            {{ label ?? 'Add layer'|t('share-previews') }}
+        </p>
+        <div class="m-0 grid grid-cols-5 gap-x-4">
+            {% for layer in availableLayers %}
+                <button
+                    class="
+                        block m-0 p-2
+    {#                    bg-blue-gray-200#}
+                        text-base
+                        rounded
+                        cursor-pointer
+                        border border-dashed border-gray-300
+                        hover:bg-blue-gray-100
+                    "
+                    name="addLayer"
+                    value="{{ layer.type }}|{{ position }}"
+                    style=""
+                >
+                    <span class="block text-2xl text-gray-400">
+                        <i class="fal fa-{{ icons[layer.type] ?? 'layer-plus' }}"></i>
+                    </span>
+                    <span class="
+                        block
+                        mt-4
+                        text-xs uppercase tracking-wide text-gray-500
+
+                    ">
+                        {{ layer.name }}
+                    </span>
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+
+{#    <div class="buttons">#}
+{#        <div class="btngroup">#}
+{#            {% for layer in availableLayers %}#}
+{#                <button type="button" class="btn dashed{% if loop.first %} add icon{% endif %}" data-type="{{ layer.type }}">#}
+{#                    {{ layer.name }}#}
+{#                </button>#}
+{#            {% endfor %}#}
+{#        </div>#}
+
+{#        <button type="button" class="btn dashed add icon menubtn">{{ 'Add a Layer'|t('share-previews') }}</button>#}
+{#        <div class="menu">#}
+{#            <ul>#}
+{#                {% for layer in availableLayers %}#}
+{#                    <li>/#}
+{#                        <a data-type="{{ layer.type }}">#}
+{#                            {{ layer.name }}#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{% endif %}

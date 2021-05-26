@@ -1,8 +1,11 @@
 <div class="space-y-8">
     {% for layerIdx, layer in template.layers|reverse(true) %}
-        {{ include('share-previews/template-editor/_add-layers', {
+        {{ include('share-previews/template-editor/_add-layer', {
             layers: availableLayers,
             position: layerIdx + 1,
+            label: loop.first
+                ? 'Add layer on top'|t('share-previews')
+                : 'Add layer in between'|t('share-previews'),
         }) }}
 
         {{ include('share-previews/template-editor/layers/' ~ layer.type, {
@@ -12,9 +15,12 @@
             namePrefix: 'template[layers][' ~ layerIdx ~ ']'
         }, with_context = false) }}
     {% endfor %}
-
-    {{ include('share-previews/template-editor/_add-layers', {
-        layers: availableLayers,
-        position: 0,
-    }) }}
 </div>
+
+{{ include('share-previews/template-editor/_add-layer', {
+    layers: availableLayers,
+    position: 0,
+    label: template.layers
+        ? 'Add layer on bottom'|t('share-previews')
+        : 'Add first layer'|t('share-previews'),
+}) }}

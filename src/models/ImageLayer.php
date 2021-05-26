@@ -26,7 +26,7 @@ class ImageLayer extends AbstractRectangleLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Image Layer');
+        return Craft::t('share-previews', 'Image');
     }
 
     public function isAvailableInTemplateEditor(): bool

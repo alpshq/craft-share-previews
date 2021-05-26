@@ -26,7 +26,7 @@ class AssetLayer extends ImageLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Asset Layer');
+        return Craft::t('share-previews', 'Asset');
     }
 
     public function isAvailableInTemplateEditor(): bool

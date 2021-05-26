@@ -20,7 +20,7 @@ class GradientLayer extends AbstractRectangleLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Gradient Layer');
+        return Craft::t('share-previews', 'Gradient');
     }
 
     public function isAvailableInTemplateEditor(): bool

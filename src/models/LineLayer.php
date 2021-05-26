@@ -14,7 +14,7 @@ class LineLayer extends AbstractLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Line Layer');
+        return Craft::t('share-previews', 'Line');
     }
 
     public function isAvailableInTemplateEditor(): bool

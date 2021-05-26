@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews;
 
+use alps\sharepreviews\assets\FontAwesomeAssets;
 use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\services\ImageDiffer;
@@ -166,6 +167,7 @@ class SharePreviews extends Plugin
                 $view = Craft::$app->getView();
 
                 $view->registerAssetBundle(ControlPanelAssets::class);
+                $view->registerAssetBundle(FontAwesomeAssets::class);
             }
         );
 

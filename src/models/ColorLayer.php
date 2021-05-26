@@ -26,7 +26,7 @@ class ColorLayer extends AbstractRectangleLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Color Layer');
+        return Craft::t('share-previews', 'Color');
     }
 
     public function isAvailableInTemplateEditor(): bool

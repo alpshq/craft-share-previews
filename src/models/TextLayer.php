@@ -22,7 +22,7 @@ class TextLayer extends AbstractRectangleLayer
 
     public function getTitle(): string
     {
-        return Craft::t('share-previews', 'Text Layer');
+        return Craft::t('share-previews', 'Text');
     }
 
     public function isAvailableInTemplateEditor(): bool
