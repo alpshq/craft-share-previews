@@ -10,21 +10,21 @@
         Preview!
     </button>
 
-    <a href="{{ actionUrl('share-previews/template-editor/edit') }}">New Template</a>
+    <a href="{{ url('share-previews/template-editor') }}">New Template</a>
 
     {% for templateIdx, template in templates %}
         <div class="flex items-start" data-template="{{ templateIdx }}">
             <div class="w-1/2 flex-none">
-
+                {{ template.getHumanFriendlyName() }}
             </div>
             <div class="bg-blue-gray-100 flex-grow">
                 <div class="sticky">
                     <div class="relative" style="padding-top: 52.5%;">
                         <a
                             class="absolute inset-0 block"
-                            href="{{ url('share-previews/template-editor', {id: templateIdx}) }}"
+                            href="{{ url('share-previews/template-editor', {id: template.id}) }}"
                         >
-                            <img class="max-w-full w-full h-auto" src="{{ template.getUrl() }}" />
+                            <img class="max-w-full w-full h-auto" src="{{ template.toImage().getUrl() }}" />
                         </a>
                     </div>
                 </div>

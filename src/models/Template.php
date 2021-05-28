@@ -3,6 +3,7 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\models\concerns\HasLayers;
+use alps\sharepreviews\services\Templates;
 use alps\sharepreviews\SharePreviews;
 use BadMethodCallException;
 use Craft;
@@ -17,6 +18,10 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
 
+/**
+ * @property ?int $id
+ * @property ?string $name
+ */
 class Template extends Model
 {
     use HasLayers;
@@ -25,15 +30,22 @@ class Template extends Model
     private int $height = 630;
 
     private ?int $id = null;
-    public ?string $name = null;
+    private ?string $name = null;
+
     public bool $isDefault = false;
 
-//    public function attributes()
-//    {
-//        return array_merge(parent::attributes(), [
-//            'layers',
-//        ]);
-//    }
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            $this->getLayersAttributes(),
+            [
+                'id',
+                'name',
+                'layers',
+            ]
+        );
+    }
 
     public function setId($id): self
     {
@@ -53,6 +65,31 @@ class Template extends Model
         return $this->id;
     }
 
+    public function setName(?string $name): self
+    {
+        $this->name = empty($name) ? null : $name;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function getHumanFriendlyName(): string
+    {
+        if ($this->name) {
+            return $this->name;
+        }
+
+        $name = Craft::t('share-previews', 'Untitled {id}', [
+            'id' => $this->id,
+        ]);
+
+        return trim($name);
+    }
+
     public function toImage(): Image
     {
         return new Image([
@@ -60,16 +97,14 @@ class Template extends Model
         ]);
     }
 
-    public function attributes()
+    public function exists(): bool
     {
-        return array_merge(
-            parent::attributes(),
-            $this->getLayersAttributes(),
-            [
-                'id',
-                'layers',
-            ]
-        );
-    }
+        if ($this->id === null) {
+            return false;
+        }
 
+        $templatesService = SharePreviews::getInstance()->templates;
+
+        return $templatesService->getTemplateById($this->id) !== null;
+    }
 }

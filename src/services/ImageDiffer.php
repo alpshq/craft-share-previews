@@ -8,6 +8,7 @@ use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\ImageLayer;
 use alps\sharepreviews\models\LineLayer;
+use alps\sharepreviews\models\Template;
 use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use Craft;
@@ -33,9 +34,11 @@ class ImageDiffer extends Component
             return array_filter($image->toArray());
         }
 
-        $template = $this->templatesService->getTemplateOrDefault($image->templateId);
+        $template = $this
+            ->templatesService
+            ->getTemplateById($image->templateId) ?? new Template;
 
-        $template = $template->toArray();
+        $template = $template->toImage()->toArray();
         $image = $image->toArray();
 
         $diff = [];
@@ -84,7 +87,13 @@ class ImageDiffer extends Component
 
         $templateId = $diff['templateId'] ?? null;
 
-        $image = $templatesService->getTemplate((int) $templateId) ?? new Image;
+        $template = null;
+
+        if ($templateId) {
+            $template = $templatesService->getTemplateById((int) $templateId);
+        }
+
+        $image = ($template ?? new Template)->toImage();
 
         $image->width = $diff['width'] ?? $image->width;
         $image->height = $diff['height'] ?? $image->height;

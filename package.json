@@ -31,6 +31,7 @@
     "core-js": "^3.12.1",
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
+    "interactjs": "^1.10.11",
     "node-sass": "^6.0.0",
     "postcss": "^8.2.15",
     "postcss-cli": "^8.3.1",

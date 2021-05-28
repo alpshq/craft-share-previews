@@ -1,18 +1,32 @@
 {% import '_includes/forms' as forms %}
 
 {% apply tabs_section(tabId, 'Padding'|t('share-previews')) %}
-    <div class="field">
+    <div class="field padding" data-name-prefix="{{ namePrefix }}">
         <div class="heading font-bold">
-            {{ "Padding"|t('share-previews') }}
+            {{ 'Padding'|t('share-previews') }}
         </div>
         <div class="instructions mb-6">
-            <p>{{ "Set the padding for each side. Set each side to 0 if you want the area to go from edge to edge." }}</p>
+            {{ 'Set the layer\'s boundaries by applying padding values for each side.
+
+The layer is **{width}px** wide and **{height}px** tall. Keep that in mind, when adapting the values.
+
+Set each side to 0 if you want the area to go from edge to edge.
+
+Values are only validated server side. If you encounter an unexpected preview, hit the **"{label}"** button to let the server resolve any issues with your padding values.'|t('share-previews', {
+                label: 'Validate values'|t('share-previews'),
+                width: layer.width,
+                height: layer.height,
+            })|md }}
         </div>
 
-        <div class="text-center">
+        <button class="btn mb-8">
+            {{ 'Validate values'|t('share-previews') }}
+        </button>
+
+        <div>
             <div class="flex justify-center">
                 {{ forms.field({
-                    label: "Top"|t('share-previews'),
+                    label: 'Top'|t('share-previews'),
                 }, forms.text({
                     name: namePrefix ~ '[paddingTop]',
                     type: 'number',
@@ -20,15 +34,12 @@
                     max: 1200,
                     unit: 'px',
                     value: layer.paddingTop,
-                    inputAttributes: {
-                        'data-features': 'calc',
-                    },
                 })) }}
             </div>
             <div class="flex justify-center">
                 <div class="pr-16">
                     {{ forms.field({
-                        label: "Left"|t('share-previews'),
+                        label: 'Left'|t('share-previews'),
                     }, forms.text({
                         name: namePrefix ~ '[paddingLeft]',
                         type: 'number',
@@ -36,14 +47,11 @@
                         max: 1200,
                         unit: 'px',
                         value: layer.paddingLeft,
-                        inputAttributes: {
-                            'data-features': 'calc',
-                        },
                     })) }}
                 </div>
                 <div>
                     {{ forms.field({
-                        label: "Right"|t('share-previews'),
+                        label: 'Right'|t('share-previews'),
                     }, forms.text({
                         name: namePrefix ~ '[paddingRight]',
                         type: 'number',
@@ -51,15 +59,12 @@
                         max: 1200,
                         unit: 'px',
                         value: layer.paddingRight,
-                        inputAttributes: {
-                            'data-features': 'calc',
-                        },
                     })) }}
                 </div>
             </div>
             <div class="flex justify-center">
                 {{ forms.field({
-                    label: "Bottom"|t('share-previews'),
+                    label: 'Bottom'|t('share-previews'),
                 }, forms.text({
                     name: namePrefix ~ '[paddingBottom]',
                     type: 'number',
@@ -67,10 +72,33 @@
                     max: 1200,
                     unit: 'px',
                     value: layer.paddingBottom,
-                    inputAttributes: {
-                        'data-features': 'calc',
-                    },
                 })) }}
+            </div>
+        </div>
+
+        <div
+            class="interactive-padding relative bg-white mt-8"
+            style="padding-top: 52.5%;"
+        >
+            <div
+                class="absolute left-0 top-0 bg-gray-100 border border-dashed border-gray-400"
+                data-name-prefix="{{ namePrefix }}"
+            >
+                <div class="
+                    absolute left-1/2 top-1/2
+                    max-w-full overflow-hidden
+                    transform -translate-x-1/2 -translate-y-1/2
+                    text-gray-400
+                    pointer-events-none
+                "></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -left-1.5 -top-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -right-1.5 -top-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -left-1.5 -bottom-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -right-1.5 -bottom-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 left-1/2 -top-1.5 -ml-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 left-1/2 -bottom-1.5 -ml-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -left-1.5 top-1/2 -mt-1.5"></div>
+                <div class="w-3 h-3 rounded-full absolute bg-gray-400 -right-1.5 top-1/2 -mt-1.5"></div>
             </div>
         </div>
     </div>

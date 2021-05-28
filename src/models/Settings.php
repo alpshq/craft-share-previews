@@ -5,6 +5,9 @@ namespace alps\sharepreviews\models;
 use alps\sharepreviews\Config;
 use Craft;
 
+/**
+ * @property Template[] $templates
+ */
 class Settings extends \craft\base\Model
 {
     public string $routePrefix = 'previews';

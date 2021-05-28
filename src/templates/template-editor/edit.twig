@@ -20,24 +20,16 @@
         {{ 'Cancel'|t('app') }}
     </button>
 
-    <button class="btn">
-        {{ 'Refresh preview'|t('share-previews') }}
-    </button>
+    {% if (template.exists()) %}
+        <button class="btn ml-12" name="op" value="duplicate">
+            {{ 'Save es new'|t('share-preview') }}
+        </button>
+    {% endif %}
 
     <button class="btn submit" type="submit" name="op" value="save">
-        {{ 'Save'|t('app') }}
+        {{ template.exists() ? 'Save'|t('app') : 'Create new Template'|t('share-previews') }}
     </button>
 {#    </div>#}
-{% endblock %}
-
-{% block foot %}
-    {{ parent() }}
-
-    <script>
-        window._alps = window._alps || {};
-        window._alps.previewUrl = '{{ actionUrl('share-previews/template-editor/preview') }}';
-        window._alps.actionUrl = '{{ actionUrl('share-previews/template-editor/post') }}';
-    </script>
 {% endblock %}
 
 {% block content %}
@@ -63,8 +55,7 @@ Most people have more than one active template. Use a name which corresponds to 
 
                 {{ forms.field({
                     label: 'Default'|t('share-previews'),
-                    instructions: 'Do you want this template to be default one?'|t('share-previews'),
-                    tip: 'Since this is your first template, it\'ll automatically be your default template.'|translate('share-previews'),
+                    instructions: 'Do you want this template to be the default one?'|t('share-previews'),
                 }, forms.lightswitch({
                     name: 'template[isDefault]',
                     value: true,
@@ -100,3 +91,11 @@ Most people have more than one active template. Use a name which corresponds to 
         </div>
     </div>
 {% endblock %}
+
+{% js %}
+    window._alps = window._alps || {};
+    window._alps.previewUrl = '{{ actionUrl('share-previews/template-editor/preview') }}';
+    window._alps.actionUrl = '{{ actionUrl('share-previews/template-editor/post') }}';
+    window._alps.deleteConfirmation = '{{ 'Are you sure you want to delete template "{name}"?'|t('share-previews')|raw }}';
+    window._alps.templateName = '{{ template.getHumanFriendlyName() }}';
+{% endjs %}

@@ -90,4 +90,7 @@
 
     {% include 'share-previews/template-editor/layers/_alignment' %}
     {% include 'share-previews/template-editor/layers/_padding' %}
+
+    {% apply tabs_section(tabId, 'Help'|t('share-previews')) %}
+    {% endapply %}
 {% endblock %}

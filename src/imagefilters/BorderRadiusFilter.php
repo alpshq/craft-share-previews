@@ -48,7 +48,7 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 
         foreach ($circles as $coords) {
             $mask->draw()->circle(
-                new Point(...$coords),
+                $this->getPoint(...$coords),
                 $radius,
                 $black->lighten(180),
                 true,
@@ -67,7 +67,7 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 
         foreach ($circles as $coords) {
             $mask->draw()->circle(
-                new Point(...$coords),
+                $this->getPoint(...$coords),
                 $radius,
                 $black,
                 true,
@@ -85,6 +85,19 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
         }
 
         return $this->applyMask($image, $mask);
+    }
+
+    private function getPoint(int $x, int $y): Point
+    {
+        if ($x < 0) {
+            $x = 0;
+        }
+
+        if ($y < 0) {
+            $y = 0;
+        }
+
+        return new Point($x, $y);
     }
 
     private function applyMask(ImageInterface $image, ImageInterface $mask)

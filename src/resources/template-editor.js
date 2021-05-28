@@ -1,5 +1,6 @@
 import createPreviewUpdater from './lib/preview-updater';
 import createFormSubmitter from './lib/form-submitter';
+import attachInteractivePadding from './lib/interactive-padding';
 
 const objEqual = (obj1, obj2) => {
   const keys = Object.keys(obj1);
@@ -64,7 +65,7 @@ const attachPreviewAnchorHandler = (win, anchor) => {
   }, false);
 };
 
-const attachFormHandler = (win, fieldsPane, form, updatePreview, previewStateToggle) => {
+const attachFormHandler = (win, editor, fieldsPane, form, updatePreview, previewStateToggle) => {
   const fieldStateToggle = createLoadingStateToggle(fieldsPane);
 
   const formCallback = (isFinished) => {
@@ -79,6 +80,7 @@ const attachFormHandler = (win, fieldsPane, form, updatePreview, previewStateTog
 
   const handleSubmit = createFormSubmitter(
     win,
+    editor,
     win._alps.actionUrl,
     fieldsPane,
     formCallback,
@@ -106,6 +108,12 @@ const attachPreviewEntryHandler = (garnish, craft, collectFieldValues, updatePre
     updatePreview(values);
   });
 };
+
+// const attachDeleteButtonHandler = (editor) => {
+//   const buttons = [...editor.querySelectorAll('button[name="op"][value="delete"]')];
+//
+//   buttons.forEach()
+// };
 
 const exec = (win) => {
   const doc = win.document;
@@ -167,11 +175,13 @@ const exec = (win) => {
   }
 
   const fieldsPane = editor.querySelector('.fields-pane');
-  attachFormHandler(win, fieldsPane, form, updatePreview, previewStateToggle);
+  attachFormHandler(win, editor, fieldsPane, form, updatePreview, previewStateToggle);
 
   attachPreviewAnchorHandler(win, document.querySelector('#preview-anchor'));
 
   attachPreviewEntryHandler(garnish, craft, collectFieldValues, updatePreview);
+
+  attachInteractivePadding(win, editor);
 
   editor.querySelector('#refresh-preview-anchor')
     .addEventListener('click', ev => {

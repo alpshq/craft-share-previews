@@ -1,18 +1,21 @@
 {% import '_includes/forms' as forms %}
 
-<div class="relative bg-blue-gray-100" style="padding-top: 52.5%;">
-    <a
-        id="preview-anchor"
-        class="absolute inset-0 block overflow-hidden"
-        href="{{ template.toImage().getUrl() }}"
-        target="_blank"
-    >
-        <img
-            id="preview-image"
-            class="max-w-full w-full h-auto"
-            src="{{ template.toImage().getUrl() }}"
-        />
-    </a>
+<div class="relative border border-solid border-transparent hover:border-pink-600">
+    <div>
+        <a
+            id="preview-anchor"
+            class="block overflow-hidden bg-blue-gray-100"
+            style="padding-top: 52.5%;"
+            href="{{ template.toImage().getUrl() }}"
+            target="_blank"
+        >
+            <img
+                id="preview-image"
+                class="absolute inset-0 block max-w-full w-full h-auto"
+                src="{{ template.toImage().getUrl() }}"
+            />
+        </a>
+    </div>
 </div>
 
 <div class="updating-message mt-2 text-gray-400 text-sm">
@@ -39,3 +42,25 @@
         limit: 1,
     })) }}
 </div>
+
+{% if (template.exists()) %}
+    <div class="mt-20">
+        <h2>{{ 'Danger Zone'|t('share-previews') }}</h2>
+
+        <div class="flex border border-solid border-pink-600 p-4 rounded">
+            <div class="flex-1">
+                <h3 class="m-0">
+                    {{ 'Delete this template'|t('share-previews') }}
+                </h3>
+                <p class="m-0 mt-2 text-gray-500 leading-tight">
+                    {{ 'Once you delete a template, there is no going back. Please be certain.'|t('share-previews') }}
+                </p>
+            </div>
+            <div class="flex-none ml-8">
+                <button class="btn" name="op" value="delete">
+                    {{ 'Delete this template'|t('share-previews') }}
+                </button>
+            </div>
+        </div>
+    </div>
+{% endif %}

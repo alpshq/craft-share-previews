@@ -1,3 +1,5 @@
+import attachInteractivePadding from './interactive-padding';
+
 const createElementWithContent = (doc, type, content) => {
   const el = doc.createElement(type);
 
@@ -23,11 +25,27 @@ const updateHtml = (doc, formWrapper, response) => {
   formWrapper.appendChild(fragment);
 };
 
-const createFormSubmitter = (win, action, formWrapper, callback = (isFinished) => {}) => {
+const handleDeletionConfirmation = (ev, win, title) => {
+  const message = win._alps.deleteConfirmation
+    .split('{name}').join(title || win._alps.templateName);
+
+  const confirm = win.confirm(message);
+
+  if (!confirm) {
+    ev.preventDefault();
+  }
+};
+
+const createFormSubmitter = (win, editor, action, formWrapper, callback = (isFinished) => {}) => {
   return async ev => {
     const form = ev.target;
 
     const formData = new FormData(form);
+
+    if (formData.has('op') && formData.get('op') === 'delete') {
+      handleDeletionConfirmation(ev, win, formData.get('template[name]'));
+      return;
+    }
 
     if (formData.has('op')) {
       return;
@@ -54,6 +72,8 @@ const createFormSubmitter = (win, action, formWrapper, callback = (isFinished) =
     const json = await response.json();
 
     updateHtml(win.document, formWrapper, json);
+
+    attachInteractivePadding(win, editor)
 
     callback(true);
   };

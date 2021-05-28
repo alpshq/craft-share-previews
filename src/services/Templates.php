@@ -8,69 +8,183 @@ use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\ImageLayer;
 use alps\sharepreviews\models\LineLayer;
 use alps\sharepreviews\models\Settings;
+use alps\sharepreviews\models\Template;
 use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Entry;
 use alps\sharepreviews\Config;
+use craft\services\Plugins;
 use yii\base\Component;
 
 class Templates extends Component
 {
-    const DEFAULT_TEMPLATE_ID = 0;
+//    const DEFAULT_TEMPLATE_ID = 0;
 
     private Settings $settings;
+    private ?SharePreviews $plugin;
+    private Plugins $pluginService;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
 
-        $this->settings = SharePreviews::getInstance()->settings;
+        $this->plugin = SharePreviews::getInstance();
+        $this->settings = $this->plugin->settings;
+        $this->pluginService = Craft::$app->getPlugins();
     }
 
-    public function getAvailableTemplates(): array
+    public function getTemplateById(int $id): ?Template
     {
-        return [
-            0 => 'Foo Template',
-        ];
+        $templates = $this->settings->templates;
+
+        $templates = array_filter($templates, function(Template $template) use ($id) {
+            return $template->id === $id;
+        });
+
+        return array_values($templates)[0] ?? null;
     }
 
-    public function isValidTemplateId(?int $id): bool
+    public function saveTemplate(Template $template): self
     {
-        if ($id === null) {
-            return false;
+        $settings = $this->settings;
+
+        $existingTemplates = $settings->templates;
+        $existingTemplates = $this->assignTemplate($existingTemplates, $template);
+
+        if ($template->isDefault) {
+            $existingTemplates = $this->makeDefault($existingTemplates, $template);
         }
 
-        $id = (int) $id;
+        $existingTemplates = $this->ensureDefaultTemplateExists($existingTemplates);
 
-        $templateIds = array_keys($this->getAvailableTemplates());
+        $settings->templates = $existingTemplates;
 
-        return in_array($id, $templateIds);
+        $this->pluginService->savePluginSettings($this->plugin, $settings->toArray());
+
+        return $this;
     }
 
-    public function getDefaultTemplate(): Image
+    private function makeDefault(array $existingTemplates, Template $template): array
     {
-        return $this->getTemplate(self::DEFAULT_TEMPLATE_ID);
+        $template->isDefault = true;
+
+        return array_map(function (Template $iteratingTemplate) use ($template) {
+            $iteratingTemplate->isDefault = $iteratingTemplate->id === $template->id;
+
+            return $iteratingTemplate;
+        }, $existingTemplates);
     }
 
-    public function getTemplateOrDefault(?int $id): Image
+    private function ensureDefaultTemplateExists(array $templates): array
     {
-        if ($id === null) {
-            return $this->getDefaultTemplate();
+        if (empty($templates)) {
+            return $templates;
         }
 
-        return $this->getTemplate($id) ?? $this->getDefaultTemplate();
-    }
+        $defaultTemplates = array_filter($templates, function(Template $template) {
+            return $template->isDefault;
+        });
 
-    public function getTemplate(int $id): ?Image
-    {
-        if (!$this->isValidTemplateId($id)) {
-            return null;
+        if (!empty($defaultTemplates)) {
+            return $templates;
         }
 
-        return new Image([
-            'templateId' => $id,
-        ]);
+        $firstIdx = array_keys($templates)[0];
+
+        $templates[$firstIdx]->isDefault = true;
+
+        return $templates;
     }
+
+    public function deleteTemplateById(int $id): self
+    {
+        $settings = $this->settings;
+        $originalTemplates = $settings->templates;
+
+        $templates = array_filter($originalTemplates, function(Template $template) use ($id) {
+            return $template->id !== $id;
+        });
+
+        $templates = array_values($templates);
+
+        if (count($templates) === count($originalTemplates)) {
+            return $this;
+        }
+
+        $templates = $this->ensureDefaultTemplateExists($templates);
+
+        $settings->templates = $templates;
+        $settings = $settings->toArray();
+
+        $this->pluginService->savePluginSettings($this->plugin, $settings);
+
+        return $this;
+    }
+
+    private function assignTemplate(array $existingTemplates, Template $template): array
+    {
+        $ids = array_map(function(Template $template) {
+            return $template->id;
+        }, $existingTemplates);
+
+        $idx = $template->id
+            ? array_search($template->id, $ids, true)
+            : false;
+
+        if ($idx === false) {
+            $template->id = empty($ids) ? 1 : max($ids) + 1;
+            $idx = count($existingTemplates);
+        }
+
+        $existingTemplates[$idx] = $template;
+
+        return array_values($existingTemplates);
+    }
+
+//    public function getAvailableTemplates(): array
+//    {
+//        return [
+//            0 => 'Foo Template',
+//        ];
+//    }
+//
+//    public function isValidTemplateId(?int $id): bool
+//    {
+//        if ($id === null) {
+//            return false;
+//        }
+//
+//        $id = (int) $id;
+//
+//        $templateIds = array_keys($this->getAvailableTemplates());
+//
+//        return in_array($id, $templateIds);
+//    }
+//
+//    public function getDefaultTemplate(): Image
+//    {
+//        return $this->getTemplate(self::DEFAULT_TEMPLATE_ID);
+//    }
+//
+//    public function getTemplateOrDefault(?int $id): Image
+//    {
+//        if ($id === null) {
+//            return $this->getDefaultTemplate();
+//        }
+//
+//        return $this->getTemplate($id) ?? $this->getDefaultTemplate();
+//    }
+//
+//    public function getTemplate(int $id): ?Image
+//    {
+//        if (!$this->isValidTemplateId($id)) {
+//            return null;
+//        }
+//
+//        return new Image([
+//            'templateId' => $id,
+//        ]);
+//    }
 }

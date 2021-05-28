@@ -11,6 +11,9 @@ namespace alps\sharepreviews\models\concerns;
  */
 trait HasPadding
 {
+    public ?int $width = 1200;
+    public ?int $height = 630;
+
     protected array $padding = [0, 0, 0, 0];
 
     protected function getHiddenPaddingFields(): array
@@ -63,9 +66,45 @@ trait HasPadding
             $padding = array_pad($padding, $expand, 0);
         }
 
-        $this->padding = array_map('intval', $padding);
+        $padding = array_map('intval', $padding);
+
+        [
+            $this->padding[0], $this->padding[2]
+        ] = $this->validateOverflow($this->width, $padding[0], $padding[2]);
+
+        [
+            $this->padding[1], $this->padding[3]
+        ] = $this->validateOverflow($this->height, $padding[1], $padding[3]);
 
         return $this;
+    }
+
+    private function validateOverflow(int $length, int $first, int $second): array
+    {
+        $buffer = $length - $first - $second - 20;
+
+        if ($buffer >= 0) {
+            return [$first, $second];
+        }
+
+        $buffer *= -1;
+
+        if ($first === 0) {
+            return [$first, $second - $buffer];
+        }
+
+        if ($second === 0) {
+            return [$first - $buffer, $second];
+        }
+
+        $distribution = $first / (($first + $second) / 100);
+        $firstOverflow = round($buffer / 100 * $distribution);
+        $secondOverflow = $buffer - $firstOverflow;
+
+        return [
+            $first - $firstOverflow,
+            $second - $secondOverflow,
+        ];
     }
 
     public function getPaddingLeft(): int
@@ -88,31 +127,34 @@ trait HasPadding
         return $this->padding[3];
     }
 
-    public function setPaddingLeft($value): self
+    private function setSinglePaddingValue(int $idx, $value): self
     {
-        $this->padding[0] = (int) $value;
+        $padding = $this->padding;
+
+        $padding[$idx] = (int) $value;
+
+        $this->setPadding($padding);
 
         return $this;
+    }
+
+    public function setPaddingLeft($value): self
+    {
+        return $this->setSinglePaddingValue(0, $value);
     }
 
     public function setPaddingTop($value): self
     {
-        $this->padding[1] = (int) $value;
-
-        return $this;
+        return $this->setSinglePaddingValue(1, $value);
     }
 
     public function setPaddingRight($value): self
     {
-        $this->padding[2] = (int) $value;
-
-        return $this;
+        return $this->setSinglePaddingValue(2, $value);
     }
 
     public function setPaddingBottom($value): self
     {
-        $this->padding[3] = (int) $value;
-
-        return $this;
+        return $this->setSinglePaddingValue(3, $value);
     }
 }

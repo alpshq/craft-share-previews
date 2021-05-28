@@ -20,6 +20,7 @@ use alps\sharepreviews\Plugin;
 use alps\sharepreviews\services\Renderer;
 use alps\youtube\Client;
 use Craft;
+use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use craft\web\Request;
 use craft\web\Response;
@@ -31,18 +32,20 @@ class TemplateEditorController extends Controller
 {
     public function actionEdit()
     {
-        $id = $this->request->getParam('id');
+        $id = (int) $this->request->getParam('id', 0);
 
-        $template = $id === null
-            ? new Template()
-            : SharePreviews::getInstance()->getSettings()->getTemplates()[0];
+        $template = SharePreviews::getInstance()
+            ->templates
+            ->getTemplateById($id);
 
-        return $this->renderEditor($template, $id);
+        $template = $template ?? new Template;
+
+        return $this->renderEditor($template);
     }
 
     public function actionPost()
     {
-        $op = $this->request->getParam('op', '');
+        $op = $this->request->getBodyParam('op', '');
 
         if ($op === 'cancel') {
             return $this->redirectToPostedUrl();
@@ -54,6 +57,14 @@ class TemplateEditorController extends Controller
 
         if ($op === 'save') {
             return $this->handleSave($template);
+        }
+
+        if ($op === 'delete') {
+            return $this->handleDelete($template);
+        }
+
+        if ($op === 'duplicate') {
+            return $this->handleDuplicate($template);
         }
 
         return $this->renderEditor($template);
@@ -174,22 +185,53 @@ class TemplateEditorController extends Controller
 
     private function handleSave(Template $template)
     {
-        $pluginService = Craft::$app->getPlugins();
-        $plugin = SharePreviews::getInstance();
+        SharePreviews::getInstance()->templates->saveTemplate($template);
 
-        $settings = $plugin->getSettings();
-
-        $templates = $settings->getTemplates();
-        $templates[$id] = $template;
-        $settings->templates = array_values($templates);
-
-        $pluginService->savePluginSettings($plugin, $settings->toArray());
-
-        $message = Craft::t('share-previews', 'Template saved.');
+        $message = Craft::t('share-previews', 'Template "{name}" saved.', [
+            'name' => $template->getHumanFriendlyName(),
+        ]);
 
         $this->setSuccessFlash($message);
 
         return $this->redirectToPostedUrl();
+    }
+
+    private function handleDelete(Template $template)
+    {
+        SharePreviews::getInstance()->templates->deleteTemplateById($template->id);
+
+        $message = Craft::t('share-previews', 'Template "{name}" deleted.', [
+            'name' => $template->getHumanFriendlyName(),
+        ]);
+
+        $this->setSuccessFlash($message);
+
+        return $this->redirectToPostedUrl();
+    }
+
+    private function handleDuplicate(Template $template)
+    {
+        $template->id = null;
+        $template->isDefault = false;
+
+        $originalName = $template->getHumanFriendlyName();
+
+        $template->name = Craft::t('share-previews', '{name} - copy', [
+            'name' => $originalName,
+        ]);
+
+        $plugin = SharePreviews::getInstance();
+        $plugin->templates->saveTemplate($template);
+
+        $message = Craft::t('share-previews', 'Template "{name}" duplicated.', [
+            'name' => $originalName,
+        ]);
+
+        $this->setSuccessFlash($message);
+
+        return $this->redirect(
+            $plugin->urls->templateEditor($template)
+        );
     }
 
     private function getAvailableLayers()

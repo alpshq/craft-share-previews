@@ -1,4 +1,4 @@
-{% set icons = {
+{% set layerIcons = {
     color: 'palette',
     gradient: 'swatchbook',
     line: 'horizontal-rule',
@@ -19,7 +19,6 @@
                 <button
                     class="
                         block m-0 p-2
-    {#                    bg-blue-gray-200#}
                         text-base
                         rounded
                         cursor-pointer
@@ -31,7 +30,7 @@
                     style=""
                 >
                     <span class="block text-2xl text-gray-400">
-                        <i class="fal fa-{{ icons[layer.type] ?? 'layer-plus' }}"></i>
+                        <i class="fal fa-{{ layerIcons[layer.type] ?? 'layer-plus' }}"></i>
                     </span>
                     <span class="
                         block

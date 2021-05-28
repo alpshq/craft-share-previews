@@ -53,7 +53,7 @@ abstract class AbstractRectangleLayer extends AbstractLayer
     /**
      * @return int[]
      */
-    protected function getCanvasDimensions(): array
+    public function getCanvasDimensions(): array
     {
         return [
             $this->width - $this->paddingLeft - $this->paddingRight,
