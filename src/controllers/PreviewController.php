@@ -39,10 +39,10 @@ class PreviewController extends Controller
         $settings = $plugin->getSettings();
 
         $image = $image->render();
-//
-//        if ($settings->disableImageCache !== true) {
-//            $plugin->fileHandler->saveImage($image, $data);
-//        }
+
+        if ($settings->disableImageCache !== true) {
+            $plugin->fileHandler->saveImage($image, $data);
+        }
 
         $image->show('png', [
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,

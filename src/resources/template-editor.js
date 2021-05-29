@@ -175,6 +175,7 @@ const exec = (win) => {
   }
 
   const fieldsPane = editor.querySelector('.fields-pane');
+
   attachFormHandler(win, editor, fieldsPane, form, updatePreview, previewStateToggle);
 
   attachPreviewAnchorHandler(win, document.querySelector('#preview-anchor'));

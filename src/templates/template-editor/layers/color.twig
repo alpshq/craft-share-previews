@@ -7,7 +7,7 @@
 
 {% block content %}
     {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-2 gap-x-6">
             <div>
                 {{ forms.field({
                     label: 'Color'|t('share-previews'),
@@ -33,21 +33,17 @@
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Border Radius'|t('share-previews')) %}
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                {{ forms.field({
-                    label: 'Border Radius'|t('share-previews'),
-                }, forms.text({
-                    name: namePrefix ~ '[borderRadius]',
-                    type: 'number',
-                    min: 0,
-                    max: 1000,
-                    placeholder: 0,
-                    unit: 'px',
-                    value: layer.borderRadius,
-                })) }}
-            </div>
-        </div>
+        {{ forms.field({
+            label: 'Border Radius'|t('share-previews'),
+        }, forms.text({
+            name: namePrefix ~ '[borderRadius]',
+            type: 'number',
+            min: 0,
+            max: 1000,
+            placeholder: 0,
+            unit: 'px',
+            value: layer.borderRadius,
+        })) }}
     {% endapply %}
 
     {% include 'share-previews/template-editor/layers/_padding' %}

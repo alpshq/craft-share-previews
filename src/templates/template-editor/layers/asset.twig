@@ -2,46 +2,55 @@
 {% import '_includes/forms' as forms %}
 
 {% block description %}
-    {{ 'Use an asset layer to add an area where an image will be placed.'|t('share-previews') }}
+    {{ 'Use an asset layer to add an area where you can place an image.'|t('share-previews') }}
 {% endblock %}
 
 {% block content %}
     {% apply tabs_section(tabId, 'Asset'|t('share-previews')) %}
-        <div class="grid grid-cols-2 gap-6">
+        <div class="space-y-6">
             <div>
                 {{ forms.field({
                     label: 'Default Asset'|t('share-previews'),
+                    instructions: 'Select an **optional** default asset.'|t('share-previews'),
                 }, forms.elementSelect({
                     elements: [layer.getAsset()]|filter,
                     name: namePrefix ~ '[assetId]',
                     elementType: 'craft\\elements\\Asset',
+                    criteria: {'kind': 'image'},
                     limit: 1,
                 })) }}
             </div>
-        </div>
 
-        <div class="grid grid-cols-2 gap-6">
             <div>
                 {{ forms.field({
                     label: 'Replace default image'|t('share-previews'),
+                    instructions: 'Select one of your entry\'s field which contain an image based asset.
+
+Everytime your template is rendered, based on an entry, the image corresponding to the selected field will replace the above default image.
+
+Choose *{noReplacementLabel}* when you always want to render the default image.
+'|t('share-previews', {
+                        'noReplacementLabel': layer.getAvailableAssetFieldsAsOptions()[0].label
+                    }),
                 }, forms.select({
                     name: namePrefix ~ '[fieldId]',
                     value: layer.fieldId,
                     options: layer.getAvailableAssetFieldsAsOptions(),
                 })) }}
             </div>
-        </div>
 
-        <div class="grid grid-cols-2 gap-6">
             <div>
                 {{ forms.field({
                     label: 'Image Fill Mode'|t('share-previews'),
+                    instructions: 'The fill mode controls how the image is placed into the layer.
+- *Contain*: The image will be scaled down to fit completely within the layer.
+- *Cover*: The image will be scaled down to cover the layer. Parts of the image\'s edges may be trimmed.'|t('share-previews'),
                 }, forms.select({
                     name: namePrefix ~ '[fillMode]',
                     value: layer.fillMode,
                     options: {
-                        'contain': 'Contain: Make sure the image fits within the area'|t('share-previews'),
-                        'cover': 'Cover: The image covers the complete area'|t('share-previews'),
+                        'contain': 'Contain: Make sure the image fits within the layer'|t('share-previews'),
+                        'cover': 'Cover: The image covers the complete layer'|t('share-previews'),
                     },
                 })) }}
             </div>
@@ -50,18 +59,6 @@
 
     {% apply tabs_section(tabId, 'Border'|t('share-previews')) %}
         <div class="grid grid-cols-2 gap-6">
-            <div>
-                {{ forms.field({
-                    label: 'Border Width'|t('share-previews'),
-                }, forms.text({
-                    name: namePrefix ~ '[borderWidth]',
-                    type: 'number',
-                    min: 0,
-                    max: 100,
-                    unit: 'px',
-                    value: layer.borderWidth,
-                })) }}
-            </div>
             <div>
                 {{ forms.field({
                     label: 'Border Color'|t('share-previews'),
@@ -81,6 +78,18 @@
                     unit: '%',
                     placeholder: 100,
                     value: layer.borderColor|rgba_to_opacity,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Border Width'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[borderWidth]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: 'px',
+                    value: layer.borderWidth,
                 })) }}
             </div>
         </div>

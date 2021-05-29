@@ -3,14 +3,23 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\behaviors\HasColors;
+use alps\sharepreviews\models\concerns\ParsesPercentages;
 use Craft;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 
 class LineLayer extends AbstractLayer
 {
-    private array $from = [0,630/2];
-    private array $to = [1200,630/2];
+    const LINE_TYPE_HORIZONTAL = 'h';
+    const LINE_TYPE_VERTICAL = 'v';
+
+//    private array $from = [0,630/2];
+//    private array $to = [1200,630/2];
+
+    private string $lineType = self::LINE_TYPE_HORIZONTAL;
+    private int $length = 1200;
+    private int $x = 0;
+    private int $y = 630/2;
 
     public function getTitle(): string
     {
@@ -24,74 +33,115 @@ class LineLayer extends AbstractLayer
 
     public function apply(ImageInterface $image): ImageInterface
     {
-        $from = new Point(...$this->from);
-        $to = new Point(...$this->to);
+        $from = $to = [$this->x, $this->y];
+
+        if ($this->lineType === self::LINE_TYPE_HORIZONTAL) {
+            $to[0] += $this->length - 1;
+        } else {
+            $to[1] += $this->length - 1;
+        }
+
+        $from = new Point(...$from);
+        $to = new Point(...$to);
 
         $image->draw()->rectangle($from, $to, $this->toColor($this->color), true);
 
         return $image;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getFrom(): array
+
+    public function getLineType(): string
     {
-        return $this->from;
+        return $this->lineType;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getTo(): array
+    public function setLineType(string $type): self
     {
-        return $this->to;
+        $this->lineType = $type === self::LINE_TYPE_VERTICAL
+            ? self::LINE_TYPE_VERTICAL
+            : self::LINE_TYPE_HORIZONTAL;
+
+        return $this;
     }
 
-    /**
-     * @param int[] $from
-     */
-    public function setFrom(array $from): void
+    public function getX(): int
     {
-        $this->from = $this->castCoordinates($from);
+        return $this->x;
     }
 
-    /**
-     * @param array|int[] $to
-     */
-    public function setTo(array $to): void
+    public function setX($value): self
     {
-        $this->to = $this->castCoordinates($to);
+        $value = (int) $value;
+
+        if ($value >= $this->width) {
+            $value = $this->width - 1;
+        }
+
+        $this->x = $value;
+
+        return $this;
     }
 
-    private function castCoordinates(array $coords): array
+    public function getY(): int
     {
-        $x = $coords[0] ?? 0;
-        $y = $coords[1] ?? 0;
-
-        return [
-            (int) $x,
-            (int) $y,
-        ];
+        return $this->y;
     }
 
-    public function scaleTo(int $width, int $height): AbstractLayer
+    public function setY($value): self
     {
-        $currentWidth = $this->width;
-        $currentHeight = $this->height;
+        $value = (int) $value;
 
-        $this->from = [
-            $this->scaleProperty($currentWidth, $width, $this->from[0]),
-            $this->scaleProperty($currentHeight, $height, $this->from[1]),
-        ];
+        if ($value >= $this->height) {
+            $value = $this->height - 1;
+        }
 
-        $this->to = [
-            $this->scaleProperty($currentWidth, $width, $this->to[0]),
-            $this->scaleProperty($currentHeight, $height, $this->to[1]),
-        ];
+        $this->y = $value;
 
-        return parent::scaleTo($width, $height);
+        return $this;
     }
+
+    public function getLength(): int
+    {
+        return $this->length;
+    }
+
+    public function setLength($value): self
+    {
+        $value = (int) $value;
+
+        $this->length = $value;
+
+        return $this;
+    }
+
+    protected function getScalableProperties(): array
+    {
+        $isHorizontal = $this->lineType === self::LINE_TYPE_HORIZONTAL;
+
+        return array_merge(parent::getScalableProperties(), [
+            'length' => $isHorizontal ? 'width' : 'height',
+            'x' => 'width',
+            'y' => 'height',
+        ]);
+    }
+
+//    public function scaleTo(int $width, int $height): AbstractLayer
+//    {
+//        $currentWidth = $this->width;
+//        $currentHeight = $this->height;
+//
+//        $this->from = [
+//            $this->scaleProperty($currentWidth, $width, $this->from[0]),
+//            $this->scaleProperty($currentHeight, $height, $this->from[1]),
+//        ];
+//
+//        $this->to = [
+//            $this->scaleProperty($currentWidth, $width, $this->to[0]),
+//            $this->scaleProperty($currentHeight, $height, $this->to[1]),
+//        ];
+//
+//        return parent::scaleTo($width, $height);
+//    }
 
     public function attributes()
     {
@@ -99,8 +149,10 @@ class LineLayer extends AbstractLayer
             parent::attributes(),
             $this->getColorAttributes(),
             [
-                'from',
-                'to',
+                'length',
+                'x',
+                'y',
+                'lineType',
             ],
         );
     }

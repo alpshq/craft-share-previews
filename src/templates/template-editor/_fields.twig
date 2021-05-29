@@ -12,6 +12,8 @@
             template,
             layer,
             layerIdx,
+            isFirstLayer: loop.first,
+            isLastLayer: loop.last,
             namePrefix: 'template[layers][' ~ layerIdx ~ ']'
         }, with_context = false) }}
     {% endfor %}

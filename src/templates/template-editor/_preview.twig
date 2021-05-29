@@ -1,10 +1,10 @@
 {% import '_includes/forms' as forms %}
 
-<div class="relative border border-solid border-transparent hover:border-pink-600">
+<div class="border border-solid border-transparent hover:border-pink-600">
     <div>
         <a
             id="preview-anchor"
-            class="block overflow-hidden bg-blue-gray-100"
+            class="relative block overflow-hidden bg-blue-gray-100"
             style="padding-top: 52.5%;"
             href="{{ template.toImage().getUrl() }}"
             target="_blank"
@@ -35,32 +35,12 @@
 <div class="mt-8">
     {{ forms.field({
         label: 'Preview Entry'|t('share-previews'),
-        instructions: 'Render the above preview based on the selected entry.'|t('share-previews'),
+        instructions: 'Render the above preview based on the selected entry.
+
+The selected entry affects only the preview of the template. Rendered images based on this template will not have any association with the selected entry.'|t('share-previews'),
     }, forms.elementSelect({
         name: 'preview[entryId]',
         elementType: 'craft\\elements\\Entry',
         limit: 1,
     })) }}
 </div>
-
-{% if (template.exists()) %}
-    <div class="mt-20">
-        <h2>{{ 'Danger Zone'|t('share-previews') }}</h2>
-
-        <div class="flex border border-solid border-pink-600 p-4 rounded">
-            <div class="flex-1">
-                <h3 class="m-0">
-                    {{ 'Delete this template'|t('share-previews') }}
-                </h3>
-                <p class="m-0 mt-2 text-gray-500 leading-tight">
-                    {{ 'Once you delete a template, there is no going back. Please be certain.'|t('share-previews') }}
-                </p>
-            </div>
-            <div class="flex-none ml-8">
-                <button class="btn" name="op" value="delete">
-                    {{ 'Delete this template'|t('share-previews') }}
-                </button>
-            </div>
-        </div>
-    </div>
-{% endif %}

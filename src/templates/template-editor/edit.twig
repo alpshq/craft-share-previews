@@ -1,5 +1,4 @@
 {% extends '_layouts/cp' %}
-
 {% import '_includes/forms' as forms %}
 
 {% set crumbs = [
@@ -10,12 +9,10 @@
 
 {% set fullPageForm = true %}
 
-
 {% set title = 'Template Editor'|t('share-previews') %}
 {% set docTitle = title ~ ' - ' ~ 'Plugins'|t('app') %}
 
 {% block actionButton %}
-{#    <div class="btngroup">#}
     <button class="btn" name="op" value="cancel">
         {{ 'Cancel'|t('app') }}
     </button>
@@ -29,7 +26,6 @@
     <button class="btn submit" type="submit" name="op" value="save">
         {{ template.exists() ? 'Save'|t('app') : 'Create new Template'|t('share-previews') }}
     </button>
-{#    </div>#}
 {% endblock %}
 
 {% block content %}
@@ -40,19 +36,28 @@
     {{ hiddenInput('template[id]', template.id) }}
 
     <div class="sp-template-editor">
-        <div class="flex items-stretch">
-            <div class="flex-1 pr-8">
+        <h2 class="mb-8">
+            {{ 'General Template Settings'|t('share-previews') }}
+        </h2>
+
+        <div class="pb-10 grid grid-cols-2 gap-x-8 border-b border-solid border-blue-gray-300">
+            <div>
                 {{ forms.field({
                     label: 'Name'|t('share-previews'),
-                    instructions: 'The name of your template helps you to recognize it in template selection menus.
-Most people have more than one active template. Use a name which corresponds to the entry types you want to use the template with.'|t('share-previews'),
-                    tip: 'Good starting points are `General`, `Blog` or `News`.'|translate('share-previews'),
+                    instructions: 'The name of your template helps you to recognize it in template selection menus.'|t('share-previews'),
                 }, forms.text({
                     name: 'template[name]',
                     value: template.name,
                     placeholder: 'Blog',
                 })) }}
 
+                <p class="m-0">
+                    {{ 'Most people have more than one active template. Use a name which corresponds to the entry types you want to use the template with.
+
+Good starting points are `General`, `Blog` or `News`.'|t('share-previews') }}
+                </p>
+            </div>
+            <div>
                 {{ forms.field({
                     label: 'Default'|t('share-previews'),
                     instructions: 'Do you want this template to be the default one?'|t('share-previews'),
@@ -61,9 +66,14 @@ Most people have more than one active template. Use a name which corresponds to 
                     value: true,
                     on: template.isDefault,
                 })) }}
+            </div>
+        </div>
 
-
-                <h2>{{ 'Layers'|t('share-previews') }}</h2>
+        <div class="my-10 grid grid-cols-2 gap-x-8">
+            <div>
+                <h2 class="mb-8">
+                    {{ 'Layers'|t('share-previews') }}
+                </h2>
                 <p>
                     {{ 'Your template consists of layers. Each layer is painted on the previous one. Layers give you the ability to compose your share previews step by step.'|t('share-previews') }}
                 </p>
@@ -77,8 +87,10 @@ Most people have more than one active template. Use a name which corresponds to 
                     {{ include('share-previews/template-editor/_fields') }}
                 </div>
             </div>
-            <div class="w-1/2 flex-none">
-                <h2>{{ 'Live Preview'|t('share-previews') }}</h2>
+            <div>
+                <h2 class="mb-8">
+                    {{ 'Live Preview'|t('share-previews') }}
+                </h2>
 
                 <p>
                     {{ 'The preview is rendered in real time and based on the layers you\'ve specified on the left side.'|t('share-previews') }}
@@ -89,6 +101,28 @@ Most people have more than one active template. Use a name which corresponds to 
                 </div>
             </div>
         </div>
+
+        {% if (template.exists()) %}
+            <div class="mt-20">
+                <h2>{{ 'Danger Zone'|t('share-previews') }}</h2>
+
+                <div class="flex flex-nowrap border border-solid border-pink-600 p-4 rounded">
+                    <div class="flex-1">
+                        <h3 class="m-0">
+                            {{ 'Delete this template'|t('share-previews') }}
+                        </h3>
+                        <p class="m-0 mt-2 text-gray-500 leading-tight">
+                            {{ 'Once you delete a template, there is no going back. Please be certain.'|t('share-previews') }}
+                        </p>
+                    </div>
+                    <div class="flex-none ml-8">
+                        <button class="btn" name="op" value="delete">
+                            {{ 'Delete this template'|t('share-previews') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

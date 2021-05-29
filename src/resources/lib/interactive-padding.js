@@ -1,4 +1,5 @@
 import interact from 'interactjs';
+import { getActiveSection } from './tabs';
 
 const triggerChangeEvent = (win, editor) => {
   let event;
@@ -13,7 +14,7 @@ const triggerChangeEvent = (win, editor) => {
   editor.dispatchEvent(event);
 };
 
-const registerHandlers = (win, editor, area) => {
+const setUpInteractivePadding = (win, editor, area) => {
   const wrapper = area.parentNode;
   const namePrefix = area.getAttribute('data-name-prefix');
   const fieldWrapper = editor.querySelector(`.padding[data-name-prefix="${namePrefix}"]`);
@@ -99,20 +100,41 @@ const registerHandlers = (win, editor, area) => {
   interact(area)
     .draggable({
       modifiers: [
-        interact.modifiers.restrictRect({
+        interact.modifiers.restrict({
           restriction: 'parent',
         }),
       ],
       listeners: {
         move: ev => {
-          const left = padding.left + ev.dx;
-          const top = padding.top + ev.dy;
+          let left = padding.left + ev.dx;
+          let top = padding.top + ev.dy;
+
+          if (left < 0) {
+            left = 0;
+          }
+
+          if (top < 0) {
+            top = 0;
+          }
+
+          let right = padding.right + (padding.left - left);
+          let bottom = padding.bottom + (padding.top - top);
+
+          if (right < 0) {
+            left = left + right;
+            right = 0;
+          }
+
+          if (bottom < 0) {
+            top = top + bottom;
+            bottom = 0;
+          }
 
           setPadding({
             left,
             top,
-            right: padding.right + (padding.left - left),
-            bottom: padding.bottom + (padding.top - top),
+            right,
+            bottom,
           });
         },
       },
@@ -147,10 +169,38 @@ const registerHandlers = (win, editor, area) => {
 };
 
 const attachInteractivePadding = (win, editor) => {
-  const areas = [...editor.querySelectorAll('.interactive-padding > div')];
+  const tabs = [...editor.querySelectorAll('.alps-tabs')];
 
-  areas.forEach(area => {
-    registerHandlers(win, editor, area);
+  const registered = {};
+
+  const setUpProxy = (id, section) => {
+    if (registered?.[id] === section) {
+      return;
+    }
+
+    const area = section.querySelector('.interactive-padding > div');
+
+    if (!area) {
+      return;
+    }
+
+    registered[id] = section;
+
+    setUpInteractivePadding(win, editor, area);
+  };
+
+  tabs.forEach(tab => {
+    const section = getActiveSection(tab);
+
+    if (section) {
+      setUpProxy(tab.dataset.id, section);
+    }
+
+    tab.addEventListener('tab-change', ev => {
+      const {id, section} = ev.detail;
+
+      setUpProxy(id, section);
+    }, false);
   });
 };
 

@@ -10,70 +10,85 @@
         <div class='grid grid-cols-2 gap-6'>
             <div>
                 {{ forms.field({
-                    label: 'Start from Left'|t('share-previews'),
-                }, forms.text({
-                    name: namePrefix ~ '[from][0]',
-                    type: 'number',
-                    min: 0,
-                    max: 1200,
-                    unit: 'px',
-                    value: layer.from[0],
-                    inputAttributes: {
-                        'data-features': 'calc',
+                    label: 'Type'|t('share-previews'),
+                }, forms.select({
+                    name: namePrefix ~ '[lineType]',
+                    value: layer.lineType,
+                    options: {
+                        'h': 'Horizontal'|t('share-previews'),
+                        'v': 'Vertical'|t('share-previews'),
                     },
                 })) }}
             </div>
             <div>
                 {{ forms.field({
-                    label: 'Start from Top'|t('share-previews'),
+                    label: 'Length'|t('share-previews'),
                 }, forms.text({
-                    name: namePrefix ~ '[from][1]',
+                    name: namePrefix ~ '[length]',
                     type: 'number',
                     min: 0,
-                    max: 630,
+                    max: 1200,
                     unit: 'px',
-                    value: layer.from[1],
-                    inputAttributes: {
-                        'data-features': 'calc',
-                    },
+                    value: layer.length,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Distance from Left'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[x]',
+                    type: 'number',
+                    min: 0,
+                    max: 1200,
+                    unit: 'px',
+                    value: layer.x,
                 })) }}
             </div>
 
             <div>
                 {{ forms.field({
-                    label: 'End from Left'|t('share-previews'),
+                    label: 'Distance from Top'|t('share-previews'),
                 }, forms.text({
-                    name: namePrefix ~ '[to][0]',
-                    type: 'number',
-                    min: 0,
-                    max: 1200,
-                    unit: 'px',
-                    value: layer.to[0],
-                    inputAttributes: {
-                        'data-features': 'calc',
-                    },
-                })) }}
-            </div>
-            <div>
-                {{ forms.field({
-                    label: 'End from Top'|t('share-previews'),
-                }, forms.text({
-                    name: namePrefix ~ '[to][1]',
+                    name: namePrefix ~ '[y]',
                     type: 'number',
                     min: 0,
                     max: 630,
                     unit: 'px',
-                    value: layer.to[1],
-                    inputAttributes: {
-                        'data-features': 'calc',
-                    },
+                    value: layer.y,
                 })) }}
             </div>
+        </div>
+
+        <div class="sp-markdown">
+            {{ 'A line has a **starting point** and a **length**.
+
+**Keep in mind** when going through the following examples: The layer is `{width}`px wide and `{height}`px tall.
+
+### Starting point
+The starting point is defined using the two **Distance** fields.
+
+- The **distance from Left** determines the distance from the layer\'s left edge to the starting point of the line.
+- The **distance form Top** determines the distance from the layer\'s top edge to the starting point of the line.
+
+If, for example, you want **a horizontal line to appear in the middle** of the layer you would set the Distance from Left to `0` and the Distance from Top to `{halfHeight}` (= `{height} / 2`).
+
+If you want **a vertical line to appear in the center** of the layer you would set the Distance from Left to `{halfWidth}` (= `{width} / 2`) and the Distance from Top to `0`.
+
+### Length
+A horizontal line can be up to `{width}`px long and a vertical line can be up to `{height}`px long.
+
+### Line Thickness
+Lines are always `1`px thick. If you want to draw a line thicker than that, use a Color layer instead.'|t('share-previews', {
+                width: layer.width,
+                height: layer.height,
+                halfWidth: layer.width / 2,
+                halfHeight: layer.height / 2,
+            })|md }}
         </div>
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
-        <div class='grid grid-cols-2 gap-6'>
+        <div class='grid grid-cols-2 gap-x-6'>
             <div>
                 {{ forms.field({
                     label: 'Color'|t('share-previews'),

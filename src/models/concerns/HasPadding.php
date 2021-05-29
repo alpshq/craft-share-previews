@@ -81,7 +81,7 @@ trait HasPadding
 
     private function validateOverflow(int $length, int $first, int $second): array
     {
-        $buffer = $length - $first - $second - 20;
+        $buffer = $length - $first - $second - 1;
 
         if ($buffer >= 0) {
             return [$first, $second];

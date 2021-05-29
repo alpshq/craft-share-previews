@@ -1,7 +1,7 @@
 {% import '_includes/forms' as forms %}
 
 <div class="p-4 bg-blue-gray-100 rounded" data-layer="{{ layerIdx }}" data-type="{{ layer.type }}">
-    <div class="flex">
+    <div class="flex items-start">
         <div class="flex-1">
             <h3 class="m-0 mb-2">
                 {{ layer.getTitle() }}
@@ -17,33 +17,41 @@
 
             </div>
         </div>
-        <div class="flex-none ml-8 text-center">
-            <button
-                class="
-                    w-full p-2
-                    text-2xl text-blue-gray-500
-                    bg-blue-gray-200 rounded cursor-pointer hover:bg-blue-gray-300
-                "
-                name="{{ namePrefix }}[move]"
-                value="up"
-            >
-                <i class="fal fa-long-arrow-up"></i>
-            </button>
-            <p class="m-0 my-2 text-xs uppercase tracking-tight text-gray-500">
-                {{ 'Move layer'|t('share-previews') }}
-            </p>
-            <button
-                class="
-                    w-full p-2
-                    text-2xl text-blue-gray-500
-                    bg-blue-gray-200 rounded cursor-pointer hover:bg-blue-gray-300
-                "
-                name="{{ namePrefix }}[move]"
-                value="down"
-            >
-                <i class="fal fa-long-arrow-down"></i>
-            </button>
-        </div>
+        {% if not (isFirstLayer and isLastLayer) %}
+            <div class="flex-none ml-8 text-center">
+                {% if not (isFirstLayer) %}
+                    <button
+                        class="
+                            w-full p-2 mb-2
+                            text-2xl text-blue-gray-500
+                            bg-blue-gray-200 rounded cursor-pointer hover:bg-blue-gray-300
+                        "
+                        name="{{ namePrefix }}[move]"
+                        value="up"
+                    >
+                        <i class="fal fa-long-arrow-up"></i>
+                    </button>
+                {% endif %}
+
+                <p class="m-0 text-xs uppercase tracking-tight text-gray-500">
+                    {{ 'Move layer'|t('share-previews') }}
+                </p>
+
+                {% if not (isLastLayer) %}
+                    <button
+                        class="
+                            w-full p-2 mt-2
+                            text-2xl text-blue-gray-500
+                            bg-blue-gray-200 rounded cursor-pointer hover:bg-blue-gray-300
+                        "
+                        name="{{ namePrefix }}[move]"
+                        value="down"
+                    >
+                        <i class="fal fa-long-arrow-down"></i>
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 
 
@@ -52,9 +60,12 @@
         value: layer.type,
     }) }}
 
-    {% set tabId = tabs_create(layer.type ~ '-' ~ layerIdx) %}
 
-    {% block content %}{% endblock %}
+    <div class="mt-4">
+        {% set tabId = tabs_create(layer.type ~ '-' ~ layerIdx) %}
 
-    {{ tabs_render(tabId, 2) }}
+        {% block content %}{% endblock %}
+
+        {{ tabs_render(tabId) }}
+    </div>
 </div>

@@ -7,16 +7,27 @@
 
 {% block content %}
     {% apply tabs_section(tabId, 'Text'|t('share-previews')) %}
-        <div class='space-y-6'>
-            <div>
-                {{ forms.field({
-                    label: 'Content'|t('share-previews'),
-                    tip: 'Use twig: {{ entry.title }}',
-                }, forms.text({
-                    name: namePrefix ~ '[content]',
-                    value: layer.content,
-                })) }}
-            </div>
+        {{ forms.field({
+            label: 'Content'|t('share-previews'),
+            instructions: 'The text will be rendered using Twig. You can implement expressions or access an entry\'s data. Just make sure all your expression evaluate to plain text.
+
+Everytime your template is rendered based on an entry, the `entry` variable will correspond to that entry.'|t('share-previews'),
+        }, forms.text({
+            name: namePrefix ~ '[content]',
+            placeholder: '{{ entry.title }}',
+            value: layer.content,
+        })) }}
+
+        <div class="sp-markdown">
+            {{ '### Twig examples:
+
+- `{{ entry.title }}` will output the entry\'s title.
+- `{{ entry.title ?? \'{defaultTitle}\' }}` will output the entry\'s title or a default title.
+- `{{ entry.postDate|date(\'M j, Y\') }}` will output the entry\'s formated post date.
+
+Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/craft-elements-entry.html). You can access all public properties and all public methods.'|t('share-previews', {
+                'defaultTitle': 'Default title'|t('share-previews'),
+            })|md }}
         </div>
     {% endapply %}
 
@@ -58,39 +69,42 @@
                 })) }}
             </div>
         </div>
+
+        <div class="mt-6 sp-markdown">
+            {{ 'All [Google Fonts](https://fonts.google.com) are supported. They\'ll be cached on your server upon first request.
+
+The font size will **automatically decrease** to fit within the layer\'s constraints. You don\'t need to worry if a text will fit. Just select your maximum desired font size and the plugin will do the rest. The minimum font size is 10px.
+
+[Google Fonts Open Source Font Attribution](https://fonts.google.com/attribution)'|t('share-previews')|md }}
+        </div>
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
-        <div class='space-y-6'>
-            <div class='grid grid-cols-2 gap-x-6'>
-                <div>
-                    {{ forms.field({
-                        label: 'Color'|t('share-previews'),
-                    }, forms.color({
-                        name: namePrefix ~ '[color]',
-                        value: layer.color|rgb_to_hex,
-                    })) }}
-                </div>
-                <div>
-                    {{ forms.field({
-                        label: 'Color Opacity'|t('share-previews'),
-                    }, forms.text({
-                        name: namePrefix ~ '[colorOpacity]',
-                        type: 'number',
-                        min: 0,
-                        max: 100,
-                        unit: '%',
-                        placeholder: 100,
-                        value: layer.color|rgba_to_opacity,
-                    })) }}
-                </div>
+        <div class='grid grid-cols-2 gap-x-6'>
+            <div>
+                {{ forms.field({
+                    label: 'Color'|t('share-previews'),
+                }, forms.color({
+                    name: namePrefix ~ '[color]',
+                    value: layer.color|rgb_to_hex,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Color Opacity'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[colorOpacity]',
+                    type: 'number',
+                    min: 0,
+                    max: 100,
+                    unit: '%',
+                    placeholder: 100,
+                    value: layer.color|rgba_to_opacity,
+                })) }}
             </div>
         </div>
     {% endapply %}
 
     {% include 'share-previews/template-editor/layers/_alignment' %}
     {% include 'share-previews/template-editor/layers/_padding' %}
-
-    {% apply tabs_section(tabId, 'Help'|t('share-previews')) %}
-    {% endapply %}
 {% endblock %}

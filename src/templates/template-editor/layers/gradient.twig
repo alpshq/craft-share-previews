@@ -54,20 +54,16 @@
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Angle'|t('share-previews')) %}
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                {{ forms.field({
-                    label: 'Angle'|t('share-previews'),
-                }, forms.text({
-                    name: namePrefix ~ '[angle]',
-                    type: 'number',
-                    min: -359,
-                    max: 359,
-                    unit: 'degrees'|t('share-previews'),
-                    value: layer.angle,
-                })) }}
-            </div>
-        </div>
+        {{ forms.field({
+            label: 'Angle'|t('share-previews'),
+        }, forms.text({
+            name: namePrefix ~ '[angle]',
+            type: 'number',
+            min: -359,
+            max: 359,
+            unit: 'degrees'|t('share-previews'),
+            value: layer.angle,
+        })) }}
     {% endapply %}
 
     {% include 'share-previews/template-editor/layers/_padding' %}

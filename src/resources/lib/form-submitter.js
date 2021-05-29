@@ -1,4 +1,5 @@
 import attachInteractivePadding from './interactive-padding';
+import { registerChangeEvents } from './tabs';
 
 const createElementWithContent = (doc, type, content) => {
   const el = doc.createElement(type);
@@ -73,7 +74,8 @@ const createFormSubmitter = (win, editor, action, formWrapper, callback = (isFin
 
     updateHtml(win.document, formWrapper, json);
 
-    attachInteractivePadding(win, editor)
+    registerChangeEvents(win);
+    attachInteractivePadding(win, editor);
 
     callback(true);
   };

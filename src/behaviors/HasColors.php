@@ -4,6 +4,7 @@ namespace alps\sharepreviews\behaviors;
 
 class HasColors extends \yii\base\Behavior
 {
+    public array $defaults = [];
     public array $properties = [];
     private array $colors = [];
 
@@ -79,7 +80,7 @@ class HasColors extends \yii\base\Behavior
     public function __get($name)
     {
         if ($this->isColorProperty($name)) {
-            return $this->colors[$name] ?? [0,0,0];
+            return $this->colors[$name] ?? $this->defaults[$name] ?? [0,0,0];
         }
 
         return parent::__get($name);

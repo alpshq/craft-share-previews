@@ -1,6 +1,10 @@
 {% import '_includes/forms' as forms %}
 
 {% apply tabs_section(tabId, 'Alignment'|t('share-previews')) %}
+    <div class="mb-6 sp-markdown">
+        {{ 'These alignment settings will tell the plugin how to position the layer\'s content within the layer itself.'|t('share-previews')|md }}
+    </div>
+
     <div class='grid grid-cols-2 gap-x-6'>
         <div>
             {{ forms.field({

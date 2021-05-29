@@ -73,7 +73,14 @@ class GradientLayer extends AbstractRectangleLayer
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            ['class' => HasColors::class, 'properties' => ['from', 'to']],
+            [
+                'class' => HasColors::class,
+                'properties' => ['from', 'to'],
+                'defaults' => [
+                    'from' => [255,255,255,1],
+                    'to' => [0,0,0,1],
+                ]
+            ],
         ]);
     }
 }

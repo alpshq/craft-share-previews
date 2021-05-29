@@ -6,7 +6,7 @@ html {
   font-size: 87.5%;
 }
 
-.tabs {
+.alps-tabs {
   @apply relative;
 
   > ul {
@@ -81,6 +81,10 @@ html {
 
 
 .sp-template-editor {
+  .tabs > div {
+    @apply mt-6
+  }
+
   .preview-pane {
     .updating-message {
       div:first-child {
@@ -110,5 +114,15 @@ html {
       opacity: 0.5;
       pointer-events: none;
     }
+  }
+}
+
+.sp-markdown {
+  ul {
+    @apply ml-6 space-y-1 list-disc;
+  }
+
+  code {
+    @apply p-1 bg-gray-200 text-xs text-amber-700 rounded-sm !important;
   }
 }

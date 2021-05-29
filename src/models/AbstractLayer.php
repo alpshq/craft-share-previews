@@ -3,6 +3,7 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\models\concerns\ParsesPercentages;
 use alps\sharepreviews\models\concerns\ScalesProperties;
 use alps\sharepreviews\validators\FilterValidator;
 use craft\base\Model;

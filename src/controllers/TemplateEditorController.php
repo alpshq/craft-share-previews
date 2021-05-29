@@ -38,6 +38,10 @@ class TemplateEditorController extends Controller
             ->templates
             ->getTemplateById($id);
 
+        $f = SharePreviews::getInstance()->fontFetcher;
+
+
+
         $template = $template ?? new Template;
 
         return $this->renderEditor($template);
