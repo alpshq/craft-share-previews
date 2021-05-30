@@ -15,7 +15,7 @@ use alps\sharepreviews\SharePreviews;
 use craft\elements\Entry;
 use alps\sharepreviews\Config;
 use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\FontFetcher;
+use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\Plugin;
 use alps\sharepreviews\services\Renderer;
 use alps\youtube\Client;
@@ -37,10 +37,6 @@ class TemplateEditorController extends Controller
         $template = SharePreviews::getInstance()
             ->templates
             ->getTemplateById($id);
-
-        $f = SharePreviews::getInstance()->fontFetcher;
-
-
 
         $template = $template ?? new Template;
 
@@ -108,9 +104,12 @@ class TemplateEditorController extends Controller
 
     private function renderEditor(Template $template)
     {
+        $fonts = SharePreviews::getInstance()->fonts;
+
         $data = [
             'template' => $template,
             'availableLayers' => $this->getAvailableLayers(),
+            'fontsService' => $fonts,
         ];
 
         $isFetch = $this->request->getHeaders()->get('x-requested-with') === 'fetch';

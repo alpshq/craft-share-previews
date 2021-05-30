@@ -12,9 +12,10 @@
             template,
             layer,
             layerIdx,
+            fontsService,
             isFirstLayer: loop.first,
             isLastLayer: loop.last,
-            namePrefix: 'template[layers][' ~ layerIdx ~ ']'
+            namePrefix: 'template[layers][' ~ layerIdx ~ ']',
         }, with_context = false) }}
     {% endfor %}
 </div>

@@ -1,5 +1,6 @@
 import attachInteractivePadding from './interactive-padding';
 import { registerChangeEvents } from './tabs';
+import setUpFontHandlers from './font-input';
 
 const createElementWithContent = (doc, type, content) => {
   const el = doc.createElement(type);
@@ -76,6 +77,7 @@ const createFormSubmitter = (win, editor, action, formWrapper, callback = (isFin
 
     registerChangeEvents(win);
     attachInteractivePadding(win, editor);
+    setUpFontHandlers(win, editor);
 
     callback(true);
   };

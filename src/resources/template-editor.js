@@ -1,6 +1,7 @@
 import createPreviewUpdater from './lib/preview-updater';
 import createFormSubmitter from './lib/form-submitter';
 import attachInteractivePadding from './lib/interactive-padding';
+import setUpFontHandlers from './lib/font-input';
 
 const objEqual = (obj1, obj2) => {
   const keys = Object.keys(obj1);
@@ -151,6 +152,7 @@ const exec = (win) => {
     );
 
     return (values = null) => {
+      previewCallback(values, false);
       if (!values) {
         values = collectFieldValues();
       }
@@ -189,6 +191,8 @@ const exec = (win) => {
       ev.preventDefault();
       updatePreview();
     }, false);
+
+  setUpFontHandlers(win, editor);
 };
 
 export default exec;

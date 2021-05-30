@@ -132,4 +132,5 @@ Good starting points are `General`, `Blog` or `News`.'|t('share-previews') }}
     window._alps.actionUrl = '{{ actionUrl('share-previews/template-editor/post') }}';
     window._alps.deleteConfirmation = '{{ 'Are you sure you want to delete template "{name}"?'|t('share-previews')|raw }}';
     window._alps.templateName = '{{ template.getHumanFriendlyName() }}';
+    window._alps.fontVariants = '{{ fontsService.getAvailableVariantsAsOptions()|json_encode|raw }}';
 {% endjs %}

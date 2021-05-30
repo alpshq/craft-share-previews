@@ -3,6 +3,7 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\Config;
+use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
@@ -138,14 +139,7 @@ class AssetLayer extends ImageLayer
             ];
         }, $fields);
 
-        usort($options, function ($a, $b) {
-            /* Source: http://stackoverflow.com/a/3650743/1402176 */
-            $clean = function ($str) {
-                return preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1' . chr(255) . '$2', htmlentities($str, ENT_QUOTES, 'UTF-8'));
-            };
-
-            return strcmp($clean($a['label']), $clean($b['label']));
-        });
+        $options = SharePreviews::getInstance()->helpers->sortOptions($options);
 
         array_unshift($options, [
             'value' => null,

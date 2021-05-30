@@ -15,8 +15,8 @@ use Laminas\Feed\Reader\Entry\EntryInterface;
 class TextLayer extends AbstractRectangleLayer
 {
     public string $content = '{{ entry.title }}';
-    public string $fontFamily = 'Roboto';
-    public string $fontWeight = '700';
+    public string $fontFamily = 'roboto';
+    public string $fontVariant = 'regular';
     public int $maxFontSize = 60;
     public bool $shrinkToFit = true;
 
@@ -28,6 +28,24 @@ class TextLayer extends AbstractRectangleLayer
     public function isAvailableInTemplateEditor(): bool
     {
         return true;
+    }
+
+    public function setFontFamilyWithVariant(array $familyWithVariant): self
+    {
+        $familyWithVariant[1] = $familyWithVariant[1] ?? $this->fontVariant;
+
+        [$familyId, $variantId] = $familyWithVariant;
+
+        $fontsService = SharePreviews::getInstance()->fonts;
+
+        if (!$fontsService->isValidVariant($familyId, $variantId)) {
+            [$familyId, $variantId] = $fontsService->getDefaults($familyId);
+        }
+
+        $this->fontFamily = $familyId;
+        $this->fontVariant = $variantId;
+
+        return $this;
     }
 
     public function apply(ImageInterface $image): ImageInterface
@@ -104,10 +122,10 @@ class TextLayer extends AbstractRectangleLayer
         $plugin = SharePreviews::getInstance();
 
         $fileHandler = $plugin->fileHandler;
-        $fontFetcher = $plugin->fontFetcher;
+        $fontFetcher = $plugin->fonts;
 
         $family = $this->fontFamily;
-        $variant = $this->fontWeight;
+        $variant = $this->fontVariant;
 
         if ($fileHandler->fontExists($family, $variant)) {
             return $fileHandler->getFontPath($family, $variant);

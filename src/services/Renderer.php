@@ -25,13 +25,13 @@ class Renderer extends Component
 //    private int $imageHeight = 0;
 
     public FileHandler $fileHandler;
-    public FontFetcher $fontFetcher;
+    public Fonts $fontFetcher;
     public ?Config $config;
 
     public function __construct($config = [])
     {
         $config['fileHandler'] = $config['fileHandler'] ?? new FileHandler;
-        $config['fontFetcher'] = $config['fontFetcher'] ?? new FontFetcher;
+        $config['fontFetcher'] = $config['fontFetcher'] ?? new Fonts;
         $config['config'] = $config['config'] ?? new Config;
 
         parent::__construct($config);

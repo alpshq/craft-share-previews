@@ -13,7 +13,7 @@ use alps\sharepreviews\SharePreviews;
 use craft\elements\Entry;
 use alps\sharepreviews\Config;
 use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\FontFetcher;
+use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\Plugin;
 use alps\sharepreviews\services\Renderer;
 use alps\youtube\Client;

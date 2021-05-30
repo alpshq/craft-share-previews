@@ -57,18 +57,6 @@ export const registerChangeEvents = win => {
   tabs.forEach(tab => {
     tab.removeAttribute('data-event-required');
 
-    // const id = tab.dataset.id;
-    //
-    // console.log(id);
-    // console.log(`input[name="_tabs[${id}]"][checked]`);
-    //
-    // const selectedInput = tab.querySelector(`input[name="_tabs[${id}]"]:checked`);
-    //
-    // console.log(selectedInput);
-    // if (selectedInput) {
-    //   triggerChangeEvent(win, selectedInput);
-    // }
-
     tab.addEventListener('change', ev => {
       handleChange(win, ev);
     }, false)

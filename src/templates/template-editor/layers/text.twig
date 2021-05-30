@@ -32,28 +32,30 @@ Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Font'|t('share-previews')) %}
-        <div class='grid grid-cols-3 gap-x-6'>
+        <div class="grid grid-cols-3 gap-x-6">
             <div>
                 {{ forms.field({
                     label: 'Font Family'|t('share-previews'),
                 }, forms.select({
-                    name: namePrefix ~ '[fontFamily]',
+                    name: namePrefix ~ '[fontFamilyWithVariant][0]',
                     value: layer.fontFamily,
-                    options: {
-                        'roboto': 'Roboto'|t('share-previews'),
-                        'pattaya': 'Pattaya'|t('share-previews'),
+                    options: fontsService.getAvailableFontFamiliesAsOptions(),
+                    inputAttributes: {
+                        'data-font-family': true,
+                        'data-variant-field': 'font-variant' ~ layerIdx,
                     },
                 })) }}
             </div>
             <div>
                 {{ forms.field({
-                    label: 'Font Weight'|t('share-previews'),
+                    label: 'Font Variant'|t('share-previews'),
                 }, forms.select({
-                    name: namePrefix ~ '[fontWeight]',
-                    value: layer.fontWeight,
-                    options: {
-                        '400': 'Bold'|t('share-previews'),
-                    },
+                    id: 'font-variant' ~ layerIdx,
+                    name: namePrefix ~ '[fontFamilyWithVariant][1]',
+                    value: layer.fontVariant,
+                    options: fontsService.getVariantsForFamilyAsOptions(layer.fontFamily) ?? [{
+                        label: 'Select a valid font family first'|t('share-previews')
+                    }]
                 })) }}
             </div>
             <div>
@@ -73,14 +75,14 @@ Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/
         <div class="mt-6 sp-markdown">
             {{ 'All [Google Fonts](https://fonts.google.com) are supported. They\'ll be cached on your server upon first request.
 
-The font size will **automatically decrease** to fit within the layer\'s constraints. You don\'t need to worry if a text will fit. Just select your maximum desired font size and the plugin will do the rest. The minimum font size is 10px.
+The font size will **automatically decrease** to fit within the layer\'s constraints, so you don\'t have to worry if a text will fit. Just select your maximum desired font size and the plugin will do the rest. The minimum font size is 10px.
 
 [Google Fonts Open Source Font Attribution](https://fonts.google.com/attribution)'|t('share-previews')|md }}
         </div>
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Color'|t('share-previews')) %}
-        <div class='grid grid-cols-2 gap-x-6'>
+        <div class="grid grid-cols-2 gap-x-6">
             <div>
                 {{ forms.field({
                     label: 'Color'|t('share-previews'),

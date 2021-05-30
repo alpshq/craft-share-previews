@@ -5,6 +5,7 @@ namespace alps\sharepreviews;
 use alps\sharepreviews\assets\FontAwesomeAssets;
 use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
 use alps\sharepreviews\models\Image;
+use alps\sharepreviews\services\Helpers;
 use alps\sharepreviews\services\ImageDiffer;
 use alps\sharepreviews\services\Urls;
 use alps\sharepreviews\twig\TabsExtension;
@@ -24,7 +25,7 @@ use alps\sharepreviews\assets\ControlPanelAssets;
 use alps\sharepreviews\fields\TemplateSelectorField;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\FontFetcher;
+use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\services\Images;
 use alps\sharepreviews\services\Renderer;
 use alps\sharepreviews\services\Templates;
@@ -33,14 +34,15 @@ use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
 
 /**
- * @property-read Settings    $settings
  * @property-read FileHandler $fileHandler
- * @property-read FontFetcher $fontFetcher
+ * @property-read Fonts       $fonts
+ * @property-read Helpers        $helpers
+ * @property-read ImageDiffer $imageDiffer
  * @property-read Images      $images
  * @property-read Renderer    $renderer
+ * @property-read Settings    $settings
  * @property-read Templates   $templates
- * @property-read ImageDiffer $imageDiffer
- * @property-read Urls $urls
+ * @property-read Urls        $urls
  * @method Settings getSettings
  */
 class SharePreviews extends Plugin
@@ -55,11 +57,12 @@ class SharePreviews extends Plugin
 
         $this->setComponents([
             'fileHandler' => FileHandler::class,
-            'fontFetcher' => FontFetcher::class,
+            'fonts' => Fonts::class,
+            'helpers' => Helpers::class,
+            'imageDiffer' => ImageDiffer::class,
             'images' => Images::class,
             'renderer' => Renderer::class,
             'templates' => Templates::class,
-            'imageDiffer' => ImageDiffer::class,
             'urls' => Urls::class,
         ]);
 

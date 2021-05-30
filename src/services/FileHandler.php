@@ -22,19 +22,19 @@ class FileHandler extends Component
         $this->settings = SharePreviews::getInstance()->getSettings();
     }
 
-    public function fontExists(string $family, string $variant): bool
+    public function fontExists(string $familyId, string $variantId): bool
     {
-        return file_exists($this->getFontPath($family, $variant));
+        return file_exists($this->getFontPath($familyId, $variantId));
     }
 
-    public function getFontPath(string $family, string $variant): string
+    public function getFontPath(string $familyId, string $variantId): string
     {
-        $filename = StringHelper::slugify($family . ' ' . $variant) . '.ttf';
+        $filename = StringHelper::slugify($familyId . ' ' . $variantId) . '.ttf';
 
         return $this->settings->fontCachePath . '/' . $filename;
     }
 
-    public function saveFont(string $family, string $variant, string $contents): self
+    public function saveFont(string $familyId, string $variantId, string $contents): self
     {
         $dir = $this->settings->fontCachePath;
 
@@ -42,7 +42,7 @@ class FileHandler extends Component
             ->ensureDirectoryExists($dir)
             ->ensureGitIgnoreExists($dir);
 
-        file_put_contents($this->getFontPath($family, $variant), $contents);
+        file_put_contents($this->getFontPath($familyId, $variantId), $contents);
 
         return $this;
     }

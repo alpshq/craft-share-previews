@@ -8,6 +8,7 @@
     "postcss:build": "npm run postcss:dev -- --env production",
     "browser-sync": "browser-sync start -p craft-plugin-dev.nitro -f './src/**/*.php' './src/**/*.twig' './dist/build' -w --no-inject-changes",
     "fontawesome:copy": "copyfiles -F -u 2 \"./node_modules/@fortawesome/*/{css,webfonts}/**/*\" ./dist/build/fortawesome/",
+    "fonts:fetch": "node ./bin/fetch-font-data.js",
     "dev": "npm run postcss:dev && concurrently 'npm run postcss:watch' 'npm run webpack:dev'",
     "build": "npm run webpack:build"
   },
@@ -32,6 +33,7 @@
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "interactjs": "^1.10.11",
+    "node-fetch": "^2.6.1",
     "node-sass": "^6.0.0",
     "postcss": "^8.2.15",
     "postcss-cli": "^8.3.1",
