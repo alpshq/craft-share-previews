@@ -134,6 +134,7 @@ module.exports = {
       borderWidth: ['first'],
       gradientColorStops: ['active'],
       outline: ['active'],
+      scale: ['group-hover'],
     },
   },
   plugins: []

@@ -94,7 +94,7 @@ const attachPreviewEntryHandler = (garnish, craft, collectFieldValues, updatePre
   garnish.on(craft.BaseElementSelectInput, 'selectElements', ev => {
     const name = ev.target.settings.name;
 
-    if (name.indexOf('template') > -1 || name.indexOf('preview') > -1) {
+    if (name.indexOf('template') > -1) {
       updatePreview();
     }
   });
@@ -109,12 +109,6 @@ const attachPreviewEntryHandler = (garnish, craft, collectFieldValues, updatePre
     updatePreview(values);
   });
 };
-
-// const attachDeleteButtonHandler = (editor) => {
-//   const buttons = [...editor.querySelectorAll('button[name="op"][value="delete"]')];
-//
-//   buttons.forEach()
-// };
 
 const exec = (win) => {
   const doc = win.document;
@@ -153,9 +147,11 @@ const exec = (win) => {
 
     return (values = null) => {
       previewCallback(values, false);
+
       if (!values) {
         values = collectFieldValues();
       }
+
       updater(values);
     };
   })();

@@ -8,6 +8,7 @@ use alps\sharepreviews\SharePreviews;
 use BadMethodCallException;
 use Craft;
 use craft\base\Model;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
@@ -34,6 +35,9 @@ class Template extends Model
 
     public bool $isDefault = false;
 
+    private ?Entry $previewEntry = null;
+    private ?int $previewEntryId = null;
+
     public function attributes()
     {
         return array_merge(
@@ -43,6 +47,7 @@ class Template extends Model
                 'id',
                 'name',
                 'layers',
+                'previewEntryId',
             ]
         );
     }
@@ -90,11 +95,71 @@ class Template extends Model
         return trim($name);
     }
 
+    public function getPreviewEntryId(): ?int
+    {
+        return $this->previewEntryId;
+    }
+
+    public function setPreviewEntryId($entryId): self
+    {
+        $this->previewEntry = null;
+
+        if ($entryId instanceof Entry) {
+            $this->previewEntry = $entryId;
+            $this->previewEntryId = $entryId->id;
+
+            return $this;
+        }
+
+        if (is_array($entryId)) {
+            $entryId = $entryId[0] ?? null;
+        }
+
+        $entryId = (int) $entryId;
+
+        $this->previewEntryId = $entryId > 0 ? $entryId : null;
+
+        return $this;
+    }
+
+    public function getPreviewEntry(): ?Entry
+    {
+        $entryId = $this->previewEntryId;
+
+        if (!$entryId) {
+            return null;
+        }
+
+        if ($this->previewEntry && $this->previewEntry->id === $entryId) {
+            return $this->previewEntry;
+        }
+
+        $entry = Entry::findOne($entryId);
+
+        if (!$entry) {
+            return null;
+        }
+
+        return $this->previewEntry = $entry;
+    }
+
     public function toImage(): Image
     {
         return new Image([
             'layers' => $this->layers,
         ]);
+    }
+
+    public function toImageWithPreviewEntry(): Image
+    {
+        $image = $this->toImage();
+        $entry = $this->getPreviewEntry();
+
+        if ($entry) {
+            $image->setEntry($entry);
+        }
+
+        return $image;
     }
 
     public function exists(): bool

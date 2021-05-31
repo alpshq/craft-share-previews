@@ -6,13 +6,13 @@
             id="preview-anchor"
             class="relative block overflow-hidden bg-blue-gray-100"
             style="padding-top: 52.5%;"
-            href="{{ template.toImage().getUrl() }}"
+            href="{{ template.toImageWithPreviewEntry().getUrl() }}"
             target="_blank"
         >
             <img
                 id="preview-image"
                 class="absolute inset-0 block max-w-full w-full h-auto"
-                src="{{ template.toImage().getUrl() }}"
+                src="{{ template.toImageWithPreviewEntry().getUrl() }}"
             />
         </a>
     </div>
@@ -39,8 +39,9 @@
 
 The selected entry affects only the preview of the template. Rendered images based on this template will not have any association with the selected entry.'|t('share-previews'),
     }, forms.elementSelect({
-        name: 'preview[entryId]',
+        name: 'template[previewEntryId]',
         elementType: 'craft\\elements\\Entry',
+        elements: [template.previewEntry]|filter,
         limit: 1,
     })) }}
 </div>

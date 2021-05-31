@@ -6,29 +6,69 @@
         settings!
     </div>
 
-    <button id="btn-preview">
-        Preview!
-    </button>
+    <hr >
 
-    <a href="{{ url('share-previews/template-editor') }}">New Template</a>
+    <section>
+        <div class="flex items-start">
+            <div class="flex-1">
+                <h2>
+                    {{ 'Templates'|t('share-previews') }}
+                </h2>
 
-    {% for templateIdx, template in templates %}
-        <div class="flex items-start" data-template="{{ templateIdx }}">
-            <div class="w-1/2 flex-none">
-                {{ template.getHumanFriendlyName() }}
+                <p class="m-0 text-gray-500">
+                    {% if templates and 0 %}
+                        {{ 'These are your templates. Click on any one to open it in the template editor or create a new one.'|t('share-previews') }}
+                    {% else %}
+                        {{ 'Currently you have no templates stored. You should create one! It\'s quick & easy using the template editor.'|t('share-previews') }}
+                    {% endif %}
+                </p>
             </div>
-            <div class="bg-blue-gray-100 flex-grow">
-                <div class="sticky">
-                    <div class="relative" style="padding-top: 52.5%;">
-                        <a
-                            class="absolute inset-0 block"
-                            href="{{ url('share-previews/template-editor', {id: template.id}) }}"
-                        >
-                            <img class="max-w-full w-full h-auto" src="{{ template.toImage().getUrl() }}" />
-                        </a>
-                    </div>
-                </div>
+
+            <div class="flex-none">
+                <a class="btn" href="{{ url('share-previews/template-editor') }}">
+                    {{ 'Create new template ...'|t('share-previews') }}
+                </a>
             </div>
         </div>
-    {% endfor %}
+
+        {% if templates %}
+            <ul class="mt-10 grid grid-cols-3 gap-8 text-center">
+                {% for templateIdx, template in templates %}
+                    <li>
+                        <a
+                            class="
+                                block group
+                                bg-blue-gray-200
+                                border border-solid border-transparent
+                                hover:border-blue-gray-400 hover:no-underline
+                                rounded overflow-hidden
+                                text-blue-gray-400 uppercase tracking-tight text-sm
+                                hover:text-blue-gray-500
+                            "
+                            href="{{ url('share-previews/template-editor', {id: template.id}) }}"
+                        >
+                            <span
+                                class="block relative bg-gray-100 overflow-hidden"
+                                style="padding-top: 52.5%;"
+                            >
+                                <img
+                                    class="
+                                        block absolute inset-0 max-w-full w-full h-auto
+                                        transform
+                                        transition
+                                        group-hover:scale-110
+                                    "
+                                    src="{{ template.toImage().getUrl() }}"
+                                />
+                            </span>
+
+                            <span class="block my-4">
+                                {{ template.getHumanFriendlyName() }}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
 </div>

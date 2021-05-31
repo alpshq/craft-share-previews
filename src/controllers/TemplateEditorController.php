@@ -76,11 +76,7 @@ class TemplateEditorController extends Controller
             $this->request->getBodyParam('template', [])
         );
 
-        $image = $template->toImage();
-
-        $preview = $this->request->getBodyParam('preview');
-
-        $image = $this->attachEntry($image, $preview);
+        $image = $template->toImageWithPreviewEntry();
 
         $image->render()->show('png', [
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
@@ -256,28 +252,5 @@ class TemplateEditorController extends Controller
         });
 
         return array_values($layers);
-    }
-
-    private function attachEntry(Image $image, ?array $preview): Image
-    {
-        if (!$preview) {
-            return $image;
-        }
-
-        $entryId = (int) ($preview['entryId'][0] ?? 0);
-
-        if ($entryId < 1) {
-            return $image;
-        }
-
-        $entry = Entry::findOne($entryId);
-
-        if (!$entry) {
-            return $image;
-        }
-
-        $image->setEntry($entry);
-
-        return $image;
     }
 }
