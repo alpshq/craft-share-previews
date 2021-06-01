@@ -14,12 +14,12 @@ return (new PhpCsFixer\Config)
         '@Symfony' => true,
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
-        'binary_operator_spaces' => ['align_double_arrow' => false],
+//        'binary_operator_spaces' => ['operators' => false],
         'class_attributes_separation' => [
             'elements' => [
-                'method',
-                'property',
-                'const',
+                'method' => 'one',
+                'property' => 'one',
+                'const' => 'one',
             ],
         ],
         'compact_nullable_typehint' => true,
