@@ -14,7 +14,6 @@ use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Entry;
-use alps\sharepreviews\Config;
 use yii\base\Component;
 
 class ImageDiffer extends Component
@@ -135,7 +134,6 @@ class ImageDiffer extends Component
     public function encodeDiff(string $templateHash, array $diff): string
     {
         $zlibAvailable = extension_loaded('zlib');
-        $zlibAvailable = false;
 
         $diff = json_encode($diff);
 

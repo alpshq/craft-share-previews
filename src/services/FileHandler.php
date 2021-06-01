@@ -2,23 +2,22 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\models\Image;
 use alps\sharepreviews\SharePreviews;
+use Craft;
 use craft\helpers\StringHelper;
 use Imagine\Image\ImageInterface;
-use alps\sharepreviews\Config;
 use alps\sharepreviews\models\Settings;
 use yii\base\Component;
 
 class FileHandler extends Component
 {
     private Settings $settings;
-    private Config $config;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
 
-        $this->config = new Config;
         $this->settings = SharePreviews::getInstance()->getSettings();
     }
 
@@ -81,9 +80,16 @@ class FileHandler extends Component
         return $this;
     }
 
+    private function getPublicPath(string $relativeToPublic): string
+    {
+        $publicPath = rtrim(Craft::getAlias('@webroot'), '/');
+
+        return $publicPath . '/' . ltrim($relativeToPublic, '/');
+    }
+
     public function getImageDirectory(): string
     {
-        return $this->config->getPublicPath(
+        return $this->getPublicPath(
             $this->settings->routePrefix
         );
     }
@@ -97,7 +103,7 @@ class FileHandler extends Component
     {
         $routePath = $this->settings->routePrefix;
 
-        $dir = $this->config->getPublicPath($routePath);
+        $dir = $this->getPublicPath($routePath);
 
         $this
             ->ensureDirectoryExists($dir)
@@ -113,7 +119,7 @@ class FileHandler extends Component
         $this->ensureDirectoryExists($directories);
 
         $image->save($filename, [
-            'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
+            'png_compression_level' => Image::PNG_COMPRESSION_LEVEL,
         ]);
 
         return $this;

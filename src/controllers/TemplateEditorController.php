@@ -13,18 +13,13 @@ use alps\sharepreviews\models\Template;
 use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use craft\elements\Entry;
-use alps\sharepreviews\Config;
 use alps\sharepreviews\services\FileHandler;
 use alps\sharepreviews\services\Fonts;
-use alps\sharepreviews\Plugin;
-use alps\sharepreviews\services\Renderer;
-use alps\youtube\Client;
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use craft\web\Request;
 use craft\web\Response;
-use League\OAuth2\Client\Provider\Google;
 use yii\web\HttpException;
 use yii\web\JqueryAsset;
 
@@ -79,7 +74,7 @@ class TemplateEditorController extends Controller
         $image = $template->toPreviewImage();
 
         $image->render()->show('png', [
-            'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,
+            'png_compression_level' => Image::PNG_COMPRESSION_LEVEL,
         ]);
     }
 

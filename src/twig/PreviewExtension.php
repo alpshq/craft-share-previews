@@ -3,7 +3,6 @@
 namespace alps\sharepreviews\twig;
 
 use craft\elements\Entry;
-use alps\sharepreviews\Plugin;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
@@ -13,7 +12,7 @@ class PreviewExtension extends \Twig\Extension\AbstractExtension
     {
         return [
             // Use a closure or define the function outside with [$this, 'nameOfTheFunction'].
-            new TwigFunction('preview_image_src', [$this, 'getPreviewImageSource'], ['is_safe' => ['html']]),
+//            new TwigFunction('preview_image_src', [$this, 'getPreviewImageSource'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -39,13 +38,6 @@ class PreviewExtension extends \Twig\Extension\AbstractExtension
     public function rgbaToOpacity(array $rgba): int
     {
         return ($rgba[3] ?? 1) * 100;
-    }
-
-    public function getPreviewImageSource(Entry $entry): ?string
-    {
-        return Plugin::getInstance()
-            ->images
-            ->getShareImagePreviewUrl($entry);
     }
 
     public function trimLines(string $str): string

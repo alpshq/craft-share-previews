@@ -21,6 +21,8 @@ class Image extends Model
 {
     use HasLayers;
 
+    const PNG_COMPRESSION_LEVEL = 5;
+
     public int $width = 1200;
     public int $height = 630;
     public ?int $templateId = null;

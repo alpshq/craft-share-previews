@@ -14,14 +14,11 @@ use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\elements\Asset;
 use craft\elements\Entry;
-use alps\sharepreviews\Config;
 use craft\services\Plugins;
 use yii\base\Component;
 
 class Templates extends Component
 {
-//    const DEFAULT_TEMPLATE_ID = 0;
-
     private Settings $settings;
     private ?SharePreviews $plugin;
     private Plugins $pluginService;

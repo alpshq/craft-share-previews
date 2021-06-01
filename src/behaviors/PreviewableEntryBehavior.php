@@ -10,8 +10,9 @@ class PreviewableEntryBehavior extends \yii\base\Behavior
 
     public function getSharePreviewUrl(): string
     {
-        $image = SharePreviews::getInstance()->images->createImageFromEntry($this->owner);
-
-        return $image->getUrl();
+        return SharePreviews::getInstance()
+            ->images
+            ->createImageFromEntry($this->owner)
+            ->getUrl();
     }
 }

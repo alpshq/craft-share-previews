@@ -4,7 +4,6 @@ namespace alps\sharepreviews;
 
 use alps\sharepreviews\assets\FontAwesomeAssets;
 use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
-use alps\sharepreviews\models\Image;
 use alps\sharepreviews\services\Helpers;
 use alps\sharepreviews\services\ImageDiffer;
 use alps\sharepreviews\services\Urls;
@@ -23,14 +22,12 @@ use craft\services\Fields;
 use craft\utilities\ClearCaches;
 use craft\web\UrlManager;
 use craft\web\View;
-use modules\Module;
 use alps\sharepreviews\assets\ControlPanelAssets;
 use alps\sharepreviews\fields\TemplateSelectField;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\services\FileHandler;
 use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\services\Images;
-use alps\sharepreviews\services\Renderer;
 use alps\sharepreviews\services\Templates;
 use alps\sharepreviews\twig\PreviewExtension;
 use yii\base\Event;
@@ -42,7 +39,6 @@ use yii\console\Application as ConsoleApplication;
  * @property-read Helpers        $helpers
  * @property-read ImageDiffer $imageDiffer
  * @property-read Images      $images
- * @property-read Renderer    $renderer
  * @property-read Settings    $settings
  * @property-read Templates   $templates
  * @property-read Urls        $urls
@@ -64,7 +60,6 @@ class SharePreviews extends Plugin
             'helpers' => Helpers::class,
             'imageDiffer' => ImageDiffer::class,
             'images' => Images::class,
-            'renderer' => Renderer::class,
             'templates' => Templates::class,
             'urls' => Urls::class,
         ]);
