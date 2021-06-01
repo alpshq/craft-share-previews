@@ -1,23 +1,19 @@
 <?php
 
-
 namespace alps\sharepreviews\imagefilters;
-
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Palette\Color\RGB as RGBColor;
-use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
 
 class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 {
     private ImagineInterface $imagine;
+
     private int $radius;
 
     public function __construct(ImagineInterface $imagine, int $radius)
@@ -35,7 +31,7 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 
         $mask = $this->imagine->create($size);
 
-        $black = $image->palette()->color([0,0,0]);
+        $black = $image->palette()->color([0, 0, 0]);
 
         $radius = $this->radius * 2;
 
@@ -102,7 +98,7 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 
     private function applyMask(ImageInterface $image, ImageInterface $mask)
     {
-        if (!$mask instanceof $image) {
+        if (! $mask instanceof $image) {
             throw new InvalidArgumentException('Cannot mask non-gd images');
         }
 
@@ -113,8 +109,8 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
             throw new InvalidArgumentException(sprintf('The given mask doesn\'t match current image\'s size, Current mask\'s dimensions are %s, while image\'s dimensions are %s', $maskSize, $size));
         }
 
-        for ($x = 0, $width = $size->getWidth(); $x < $width; $x++) {
-            for ($y = 0, $height = $size->getHeight(); $y < $height; $y++) {
+        for ($x = 0, $width = $size->getWidth(); $x < $width; ++$x) {
+            for ($y = 0, $height = $size->getHeight(); $y < $height; ++$y) {
                 $position = new Point($x, $y);
                 $color = $image->getColorAt($position);
                 $maskColor = $mask->getColorAt($position);
@@ -131,7 +127,7 @@ class BorderRadiusFilter implements \Imagine\Filter\FilterInterface
 
     private function getColor(ImageInterface $image, ColorInterface $color)
     {
-        if (!$color instanceof RGBColor) {
+        if (! $color instanceof RGBColor) {
             throw new InvalidArgumentException('GD driver only supports RGB colors');
         }
 

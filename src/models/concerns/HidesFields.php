@@ -1,8 +1,6 @@
 <?php
 
-
 namespace alps\sharepreviews\models\concerns;
-
 
 trait HidesFields
 {
@@ -26,7 +24,7 @@ trait HidesFields
         $filtered = [];
 
         foreach ($fields as $fieldName) {
-            if (!in_array($fieldName, $hidden)) {
+            if (! in_array($fieldName, $hidden)) {
                 $filtered[] = $fieldName;
             }
         }

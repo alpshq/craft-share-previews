@@ -41,14 +41,14 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
             $id = (int) $id;
         }
 
-        $this->tabs[$id]= [];
+        $this->tabs[$id] = [];
 
         return $id;
     }
 
     public function setSection(Markup $markup, $id, string $name)
     {
-        $this->tabs[$id][]= [
+        $this->tabs[$id][] = [
             'name' => $name,
             'markup' => $markup,
         ];

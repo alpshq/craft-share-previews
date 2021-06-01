@@ -8,16 +8,17 @@ use Craft;
 use craft\elements\Entry;
 use Imagine\Gd\Font;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\Palette\Color\RGB;
-use Imagine\Image\Point;
-use Laminas\Feed\Reader\Entry\EntryInterface;
 
 class TextLayer extends AbstractRectangleLayer
 {
     public string $content = '{{ entry.title }}';
+
     public string $fontFamily = 'roboto';
+
     public string $fontVariant = 'regular';
+
     public int $maxFontSize = 60;
+
     public bool $shrinkToFit = true;
 
     public function getTitle(): string
@@ -38,7 +39,7 @@ class TextLayer extends AbstractRectangleLayer
 
         $fontsService = SharePreviews::getInstance()->fonts;
 
-        if (!$fontsService->isValidVariant($familyId, $variantId)) {
+        if (! $fontsService->isValidVariant($familyId, $variantId)) {
             [$familyId, $variantId] = $fontsService->getDefaults($familyId);
         }
 
@@ -105,13 +106,11 @@ class TextLayer extends AbstractRectangleLayer
                 if ($wrapAfter <= 10) {
                     break;
                 }
-
             } while ($box->getWidth() > $maxWidth);
 
-            if (!$shrinkToFit || $maxFontSize <= 10) {
+            if (! $shrinkToFit || $maxFontSize <= 10) {
                 break;
             }
-
         } while ($box->getHeight() > $maxHeight);
 
         return [$font, wordwrap($content, $wrapAfter)];

@@ -3,10 +3,7 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\behaviors\HasColors;
-use alps\sharepreviews\Config;
 use Craft;
-use Imagine\Filter\Advanced\Border;
-use Imagine\Filter\Transformation;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
@@ -16,6 +13,7 @@ use Imagine\Image\Point;
 class ImageLayer extends AbstractRectangleLayer
 {
     const FILL_MODE_CONTAIN = 'contain';
+
     const FILL_MODE_COVER = 'cover';
 
     public ?string $path = null;
@@ -38,7 +36,7 @@ class ImageLayer extends AbstractRectangleLayer
     {
         $path = $this->getPath();
 
-        if (empty($path) || !file_exists($path)) {
+        if (empty($path) || ! file_exists($path)) {
             return $image;
         }
 
@@ -100,7 +98,6 @@ class ImageLayer extends AbstractRectangleLayer
 
         return $image;
     }
-
 
     protected function getScalableProperties(): array
     {

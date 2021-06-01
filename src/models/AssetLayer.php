@@ -2,27 +2,19 @@
 
 namespace alps\sharepreviews\models;
 
-use alps\sharepreviews\Config;
 use alps\sharepreviews\SharePreviews;
 use Craft;
-use craft\base\Element;
-use craft\base\FieldInterface;
 use craft\elements\Asset;
 use craft\elements\db\AssetQuery;
 use craft\elements\Entry;
 use craft\fields\Assets;
-use Imagine\Filter\Advanced\Border;
-use Imagine\Filter\Transformation;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
-use Imagine\Image\ManipulatorInterface;
-use Imagine\Image\Point;
 
 class AssetLayer extends ImageLayer
 {
     private ?int $assetId = null;
+
     public ?int $fieldId = null;
+
     private ?Asset $asset = null;
 
     public function getTitle(): string
@@ -37,26 +29,26 @@ class AssetLayer extends ImageLayer
 
     public function willRender(Entry $entry)
     {
-        if (!$this->fieldId) {
+        if (! $this->fieldId) {
             return;
         }
 
         $field = Craft::$app->getFields()->getFieldById($this->fieldId);
 
-        if (!$field) {
+        if (! $field) {
             return;
         }
 
         /** @var AssetQuery|null $query */
         $query = $entry->getFieldValues([$field->handle])[$field->handle] ?? null;
 
-        if (!$query) {
+        if (! $query) {
             return;
         }
 
         $asset = $query->one();
 
-        if (!$asset || !$asset instanceof Asset) {
+        if (! $asset || ! $asset instanceof Asset) {
             return;
         }
 
@@ -100,7 +92,7 @@ class AssetLayer extends ImageLayer
 
     public function getAsset(): ?Asset
     {
-        if (!$this->assetId) {
+        if (! $this->assetId) {
             return null;
         }
 
@@ -115,7 +107,7 @@ class AssetLayer extends ImageLayer
     {
         $asset = $this->getAsset();
 
-        if (!$asset) {
+        if (! $asset) {
             return null;
         }
 
@@ -126,13 +118,13 @@ class AssetLayer extends ImageLayer
     {
         $fields = Craft::$app->getFields()->getFieldsByElementType(Entry::class);
 
-        $fields = array_filter($fields, function($field) {
+        $fields = array_filter($fields, function ($field) {
             return $field instanceof Assets;
         });
 
         $fields = array_values($fields);
 
-        $options = array_map(function(Assets $field) {
+        $options = array_map(function (Assets $field) {
             return [
                 'value' => $field->id,
                 'label' => sprintf('%s [%s]', $field->name, $field->handle),

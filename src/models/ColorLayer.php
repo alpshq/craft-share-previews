@@ -4,16 +4,10 @@ namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\imagefilters\BorderRadiusFilter;
-use alps\sharepreviews\models\concerns\TransformsColors;
 use Craft;
-use Imagine\Exception\InvalidArgumentException;
-use Imagine\Exception\RuntimeException;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Imagine\Image\Fill\Gradient\Vertical;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\Palette\Color\ColorInterface;
-use Imagine\Image\Palette\Color\RGB as RGBColor;
 use Imagine\Image\Point;
 
 /** @property array $color
@@ -39,7 +33,8 @@ class ColorLayer extends AbstractRectangleLayer
         [$width, $height] = $this->getCanvasDimensions();
 
         $rect = (new Imagine)->create(
-            new Box($width, $height), $this->toColor([0,0,0,0])
+            new Box($width, $height),
+            $this->toColor([0, 0, 0, 0])
         );
 
         $rect->draw()->rectangle(

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FauxTwigExtension for Craft CMS 3.x
+ * FauxTwigExtension for Craft CMS 3.x.
  *
  * This is intended to be used with the Symfony Plugin for PhpStorm:
  * https://plugins.jetbrains.com/plugin/7219-symfony-plugin
@@ -20,7 +20,8 @@
  * Thanks to Robin Schambach; for context, see:
  * https://github.com/Haehnchen/idea-php-symfony2-plugin/issues/1103
  *
- * @link      https://nystudio107.com
+ * @see      https://nystudio107.com
+ *
  * @copyright Copyright (c) 2019 nystudio107
  * @license   MIT
  * @license   https://opensource.org/licenses/MIT MIT Licensed
@@ -33,29 +34,29 @@ namespace alps\sharepreviews\twig;
  * that reflect things that are added to the Craft Variable dynamically by
  * plugins or modules.
  *
- * @property \craft\web\twig\variables\Cp $cp
- * @property \craft\web\twig\variables\Io $io
- * @property \craft\web\twig\variables\Routes $routes
- * @property \craft\web\twig\variables\CategoryGroups $categoryGroups
- * @property \craft\web\twig\variables\Config $config
- * @property \craft\web\twig\variables\Deprecator $deprecator
- * @property \craft\web\twig\variables\ElementIndexes $elementIndexes
- * @property \craft\web\twig\variables\EntryRevisions $entryRevisions
- * @property \craft\web\twig\variables\Feeds $feeds
- * @property \craft\web\twig\variables\Fields $fields
- * @property \craft\web\twig\variables\Globals $globals
- * @property \craft\web\twig\variables\I18N $i18n
- * @property \craft\web\twig\variables\Request $request
- * @property \craft\web\twig\variables\Sections $sections
- * @property \craft\web\twig\variables\SystemSettings $systemSettings
- * @property \craft\web\twig\variables\UserSession $session
- * @property \putyourlightson\blitz\variables\BlitzVariable $blitz
+ * @property \craft\web\twig\variables\Cp                     $cp
+ * @property \craft\web\twig\variables\Io                     $io
+ * @property \craft\web\twig\variables\Routes                 $routes
+ * @property \craft\web\twig\variables\CategoryGroups         $categoryGroups
+ * @property \craft\web\twig\variables\Config                 $config
+ * @property \craft\web\twig\variables\Deprecator             $deprecator
+ * @property \craft\web\twig\variables\ElementIndexes         $elementIndexes
+ * @property \craft\web\twig\variables\EntryRevisions         $entryRevisions
+ * @property \craft\web\twig\variables\Feeds                  $feeds
+ * @property \craft\web\twig\variables\Fields                 $fields
+ * @property \craft\web\twig\variables\Globals                $globals
+ * @property \craft\web\twig\variables\I18N                   $i18n
+ * @property \craft\web\twig\variables\Request                $request
+ * @property \craft\web\twig\variables\Sections               $sections
+ * @property \craft\web\twig\variables\SystemSettings         $systemSettings
+ * @property \craft\web\twig\variables\UserSession            $session
+ * @property \putyourlightson\blitz\variables\BlitzVariable   $blitz
  * @property \nystudio107\twigpack\variables\ManifestVariable $twigpack
- * @property \modules\sitemodule\SiteModule $site
+ * @property \modules\sitemodule\SiteModule                   $site
  * @mixin \craft\commerce\web\twig\CraftVariableBehavior
  *
  * @author    nystudio107
- * @package   nystudio107\craft
+ *
  * @since     1.0.2
  */
 class FauxCraftVariable extends \craft\web\twig\variables\CraftVariable
@@ -67,7 +68,7 @@ class FauxCraftVariable extends \craft\web\twig\variables\CraftVariable
  * so that we get Intellisense auto-complete in our Twig templates.
  *
  * @author    nystudio107
- * @package   nystudio107\craft
+ *
  * @since     1.0.2
  */
 class FauxTwigExtension extends \Twig\Extension\AbstractExtension implements \Twig\Extension\GlobalsInterface

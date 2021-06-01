@@ -2,25 +2,20 @@
 
 namespace alps\sharepreviews\services;
 
-use alps\sharepreviews\models\ColorLayer;
-use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
-use alps\sharepreviews\models\ImageLayer;
-use alps\sharepreviews\models\LineLayer;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\models\Template;
-use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
 use Craft;
-use craft\elements\Asset;
-use craft\elements\Entry;
 use craft\services\Plugins;
 use yii\base\Component;
 
 class Templates extends Component
 {
     private Settings $settings;
+
     private ?SharePreviews $plugin;
+
     private Plugins $pluginService;
 
     public function __construct($config = [])
@@ -39,7 +34,7 @@ class Templates extends Component
 
     public function getDefaultTemplate(bool $fallback = false): ?Template
     {
-        $templates = array_filter($this->getAvailableTemplates(), function(Template $template) {
+        $templates = array_filter($this->getAvailableTemplates(), function (Template $template) {
             return $template->isDefault;
         });
 
@@ -54,7 +49,7 @@ class Templates extends Component
     {
         $templates = $this->settings->templates;
 
-        $templates = array_filter($templates, function(Template $template) use ($id) {
+        $templates = array_filter($templates, function (Template $template) use ($id) {
             return $template->id === $id;
         });
 
@@ -98,11 +93,11 @@ class Templates extends Component
             return $templates;
         }
 
-        $defaultTemplates = array_filter($templates, function(Template $template) {
+        $defaultTemplates = array_filter($templates, function (Template $template) {
             return $template->isDefault;
         });
 
-        if (!empty($defaultTemplates)) {
+        if (! empty($defaultTemplates)) {
             return $templates;
         }
 
@@ -118,7 +113,7 @@ class Templates extends Component
         $settings = $this->settings;
         $originalTemplates = $settings->templates;
 
-        $templates = array_filter($originalTemplates, function(Template $template) use ($id) {
+        $templates = array_filter($originalTemplates, function (Template $template) use ($id) {
             return $template->id !== $id;
         });
 
@@ -140,7 +135,7 @@ class Templates extends Component
 
     private function assignTemplate(array $existingTemplates, Template $template): array
     {
-        $ids = array_map(function(Template $template) {
+        $ids = array_map(function (Template $template) {
             return $template->id;
         }, $existingTemplates);
 
@@ -204,7 +199,7 @@ class Templates extends Component
 //    }
     public function isValidTemplateId(int $id)
     {
-        $templateIds = array_map(function(Template $template) {
+        $templateIds = array_map(function (Template $template) {
             return $template->id;
         }, $this->settings->templates);
 

@@ -6,7 +6,6 @@ use alps\sharepreviews\fields\TemplateSelectField;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Template;
 use alps\sharepreviews\SharePreviews;
-use craft\elements\Asset;
 use craft\elements\Entry;
 use yii\base\Component;
 
@@ -56,7 +55,7 @@ class Images extends Component
     {
         $fieldLayout = $entry->getFieldLayout();
 
-        if (!$fieldLayout) {
+        if (! $fieldLayout) {
             return null;
         }
 
@@ -66,7 +65,7 @@ class Images extends Component
             return null;
         }
 
-        $fields = array_filter($fields, function($field) {
+        $fields = array_filter($fields, function ($field) {
             return $field instanceof TemplateSelectField;
         });
 

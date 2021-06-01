@@ -1,6 +1,5 @@
 <?php
 
-
 namespace alps\sharepreviews\models\concerns;
 
 use alps\sharepreviews\models\AbstractLayer;
@@ -32,7 +31,7 @@ trait HasLayers
         $this->layers = [];
 
         foreach ($layers as $layer) {
-            if (!$layer instanceof AbstractLayer) {
+            if (! $layer instanceof AbstractLayer) {
                 $layer = AbstractLayer::make($layer);
             }
 
@@ -44,7 +43,7 @@ trait HasLayers
 
     public function getLayers(): array
     {
-        return array_map(function(AbstractLayer $layer) {
+        return array_map(function (AbstractLayer $layer) {
             return AbstractLayer::make($layer->toArray());
         }, $this->layers);
     }

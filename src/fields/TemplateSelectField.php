@@ -3,23 +3,23 @@
 namespace alps\sharepreviews\fields;
 
 use alps\sharepreviews\models\Template;
+use alps\sharepreviews\services\Templates;
+use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\elements\Entry;
-use alps\sharepreviews\services\Templates;
-use alps\sharepreviews\SharePreviews;
 use yii\db\Schema;
 
 /**
- *
- * @property-read int[]    $availableTemplates
- * @property-read null|int $defaultTemplate
+ * @property int[]    $availableTemplates
+ * @property int|null $defaultTemplate
  */
 class TemplateSelectField extends Field
 {
     private ?array $availableTemplates = null;
+
     private ?int $defaultTemplate = null;
 
     public static function displayName(): string
@@ -50,7 +50,7 @@ class TemplateSelectField extends Field
             return $this;
         }
 
-        if (!is_array($templates)) {
+        if (! is_array($templates)) {
             $templates = [$templates];
         }
 
@@ -97,7 +97,7 @@ class TemplateSelectField extends Field
         $helpers = $plugin->helpers;
         $templates = $plugin->templates->getAvailableTemplates();
 
-        $options = array_map(function(Template $template) {
+        $options = array_map(function (Template $template) {
             $label = $template->getHumanFriendlyName();
 
             if ($template->isDefault) {
@@ -111,7 +111,7 @@ class TemplateSelectField extends Field
             ];
         }, $templates);
 
-        return $helpers->sortOptions($options, function($a, $b, $comparison) {
+        return $helpers->sortOptions($options, function ($a, $b, $comparison) {
             $aDefault = (int) $a['default'];
             $bDefault = (int) $b['default'];
 
@@ -129,7 +129,7 @@ class TemplateSelectField extends Field
 
         $templates = $plugin->templates->getAvailableTemplates();
 
-        $options = array_map(function(Template $template) {
+        $options = array_map(function (Template $template) {
             $label = $template->getHumanFriendlyName();
 
             return [
@@ -187,7 +187,7 @@ class TemplateSelectField extends Field
 
         $value = (int) $value;
 
-        if (!$templatesService->isValidTemplateId($value)) {
+        if (! $templatesService->isValidTemplateId($value)) {
             $value = null;
         }
 

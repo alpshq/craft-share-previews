@@ -1,11 +1,11 @@
 <?php
 
-
 namespace alps\sharepreviews\models\concerns;
 
 trait ScalesProperties
 {
     public ?int $width = 1200;
+
     public ?int $height = 630;
 
     protected function getScalableProperties(): array

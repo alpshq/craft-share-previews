@@ -3,17 +3,9 @@
 namespace alps\sharepreviews\services;
 
 use alps\sharepreviews\models\AbstractLayer;
-use alps\sharepreviews\models\ColorLayer;
-use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
-use alps\sharepreviews\models\ImageLayer;
-use alps\sharepreviews\models\LineLayer;
 use alps\sharepreviews\models\Template;
-use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
-use Craft;
-use craft\elements\Asset;
-use craft\elements\Entry;
 use yii\base\Component;
 
 class ImageDiffer extends Component
@@ -58,7 +50,7 @@ class ImageDiffer extends Component
             $secondLayer = $image['layers'][$idx] ?? null;
 
             if ($secondLayer === null) {
-                $layers[]= null;
+                $layers[] = null;
                 continue;
             }
 
@@ -72,7 +64,7 @@ class ImageDiffer extends Component
                 $diffedLayer[$prop] = $secondLayer[$prop];
             }
 
-            $layers[]= $diffedLayer;
+            $layers[] = $diffedLayer;
         }
 
         $diff['layers'] = array_filter($layers);

@@ -2,11 +2,19 @@
 
 namespace alps\sharepreviews;
 
+use alps\sharepreviews\assets\ControlPanelAssets;
 use alps\sharepreviews\assets\FontAwesomeAssets;
 use alps\sharepreviews\behaviors\PreviewableEntryBehavior;
+use alps\sharepreviews\fields\TemplateSelectField;
+use alps\sharepreviews\models\Settings;
+use alps\sharepreviews\services\FileHandler;
+use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\services\Helpers;
 use alps\sharepreviews\services\ImageDiffer;
+use alps\sharepreviews\services\Images;
+use alps\sharepreviews\services\Templates;
 use alps\sharepreviews\services\Urls;
+use alps\sharepreviews\twig\PreviewExtension;
 use alps\sharepreviews\twig\TabsExtension;
 use Craft;
 use craft\base\Plugin;
@@ -22,26 +30,18 @@ use craft\services\Fields;
 use craft\utilities\ClearCaches;
 use craft\web\UrlManager;
 use craft\web\View;
-use alps\sharepreviews\assets\ControlPanelAssets;
-use alps\sharepreviews\fields\TemplateSelectField;
-use alps\sharepreviews\models\Settings;
-use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\Fonts;
-use alps\sharepreviews\services\Images;
-use alps\sharepreviews\services\Templates;
-use alps\sharepreviews\twig\PreviewExtension;
 use yii\base\Event;
-use yii\console\Application as ConsoleApplication;
 
 /**
- * @property-read FileHandler $fileHandler
- * @property-read Fonts       $fonts
- * @property-read Helpers        $helpers
- * @property-read ImageDiffer $imageDiffer
- * @property-read Images      $images
- * @property-read Settings    $settings
- * @property-read Templates   $templates
- * @property-read Urls        $urls
+ * @property FileHandler $fileHandler
+ * @property Fonts       $fonts
+ * @property Helpers     $helpers
+ * @property ImageDiffer $imageDiffer
+ * @property Images      $images
+ * @property Settings    $settings
+ * @property Templates   $templates
+ * @property Urls        $urls
+ *
  * @method Settings getSettings
  */
 class SharePreviews extends Plugin
@@ -160,14 +160,14 @@ class SharePreviews extends Plugin
     {
         $isCpRequest = Craft::$app->getRequest()->getIsCpRequest();
 
-        if (!$isCpRequest) {
+        if (! $isCpRequest) {
             return $this;
         }
 
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_TEMPLATE,
-            function(TemplateEvent $event) {
+            function (TemplateEvent $event) {
                 $view = Craft::$app->getView();
 
                 $view->registerAssetBundle(ControlPanelAssets::class);
@@ -183,7 +183,7 @@ class SharePreviews extends Plugin
         Event::on(
             Fields::class,
             Fields::EVENT_REGISTER_FIELD_TYPES,
-            function(RegisterComponentTypesEvent $event) {
+            function (RegisterComponentTypesEvent $event) {
                 $event->types = array_merge($event->types, [
                     TemplateSelectField::class,
                 ]);
@@ -198,7 +198,7 @@ class SharePreviews extends Plugin
         Event::on(
             Entry::class,
             Entry::EVENT_DEFINE_BEHAVIORS,
-            function(DefineBehaviorsEvent $event) {
+            function (DefineBehaviorsEvent $event) {
                 $event->sender->attachBehaviors([
                     PreviewableEntryBehavior::class,
                 ]);
@@ -213,14 +213,14 @@ class SharePreviews extends Plugin
         Event::on(
             ClearCaches::class,
             ClearCaches::EVENT_REGISTER_CACHE_OPTIONS,
-            function(RegisterCacheOptionsEvent $event) {
-                $event->options[]= [
+            function (RegisterCacheOptionsEvent $event) {
+                $event->options[] = [
                     'key' => 'sharepreviews-images',
                     'label' => Craft::t('share-previews', 'Share Previews'),
                     'info' => Craft::t('share-previews', 'Contents of `{path}`', [
                         'path' => 'web/' . $this->settings->routePrefix . '/',
                     ]),
-                    'action' => function() {
+                    'action' => function () {
                         FileHelper::clearDirectory($this->fileHandler->getImageDirectory(), [
                             'except' => ['.gitignore'],
                         ]);

@@ -2,26 +2,12 @@
 
 namespace alps\sharepreviews\controllers;
 
-use alps\Module;
 use alps\sharepreviews\models\AbstractLayer;
-use alps\sharepreviews\models\ColorLayer;
-use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
-use alps\sharepreviews\models\ImageLayer;
-use alps\sharepreviews\models\LineLayer;
 use alps\sharepreviews\models\Template;
-use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
-use craft\elements\Entry;
-use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\Fonts;
 use Craft;
-use craft\helpers\UrlHelper;
 use craft\web\Controller;
-use craft\web\Request;
-use craft\web\Response;
-use yii\web\HttpException;
-use yii\web\JqueryAsset;
 
 class TemplateEditorController extends Controller
 {
@@ -105,7 +91,7 @@ class TemplateEditorController extends Controller
 
         $isFetch = $this->request->getHeaders()->get('x-requested-with') === 'fetch';
 
-        if (!$isFetch) {
+        if (! $isFetch) {
             return $this->renderTemplate('share-previews/template-editor/edit', $data);
         }
 
@@ -119,13 +105,13 @@ class TemplateEditorController extends Controller
 
         return $this->asJson([
             'html' => $html,
-            'js' => !empty($js) ? $js : null,
+            'js' => ! empty($js) ? $js : null,
         ]);
     }
 
     private function removeLayers(array $layers): array
     {
-        return array_filter($layers, function($layer) {
+        return array_filter($layers, function ($layer) {
             return array_key_exists('delete', $layer) === false;
         });
     }
@@ -134,7 +120,7 @@ class TemplateEditorController extends Controller
     {
         $add = $this->request->getBodyParam('addLayer');
 
-        if (!$add) {
+        if (! $add) {
             return $layers;
         }
 
@@ -151,7 +137,7 @@ class TemplateEditorController extends Controller
     private function moveLayers(array $layers): array
     {
         do {
-            $itemsToMove = array_filter($layers, function($layer) {
+            $itemsToMove = array_filter($layers, function ($layer) {
                 return array_key_exists('move', $layer);
             });
 
@@ -171,8 +157,7 @@ class TemplateEditorController extends Controller
             }
 
             array_splice($layers, $newIdx, 0, $movingLayers);
-        } while (!empty($itemsToMove));
-
+        } while (! empty($itemsToMove));
 
         return $layers;
     }
@@ -232,7 +217,7 @@ class TemplateEditorController extends Controller
     {
         $layers = array_values(AbstractLayer::getTypes());
 
-        $layers = array_map(function(string $className) {
+        $layers = array_map(function (string $className) {
             $instance = new $className;
 
             return [
@@ -242,7 +227,7 @@ class TemplateEditorController extends Controller
             ];
         }, $layers);
 
-        $layers = array_filter($layers, function(array $layer) {
+        $layers = array_filter($layers, function (array $layer) {
             return $layer['available'];
         });
 

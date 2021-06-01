@@ -1,40 +1,39 @@
 <?php
 
-
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\models\concerns\HasPadding;
 use alps\sharepreviews\models\concerns\HidesFields;
-use alps\sharepreviews\models\concerns\ScalesProperties;
-use alps\sharepreviews\validators\FilterValidator;
-use craft\base\Model;
-use Imagine\Image\ImageInterface;
-use Imagine\Image\Palette\Color\RGB;
-use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
-use yii\debug\components\search\Filter;
 
 /**
- * @property-read int[] $canvasDimensions
- * @property-read array $scalableProperties
+ * @property int[] $canvasDimensions
+ * @property array $scalableProperties
  */
 abstract class AbstractRectangleLayer extends AbstractLayer
 {
-    use HidesFields, HasPadding;
+    use HidesFields;
+    use HasPadding;
 
     const HORIZONTAL_ALIGN_LEFT = 'hl';
+
     const HORIZONTAL_ALIGN_RIGHT = 'hr';
+
     const HORIZONTAL_ALIGN_CENTER = 'hc';
 
     const VERTICAL_ALIGN_TOP = 'vt';
+
     const VERTICAL_ALIGN_BOTTOM = 'vb';
+
     const VERTICAL_ALIGN_MIDDLE = 'vm';
 
     public ?int $width = 1200;
+
     public ?int $height = 630;
 
     public string $horizontalAlign = self::HORIZONTAL_ALIGN_CENTER;
+
     public string $verticalAlign = self::VERTICAL_ALIGN_MIDDLE;
 
     public function getHiddenFields(): array

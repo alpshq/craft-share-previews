@@ -5,7 +5,9 @@ namespace alps\sharepreviews\behaviors;
 class HasColors extends \yii\base\Behavior
 {
     public array $defaults = [];
+
     public array $properties = [];
+
     private array $colors = [];
 
     public function canSetProperty($name, $checkVars = true)
@@ -46,15 +48,17 @@ class HasColors extends \yii\base\Behavior
     {
         if ($this->isColorProperty($name)) {
             $this->colors[$name] = $this->transformToRgb($value);
+
             return;
         }
 
-        if (!$this->isOpacityProperty($name)) {
+        if (! $this->isOpacityProperty($name)) {
             parent::__set($name, $value);
+
             return;
         }
 
-        if (!is_int($value) && empty($value) && $value !== '0') {
+        if (! is_int($value) && empty($value) && $value !== '0') {
             $value = 100;
         }
 
@@ -63,7 +67,7 @@ class HasColors extends \yii\base\Behavior
         $color = $this->colors[$property];
 
         if (count($color) !== 4) {
-            $color[]= 1;
+            $color[] = 1;
         }
 
         $alpha = (int) $value;
@@ -80,7 +84,7 @@ class HasColors extends \yii\base\Behavior
     public function __get($name)
     {
         if ($this->isColorProperty($name)) {
-            return $this->colors[$name] ?? $this->defaults[$name] ?? [0,0,0];
+            return $this->colors[$name] ?? $this->defaults[$name] ?? [0, 0, 0];
         }
 
         return parent::__get($name);
@@ -95,12 +99,13 @@ class HasColors extends \yii\base\Behavior
             return array_slice($color, 0, 4);
         }
 
-        $color = (string)$color;
+        $color = (string) $color;
         $color = ltrim($color, '#');
         $color = str_split($color, strlen($color) > 4 ? 2 : 1);
 
         return array_map(function ($hex) {
             $hex = str_pad($hex, 2, $hex);
+
             return hexdec($hex);
         }, $color);
     }

@@ -2,19 +2,9 @@
 
 namespace alps\sharepreviews\controllers;
 
-use alps\sharepreviews\models\ColorLayer;
-use alps\sharepreviews\models\GradientLayer;
 use alps\sharepreviews\models\Image;
-use alps\sharepreviews\models\ImageLayer;
-use alps\sharepreviews\models\LineLayer;
-use alps\sharepreviews\models\TextLayer;
 use alps\sharepreviews\SharePreviews;
-use craft\elements\Entry;
-use alps\sharepreviews\services\FileHandler;
-use alps\sharepreviews\services\Fonts;
-use Craft;
 use craft\web\Controller;
-use yii\web\HttpException;
 
 class PreviewController extends Controller
 {

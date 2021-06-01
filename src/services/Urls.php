@@ -5,9 +5,6 @@ namespace alps\sharepreviews\services;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\models\Template;
 use alps\sharepreviews\SharePreviews;
-use craft\elements\Asset;
-use craft\elements\Entry;
-use alps\sharepreviews\Config;
 use craft\helpers\UrlHelper;
 use yii\base\Component;
 

@@ -3,7 +3,6 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\behaviors\HasColors;
-use alps\sharepreviews\models\concerns\ParsesPercentages;
 use Craft;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
@@ -11,15 +10,19 @@ use Imagine\Image\Point;
 class LineLayer extends AbstractLayer
 {
     const LINE_TYPE_HORIZONTAL = 'h';
+
     const LINE_TYPE_VERTICAL = 'v';
 
 //    private array $from = [0,630/2];
 //    private array $to = [1200,630/2];
 
     private string $lineType = self::LINE_TYPE_HORIZONTAL;
+
     private int $length = 1200;
+
     private int $x = 0;
-    private int $y = 630/2;
+
+    private int $y = 630 / 2;
 
     public function getTitle(): string
     {
@@ -48,7 +51,6 @@ class LineLayer extends AbstractLayer
 
         return $image;
     }
-
 
     public function getLineType(): string
     {

@@ -37,7 +37,7 @@ class GradientLayer extends AbstractRectangleLayer
         $width = $this->width - $this->paddingLeft - $this->paddingRight;
         $height = $this->height - $this->paddingTop - $this->paddingBottom;
 
-        $transparent = $this->toColor([0,0,0,0]);
+        $transparent = $this->toColor([0, 0, 0, 0]);
 
         $gradientImage = (new Imagine)
             ->create(new Box($width + 2, $height + 2), $transparent);
@@ -77,9 +77,9 @@ class GradientLayer extends AbstractRectangleLayer
                 'class' => HasColors::class,
                 'properties' => ['from', 'to'],
                 'defaults' => [
-                    'from' => [255,255,255,1],
-                    'to' => [0,0,0,1],
-                ]
+                    'from' => [255, 255, 255, 1],
+                    'to' => [0, 0, 0, 1],
+                ],
             ],
         ]);
     }

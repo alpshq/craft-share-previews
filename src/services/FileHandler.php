@@ -3,11 +3,11 @@
 namespace alps\sharepreviews\services;
 
 use alps\sharepreviews\models\Image;
+use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\helpers\StringHelper;
 use Imagine\Image\ImageInterface;
-use alps\sharepreviews\models\Settings;
 use yii\base\Component;
 
 class FileHandler extends Component
@@ -61,7 +61,7 @@ class FileHandler extends Component
     {
         $ensure = $this->settings->ensureGitignoreExists;
 
-        if (!$ensure) {
+        if (! $ensure) {
             return $this;
         }
 

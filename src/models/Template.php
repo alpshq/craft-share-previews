@@ -3,24 +3,13 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\models\concerns\HasLayers;
-use alps\sharepreviews\services\Templates;
 use alps\sharepreviews\SharePreviews;
-use BadMethodCallException;
 use Craft;
 use craft\base\Model;
-use craft\elements\Asset;
 use craft\elements\Entry;
-use craft\helpers\StringHelper;
-use craft\helpers\UrlHelper;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
-use InvalidArgumentException;
-use ReflectionClass;
-use ReflectionProperty;
 
 /**
- * @property ?int $id
+ * @property ?int    $id
  * @property ?string $name
  */
 class Template extends Model
@@ -28,14 +17,17 @@ class Template extends Model
     use HasLayers;
 
     private int $width = 1200;
+
     private int $height = 630;
 
     private ?int $id = null;
+
     private ?string $name = null;
 
     public bool $isDefault = false;
 
     private ?Entry $previewEntry = null;
+
     private ?int $previewEntryId = null;
 
     public function attributes()
@@ -126,7 +118,7 @@ class Template extends Model
     {
         $entryId = $this->previewEntryId;
 
-        if (!$entryId) {
+        if (! $entryId) {
             return null;
         }
 
@@ -136,7 +128,7 @@ class Template extends Model
 
         $entry = Entry::findOne($entryId);
 
-        if (!$entry) {
+        if (! $entry) {
             return null;
         }
 

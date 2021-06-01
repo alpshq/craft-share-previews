@@ -2,7 +2,6 @@
 
 namespace alps\sharepreviews\models;
 
-use alps\sharepreviews\Config;
 use alps\sharepreviews\fields\TemplateSelectField;
 use Craft;
 
@@ -42,7 +41,7 @@ class Settings extends \craft\base\Model
 
     public function setTemplates(array $templates): self
     {
-        $this->templates = array_map(function($template) {
+        $this->templates = array_map(function ($template) {
             return new Template($template);
         }, $templates);
 

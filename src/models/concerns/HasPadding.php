@@ -1,17 +1,17 @@
 <?php
 
-
 namespace alps\sharepreviews\models\concerns;
 
 /**
- * @property int        $paddingLeft
- * @property int        $paddingTop
- * @property int        $paddingRight
- * @property int        $paddingBottom
+ * @property int $paddingLeft
+ * @property int $paddingTop
+ * @property int $paddingRight
+ * @property int $paddingBottom
  */
 trait HasPadding
 {
     public ?int $width = 1200;
+
     public ?int $height = 630;
 
     protected array $padding = [0, 0, 0, 0];
@@ -54,7 +54,7 @@ trait HasPadding
 
     public function setPadding($padding): self
     {
-        if (!is_array($padding)) {
+        if (! is_array($padding)) {
             $padding = array_fill(0, 4, (int) $padding);
         }
 

@@ -4,18 +4,11 @@ namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\models\concerns\HasLayers;
 use alps\sharepreviews\SharePreviews;
-use BadMethodCallException;
-use Craft;
 use craft\base\Model;
 use craft\elements\Entry;
-use craft\helpers\StringHelper;
-use craft\helpers\UrlHelper;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
-use InvalidArgumentException;
-use ReflectionClass;
-use ReflectionProperty;
 
 class Image extends Model
 {
@@ -24,7 +17,9 @@ class Image extends Model
     const PNG_COMPRESSION_LEVEL = 5;
 
     public int $width = 1200;
+
     public int $height = 630;
+
     public ?int $templateId = null;
 
     private ?Entry $entry = null;
@@ -62,7 +57,7 @@ class Image extends Model
 
     private function willRender(): self
     {
-        if (!$this->entry) {
+        if (! $this->entry) {
             return $this;
         }
 

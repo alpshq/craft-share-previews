@@ -2,7 +2,6 @@
 
 namespace alps\sharepreviews\twig;
 
-use craft\elements\Entry;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
