@@ -8,29 +8,33 @@
 ] %}
 
 {% set fullPageForm = true %}
+{% set saveShortcut = false %}
 
 {% set title = 'Template Editor'|t('share-previews') %}
 {% set docTitle = title ~ ' - ' ~ 'Plugins'|t('app') %}
 
 {% block actionButton %}
-    <button class="btn" name="op" value="cancel">
-        {{ 'Cancel'|t('app') }}
-    </button>
+    <div class="relative">
+        <button type="submit" name="op" value="save" class="absolute left-0 top-0 invisible"></button>
 
-    {% if (template.exists()) %}
-        <button class="btn ml-12" name="op" value="duplicate">
-            {{ 'Save es new'|t('share-preview') }}
+        <button class="btn" name="op" value="cancel">
+            {{ 'Cancel'|t('app') }}
         </button>
-    {% endif %}
 
-    <button class="btn submit" type="submit" name="op" value="save">
-        {{ template.exists() ? 'Save'|t('app') : 'Create new Template'|t('share-previews') }}
-    </button>
+        {% if (template.exists()) %}
+            <button class="btn ml-12" name="op" value="duplicate">
+                {{ 'Save es new'|t('share-preview') }}
+            </button>
+        {% endif %}
+
+        <button class="btn submit" type="submit" name="op" value="save">
+            {{ template.exists() ? 'Save'|t('app') : 'Create new Template'|t('share-previews') }}
+        </button>
+    </div>
 {% endblock %}
 
 {% block content %}
     {{ actionInput('share-previews/template-editor/post') }}
-{#    {{ hiddenInput('pluginHandle', plugin.handle) }}#}
     {{ redirectInput('settings/plugins/share-previews') }}
 
     {{ hiddenInput('template[id]', template.id) }}
@@ -60,7 +64,8 @@ Good starting points are `General`, `Blog` or `News`.'|t('share-previews') }}
             <div>
                 {{ forms.field({
                     label: 'Default'|t('share-previews'),
-                    instructions: 'Do you want this template to be the default one?'|t('share-previews'),
+                    instructions: 'Do you want this template to be the default one?
+The default template is used when no other template was selected in your entries.'|t('share-previews'),
                 }, forms.lightswitch({
                     name: 'template[isDefault]',
                     value: true,

@@ -35,6 +35,24 @@ class Templates extends Component
         $this->pluginService = Craft::$app->getPlugins();
     }
 
+    public function getAvailableTemplates(): array
+    {
+        return $this->settings->templates;
+    }
+
+    public function getDefaultTemplate(bool $fallback = false): ?Template
+    {
+        $templates = array_filter($this->getAvailableTemplates(), function(Template $template) {
+            return $template->isDefault;
+        });
+
+        $templates = array_values($templates);
+
+        $fallbackTemplate = $fallback ? new Template : null;
+
+        return $templates[0] ?? $this->getAvailableTemplates()[0] ?? $fallbackTemplate;
+    }
+
     public function getTemplateById(int $id): ?Template
     {
         $templates = $this->settings->templates;
@@ -187,4 +205,12 @@ class Templates extends Component
 //            'templateId' => $id,
 //        ]);
 //    }
+    public function isValidTemplateId(int $id)
+    {
+        $templateIds = array_map(function(Template $template) {
+            return $template->id;
+        }, $this->settings->templates);
+
+        return in_array($id, $templateIds, true);
+    }
 }

@@ -146,13 +146,15 @@ class Template extends Model
     public function toImage(): Image
     {
         return new Image([
-            'layers' => $this->layers,
+            'templateId' => $this->id,
+            'layers' => $this->toArray(['layers'])['layers'],
         ]);
     }
 
-    public function toImageWithPreviewEntry(): Image
+    public function toPreviewImage(): Image
     {
         $image = $this->toImage();
+
         $entry = $this->getPreviewEntry();
 
         if ($entry) {

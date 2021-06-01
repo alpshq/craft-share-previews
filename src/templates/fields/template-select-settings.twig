@@ -1,0 +1,22 @@
+{% import '_includes/forms' as forms %}
+
+
+{{ forms.field({
+    label: 'Template Availability'|t('share-previews'),
+    instructions: 'Which templates can entry editors select from?'|t('share-previews'),
+}, forms.checkboxSelect({
+    name: 'availableTemplates',
+    showAllOption: true,
+    values: field.availableTemplates ?? '*',
+    options: templateOptions,
+})) }}
+
+{{ forms.field({
+    label: 'Default Template'|t('share-previews'),
+    instructions: 'Do you want to make a specific template the default one for all entries which will embed this field?
+It is possible to select a default template which you did not select in the above **Template Availability** list.'|t('share-previews'),
+}, forms.select({
+    name: 'defaultTemplate',
+    value: field.defaultTemplate,
+    options: templateDefaultOptions,
+})) }}

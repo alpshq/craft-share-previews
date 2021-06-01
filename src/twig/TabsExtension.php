@@ -64,7 +64,7 @@ class TabsExtension extends \Twig\Extension\AbstractExtension
             'selected' => $this->getSelectedSection($id, $selected),
         ];
 
-        return $env->render('share-previews/_tabs', $data);
+        return $env->render('share-previews/_shared/_tabs', $data);
     }
 
     private function getSelectedSection($id, $selected)

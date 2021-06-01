@@ -126,3 +126,41 @@ html {
     @apply p-1 bg-gray-200 text-xs text-amber-700 rounded-sm !important;
   }
 }
+
+
+
+
+.sp-template-select input {
+  &:nth-of-type(1):checked ~ ul li:nth-of-type(1) label,
+  &:nth-of-type(2):checked ~ ul li:nth-of-type(2) label,
+  &:nth-of-type(3):checked ~ ul li:nth-of-type(3) label,
+  &:nth-of-type(4):checked ~ ul li:nth-of-type(4) label,
+  &:nth-of-type(5):checked ~ ul li:nth-of-type(5) label,
+  &:nth-of-type(6):checked ~ ul li:nth-of-type(6) label,
+  &:nth-of-type(7):checked ~ ul li:nth-of-type(7) label,
+  &:nth-of-type(8):checked ~ ul li:nth-of-type(8) label,
+  &:nth-of-type(9):checked ~ ul li:nth-of-type(9) label,
+  &:nth-of-type(10):checked ~ ul li:nth-of-type(10) label,
+  &:nth-of-type(11):checked ~ ul li:nth-of-type(11) label,
+  &:nth-of-type(12):checked ~ ul li:nth-of-type(12) label,
+  &:nth-of-type(13):checked ~ ul li:nth-of-type(13) label,
+  &:nth-of-type(14):checked ~ ul li:nth-of-type(14) label,
+  &:nth-of-type(15):checked ~ ul li:nth-of-type(15) label,
+  &:nth-of-type(16):checked ~ ul li:nth-of-type(16) label,
+  &:nth-of-type(17):checked ~ ul li:nth-of-type(17) label,
+  &:nth-of-type(18):checked ~ ul li:nth-of-type(18) label,
+  &:nth-of-type(19):checked ~ ul li:nth-of-type(19) label,
+  &:nth-of-type(20):checked ~ ul li:nth-of-type(20) label,
+  &:nth-of-type(21):checked ~ ul li:nth-of-type(21) label,
+  &:nth-of-type(22):checked ~ ul li:nth-of-type(22) label,
+  &:nth-of-type(23):checked ~ ul li:nth-of-type(23) label,
+  &:nth-of-type(24):checked ~ ul li:nth-of-type(24) label,
+  &:nth-of-type(25):checked ~ ul li:nth-of-type(25) label,
+  &:nth-of-type(26):checked ~ ul li:nth-of-type(26) label,
+  &:nth-of-type(27):checked ~ ul li:nth-of-type(27) label,
+  &:nth-of-type(28):checked ~ ul li:nth-of-type(28) label,
+  &:nth-of-type(29):checked ~ ul li:nth-of-type(29) label,
+  &:nth-of-type(30):checked ~ ul li:nth-of-type(30) label {
+    @apply bg-blue-gray-200 border-transparent !important;
+  }
+}

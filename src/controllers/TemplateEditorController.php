@@ -76,7 +76,7 @@ class TemplateEditorController extends Controller
             $this->request->getBodyParam('template', [])
         );
 
-        $image = $template->toImageWithPreviewEntry();
+        $image = $template->toPreviewImage();
 
         $image->render()->show('png', [
             'png_compression_level' => Renderer::PNG_COMPRESSION_LEVEL,

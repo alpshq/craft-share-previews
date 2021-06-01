@@ -2,12 +2,6 @@
 {% set templates = settings.templates %}
 
 <div class="share-preview-settings">
-    <div class="text-red-500">
-        settings!
-    </div>
-
-    <hr >
-
     <section>
         <div class="flex items-start">
             <div class="flex-1">
@@ -16,16 +10,20 @@
                 </h2>
 
                 <p class="m-0 text-gray-500">
-                    {% if templates and 0 %}
-                        {{ 'These are your templates. Click on any one to open it in the template editor or create a new one.'|t('share-previews') }}
+                    {% if templates %}
+                        {{ 'These are your templates. Click on one to open it in the template editor or [create a new one]({createNewUrl}).'|t('share-previews', {
+                            'createNewUrl': urls.templateEditor(),
+                        })|md(inlineOnly=true) }}
                     {% else %}
-                        {{ 'Currently you have no templates stored. You should create one! It\'s quick & easy using the template editor.'|t('share-previews') }}
+                        {{ 'Currently you have no templates stored. You should [create one]({createNewUrl})! It\'s quick & easy using the template editor.'|t('share-previews', {
+                            'createNewUrl': urls.templateEditor(),
+                        })|md(inlineOnly=true) }}
                     {% endif %}
                 </p>
             </div>
 
             <div class="flex-none">
-                <a class="btn" href="{{ url('share-previews/template-editor') }}">
+                <a class="btn" href="{{ urls.templateEditor() }}">
                     {{ 'Create new template ...'|t('share-previews') }}
                 </a>
             </div>
@@ -33,7 +31,7 @@
 
         {% if templates %}
             <ul class="mt-10 grid grid-cols-3 gap-8 text-center">
-                {% for templateIdx, template in templates %}
+                {% for template in templates %}
                     <li>
                         <a
                             class="
@@ -42,10 +40,9 @@
                                 border border-solid border-transparent
                                 hover:border-blue-gray-400 hover:no-underline
                                 rounded overflow-hidden
-                                text-blue-gray-400 uppercase tracking-tight text-sm
                                 hover:text-blue-gray-500
                             "
-                            href="{{ url('share-previews/template-editor', {id: template.id}) }}"
+                            href="{{ urls.templateEditor(template) }}"
                         >
                             <span
                                 class="block relative bg-gray-100 overflow-hidden"
@@ -62,13 +59,77 @@
                                 />
                             </span>
 
-                            <span class="block my-4">
+                            <span class="
+                                block my-4
+                                text-blue-gray-500 uppercase tracking-tight text-sm
+                            ">
                                 {{ template.getHumanFriendlyName() }}
+
+                                {% if (template.isDefault) %}
+                                    <span class="
+                                        ml-3 px-1.5 py-0.5 bg-green-300
+                                        border border-solid border-green-400
+                                        normal-case text-green-700 text-xs
+                                        rounded
+                                    ">
+                                        {{ 'Default'|t('share-previews') }}
+                                    </span>
+                                {% endif %}
                             </span>
                         </a>
                     </li>
                 {% endfor %}
             </ul>
         {% endif %}
+
+        {% if templates %}
+            <div class="
+                sp-markdown
+                mt-8 p-4 pl-6 bg-blue-gray-100 rounded
+                text-blue-gray-500
+                border-l-4 border-solid border-blue-gray-500
+            ">
+                {% apply t('share-previews', {
+                    newFieldUrl: urls.createNewField(),
+                    fieldType: templateSelectFieldName,
+                })|trim_lines|md %}
+                    ### Want to select from your templates in your entries?
+
+                    - **[Create a new field]({newFieldUrl})** with a field type of `{fieldType}` -- choose all the other values as you see them fit
+                    - **Add the created field** to those **entry types** where you want to make a template selectable
+                    - Next time you edit your entries **you'll be able to select** one of your templates
+                {% endapply %}
+            </div>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>
+            {{ 'General settings'|t('share-previews') }}
+        </h2>
+
+        <div class="mt-10">
+            {{ forms.field({
+                label: 'Route Prefix'|t('share-previews'),
+                instructions: 'The route prefix is used to build the URL of each share preview.
+Your current route prefix is **{routePrefix}**, your image URLs will look like this: {urlPreview}
+
+**Keep in mind**: The route prefix is also the name of the folder where your images are cached.
+If you change the prefix you might need to commit the generated .gitignore file.
+Your images are currently cached in **web/{routePrefix}/**'|t('share-previews', {
+                    routePrefix: settings.routePrefix,
+                    urlPreview: settings.getPreviewUrl(),
+                }),
+                tip: 'You can flush the image cache using [Craft\'s Caches utility]({cachesUtilityUrl}).'|t('share-previews', {
+                    'cachesUtilityUrl': urls.cachesUtility(),
+                }),
+            }, forms.text({
+                name: 'routePrefix',
+                placeholder: 'previews',
+                value: settings.routePrefix,
+            })) }}
+        </div>
     </section>
 </div>

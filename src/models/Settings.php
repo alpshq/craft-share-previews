@@ -3,6 +3,7 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\Config;
+use alps\sharepreviews\fields\TemplateSelectField;
 use Craft;
 
 /**
@@ -46,5 +47,15 @@ class Settings extends \craft\base\Model
         }, $templates);
 
         return $this;
+    }
+
+    public function getPreviewUrl(): string
+    {
+        return (new Image)->getUrl();
+    }
+
+    public function getTemplateSelectFieldName(): string
+    {
+        return TemplateSelectField::displayName();
     }
 }

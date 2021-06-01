@@ -40,12 +40,26 @@ class Urls extends Component
     /**
      * @param Template|int $templateOrId
      */
-    public function templateEditor($templateOrId): string
+    public function templateEditor($templateOrId = null): string
     {
+        if ($templateOrId === null) {
+            return UrlHelper::cpUrl('share-previews/template-editor');
+        }
+
         $id = $templateOrId instanceof Template ? $templateOrId->id : $templateOrId;
 
         return UrlHelper::cpUrl('share-previews/template-editor', [
             'id' => $id,
         ]);
+    }
+
+    public function createNewField(): string
+    {
+        return UrlHelper::cpUrl('settings/fields/new');
+    }
+
+    public function cachesUtility(): string
+    {
+        return UrlHelper::cpUrl('utilities/clear-caches');
     }
 }

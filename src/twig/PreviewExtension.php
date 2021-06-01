@@ -22,7 +22,7 @@ class PreviewExtension extends \Twig\Extension\AbstractExtension
         return [
             new TwigFilter('rgb_to_hex', [$this, 'rgbToHex']),
             new TwigFilter('rgba_to_opacity', [$this, 'rgbaToOpacity']),
-//            new TwigFilter('trim_lines', [$this, 'trimLines']),
+            new TwigFilter('trim_lines', [$this, 'trimLines']),
         ];
     }
 
@@ -48,11 +48,11 @@ class PreviewExtension extends \Twig\Extension\AbstractExtension
             ->getShareImagePreviewUrl($entry);
     }
 
-//    public function trimLines(string $str): string
-//    {
-//        $str = explode("\n", $str);
-//        $str = array_map('trim', $str);
-//
-//        return implode("\n", $str);
-//    }
+    public function trimLines(string $str): string
+    {
+        $str = explode("\n", $str);
+        $str = array_map('trim', $str);
+
+        return implode("\n", $str);
+    }
 }

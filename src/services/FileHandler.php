@@ -81,16 +81,16 @@ class FileHandler extends Component
         return $this;
     }
 
-    public function imageExists(string $data): bool
+    public function getImageDirectory(): string
     {
-        return file_exists($this->getImagePath($data));
+        return $this->config->getPublicPath(
+            $this->settings->routePrefix
+        );
     }
 
     private function getImagePath(string $data): string
     {
-        return $this->config->getPublicPath(
-            $this->settings->routePrefix . '/' . $data . '.png'
-        );
+        return $this->getImageDirectory() . '/' . $data . '.png';
     }
 
     public function saveImage(ImageInterface $image, string $data): self

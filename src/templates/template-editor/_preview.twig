@@ -6,13 +6,13 @@
             id="preview-anchor"
             class="relative block overflow-hidden bg-blue-gray-100"
             style="padding-top: 52.5%;"
-            href="{{ template.toImageWithPreviewEntry().getUrl() }}"
+            href="{{ template.toPreviewImage().getUrl() }}"
             target="_blank"
         >
             <img
                 id="preview-image"
                 class="absolute inset-0 block max-w-full w-full h-auto"
-                src="{{ template.toImageWithPreviewEntry().getUrl() }}"
+                src="{{ template.toPreviewImage().getUrl() }}"
             />
         </a>
     </div>

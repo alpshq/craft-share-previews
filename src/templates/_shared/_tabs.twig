@@ -1,0 +1,25 @@
+<div class="alps-tabs" data-id="{{ id }}" data-event-required>
+    {% for idx in sections|keys %}
+        <input
+            type="radio"
+            id="_tab-{{ id }}-{{ idx }}"
+            name="_tabs[{{ id }}]"
+            value="{{ idx }}"
+            {{ selected == idx ? 'checked' : '' }}
+        />
+    {% endfor %}
+
+    <ul>
+        {% for idx, section in sections %}
+            <li>
+                <label data-tab="{{ idx }}" for="_tab-{{ id }}-{{ idx }}">{{ section.name }}</label>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% for idx, section in sections %}
+        <div data-tab="{{ idx }}" id="_tab-{{ id }}-{{ idx }}-section">
+            {{ section.markup }}
+        </div>
+    {% endfor %}
+</div>

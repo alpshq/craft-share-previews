@@ -1,0 +1,42 @@
+<div class="sp-template-select relative -mb-8">
+    {% for template in templates %}
+        <input
+            id="sp-preview-template-{{ template.id }}"
+            class="absolute left-0 top-0 invisible"
+            type="radio"
+            name="{{ field.handle }}"
+            value="{{ template.id }}"
+            {{ template.id == value ? 'checked' : '' }}
+        >
+    {% endfor %}
+
+    <ul class="grid grid-cols-3 gap-none gap-8">
+        {% for template in templates %}
+            <li class="block">
+                <label
+                    class="
+                        block p-2 rounded overflow-hidden
+                        border border-solid border-transparent
+                        cursor-pointer
+                        hover:border-blue-gray-400
+                    "
+                    for="sp-preview-template-{{ template.id }}"
+                >
+                    <span
+                        class="block relative bg-blue-gray-100 overflow-hidden"
+                        style="padding-top: 52.5%;"
+                    >
+                        <img
+                            class="block absolute inset-0 max-w-full w-full h-auto"
+                            src="{{ images[template.id].getUrl() }}"
+                            alt=""
+                        />
+                    </span>
+                    <span class="block mt-4 text-center">
+                        {{ template.name }}
+                    </span>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

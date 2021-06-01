@@ -13,16 +13,19 @@ use Craft;
 use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineBehaviorsEvent;
+use craft\events\RegisterCacheOptionsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\TemplateEvent;
+use craft\helpers\FileHelper;
 use craft\services\Fields;
+use craft\utilities\ClearCaches;
 use craft\web\UrlManager;
 use craft\web\View;
 use modules\Module;
 use alps\sharepreviews\assets\ControlPanelAssets;
-use alps\sharepreviews\fields\TemplateSelectorField;
+use alps\sharepreviews\fields\TemplateSelectField;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\services\FileHandler;
 use alps\sharepreviews\services\Fonts;
@@ -72,7 +75,8 @@ class SharePreviews extends Plugin
             ->registerTwigVariables()
             ->registerCpAssets()
             ->registerFields()
-            ->registerBehaviors();
+            ->registerBehaviors()
+            ->registerCacheUtility();
     }
 
     protected function createSettingsModel()
@@ -84,6 +88,8 @@ class SharePreviews extends Plugin
     {
         return Craft::$app->getView()->renderTemplate('share-previews/settings', [
             'settings' => $this->getSettings(),
+            'templateSelectFieldName' => TemplateSelectField::displayName(),
+            'urls' => $this->urls,
         ]);
     }
 
@@ -184,7 +190,7 @@ class SharePreviews extends Plugin
             Fields::EVENT_REGISTER_FIELD_TYPES,
             function(RegisterComponentTypesEvent $event) {
                 $event->types = array_merge($event->types, [
-                    TemplateSelectorField::class,
+                    TemplateSelectField::class,
                 ]);
             }
         );
@@ -202,6 +208,30 @@ class SharePreviews extends Plugin
                     PreviewableEntryBehavior::class,
                 ]);
             }
+        );
+
+        return $this;
+    }
+
+    private function registerCacheUtility(): self
+    {
+        Event::on(
+            ClearCaches::class,
+            ClearCaches::EVENT_REGISTER_CACHE_OPTIONS,
+            function(RegisterCacheOptionsEvent $event) {
+                $event->options[]= [
+                    'key' => 'sharepreviews-images',
+                    'label' => Craft::t('share-previews', 'Share Previews'),
+                    'info' => Craft::t('share-previews', 'Contents of `{path}`', [
+                        'path' => 'web/' . $this->settings->routePrefix . '/',
+                    ]),
+                    'action' => function() {
+                        FileHelper::clearDirectory($this->fileHandler->getImageDirectory(), [
+                            'except' => ['.gitignore'],
+                        ]);
+                    },
+                ];
+            },
         );
 
         return $this;

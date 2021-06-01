@@ -41,7 +41,9 @@ class ImageDiffer extends Component
         $template = $template->toImage()->toArray();
         $image = $image->toArray();
 
-        $diff = [];
+        $diff = [
+            'templateId' => $image['templateId'],
+        ];
 
         if ($template['width'] !== $image['width']) {
             $diff['width'] = $image['width'];
@@ -100,8 +102,6 @@ class ImageDiffer extends Component
 
         $diffLayers = $diff['layers'] ?? [];
 
-//        dd($diffLayers);
-
         if (empty($diffLayers)) {
             return $image;
         }
@@ -110,10 +110,9 @@ class ImageDiffer extends Component
 
         foreach ($diffLayers as $idx => $diffLayer) {
             $baseLayer = $layers[$idx] ?? AbstractLayer::make($diffLayer);
-            unset($diffLayer['type']);
-//            $baseLayer->setAttributes($diffLayer);
 
-//            $layers[$idx] = $baseLayer;
+            unset($diffLayer['type']);
+
             $layers[$idx] = $this->createLayerFromDiff($baseLayer, $diffLayer);
         }
 
@@ -136,7 +135,7 @@ class ImageDiffer extends Component
     public function encodeDiff(string $templateHash, array $diff): string
     {
         $zlibAvailable = extension_loaded('zlib');
-//        $zlibAvailable = false;
+        $zlibAvailable = false;
 
         $diff = json_encode($diff);
 

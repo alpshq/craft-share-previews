@@ -96,7 +96,11 @@ class Image extends Model
             return null;
         }
 
-        return SharePreviews::getInstance()->templates->getTemplate($this->templateId);
+        $templatesService = SharePreviews::getInstance()->templates;
+
+        $template = $templatesService->getTemplateById($this->templateId) ?? new Template;
+
+        return $template->toImage();
     }
 
     public function getHash(): string
