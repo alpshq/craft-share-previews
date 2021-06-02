@@ -20,16 +20,20 @@ use Craft;
 use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineBehaviorsEvent;
+use craft\events\DefineGqlTypeFieldsEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\TemplateEvent;
+use craft\gql\TypeManager;
 use craft\helpers\FileHelper;
 use craft\services\Fields;
 use craft\utilities\ClearCaches;
 use craft\web\UrlManager;
 use craft\web\View;
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
 use yii\base\Event;
 
 /**
@@ -71,7 +75,8 @@ class SharePreviews extends Plugin
             ->registerCpAssets()
             ->registerFields()
             ->registerBehaviors()
-            ->registerCacheUtility();
+            ->registerCacheUtility()
+            ->registerGraphQlField();
     }
 
     protected function createSettingsModel()
@@ -224,6 +229,30 @@ class SharePreviews extends Plugin
                         FileHelper::clearDirectory($this->fileHandler->getImageDirectory(), [
                             'except' => ['.gitignore'],
                         ]);
+                    },
+                ];
+            },
+        );
+
+        return $this;
+    }
+
+    private function registerGraphQlField(): self
+    {
+        Event::on(
+            TypeManager::class,
+            TypeManager::EVENT_DEFINE_GQL_TYPE_FIELDS,
+            function (DefineGqlTypeFieldsEvent $event) {
+                if ($event->typeName !== 'EntryInterface') {
+                    return;
+                }
+
+                $event->fields['sharePreviewUrl'] = [
+                    'name' => 'sharePreviewUrl',
+                    'type' => Type::string(),
+                    'description' => Craft::t('share-previews', 'The URL to the entry\'s generated share preview image.'),
+                    'resolve' => function ($source, array $arguments, $context, ResolveInfo $resolveInfo) {
+                        return $source->getSharePreviewUrl();
                     },
                 ];
             },
