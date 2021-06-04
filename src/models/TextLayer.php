@@ -137,11 +137,11 @@ class TextLayer extends AbstractRectangleLayer
             ->getFontPath($family, $variant);
     }
 
-    public function willRender(Entry $entry)
+    protected function getPropertiesWithVariables(): array
     {
-        $this->content = Craft::$app->getView()->renderString($this->content, [
-            'entry' => $entry,
-        ]);
+        return [
+            'content',
+        ];
     }
 
     public function attributes()

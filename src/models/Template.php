@@ -30,6 +30,8 @@ class Template extends Model
 
     private ?int $previewEntryId = null;
 
+    private array $variables = [];
+
     public function attributes()
     {
         return array_merge(
@@ -140,6 +142,7 @@ class Template extends Model
         return new Image([
             'templateId' => $this->id,
             'layers' => $this->toArray(['layers'])['layers'],
+            'variables' => $this->variables,
         ]);
     }
 
@@ -165,5 +168,25 @@ class Template extends Model
         $templatesService = SharePreviews::getInstance()->templates;
 
         return $templatesService->getTemplateById($this->id) !== null;
+    }
+
+    public function setVariable(string $name, $value): self
+    {
+        $this->variables[$name] = $value;
+
+        return $this;
+    }
+
+    public function setVariables(array $variables, bool $clearPrevious = false): self
+    {
+        if ($clearPrevious) {
+            $this->variables = $variables;
+
+            return $this;
+        }
+
+        $this->variables = array_merge($this->variables, $variables);
+
+        return $this;
     }
 }

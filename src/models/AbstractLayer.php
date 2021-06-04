@@ -3,12 +3,14 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\models\concerns\ScalesProperties;
+use Craft;
 use craft\base\Model;
 use craft\elements\Entry;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use ReflectionClass;
+use Twig\Error\RuntimeError;
 
 abstract class AbstractLayer extends Model
 {
@@ -71,8 +73,31 @@ abstract class AbstractLayer extends Model
         return $types[static::class];
     }
 
-    public function willRender(Entry $entry)
+    protected function getPropertiesWithVariables(): array
     {
+        return [];
+    }
+
+    protected function evaluateTwigExpression(string $expression, array $vars): ?string
+    {
+        try {
+            return Craft::$app->getView()->renderString($expression, $vars);
+        } catch (RuntimeError $e) {
+            //
+        }
+
+        return $expression;
+    }
+
+    public function willRender(array $vars)
+    {
+        foreach ($this->getPropertiesWithVariables() as $prop) {
+            if ($prop === null) {
+                continue;
+            }
+
+            $this->{$prop} = $this->evaluateTwigExpression($this->{$prop}, $vars);
+        }
     }
 
     protected function toColor($color): RGB

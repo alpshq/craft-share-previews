@@ -24,6 +24,8 @@ class Image extends Model
 
     private ?Entry $entry = null;
 
+    private array $variables = [];
+
     public static function fromEncodedDiff(string $diff): self
     {
         $differ = SharePreviews::getInstance()->imageDiffer;
@@ -35,7 +37,7 @@ class Image extends Model
 
     public function setEntry(?Entry $entry): self
     {
-        $this->entry = $entry;
+        $this->variables['entry'] = $entry;
 
         return $this;
     }
@@ -57,12 +59,8 @@ class Image extends Model
 
     private function willRender(): self
     {
-        if (! $this->entry) {
-            return $this;
-        }
-
         foreach ($this->layers as $layer) {
-            $layer->willRender($this->entry);
+            $layer->willRender($this->variables);
         }
 
         return $this;
@@ -116,5 +114,25 @@ class Image extends Model
         $encoded = $differ->encodeDiff($template->getHash(), $diff);
 
         return SharePreviews::getInstance()->urls->createUrl($encoded);
+    }
+
+    public function setVariable(string $name, $value): self
+    {
+        $this->variables[$name] = $value;
+
+        return $this;
+    }
+
+    public function setVariables(array $variables, bool $clearPrevious = false): self
+    {
+        if ($clearPrevious) {
+            $this->variables = $variables;
+
+            return $this;
+        }
+
+        $this->variables = array_merge($this->variables, $variables);
+
+        return $this;
     }
 }

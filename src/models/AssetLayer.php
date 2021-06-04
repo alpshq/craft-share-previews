@@ -17,6 +17,8 @@ class AssetLayer extends ImageLayer
 
     private ?Asset $asset = null;
 
+    public ?string $assetIdByExpression = null;
+
     public function getTitle(): string
     {
         return Craft::t('share-previews', 'Asset');
@@ -27,26 +29,27 @@ class AssetLayer extends ImageLayer
         return true;
     }
 
-    public function willRender(Entry $entry)
+    public function getPropertiesWithVariables(): array
     {
-        if (! $this->fieldId) {
-            return;
+        return array_merge(parent::getPropertiesWithVariables());
+    }
+
+    public function willRender(array $vars)
+    {
+        $asset = null;
+        $entry = $vars['entry'] ?? null;
+
+        if ($this->fieldId !== null && $entry instanceof Entry) {
+            $asset = $this->fetchAssetFromEntryField($entry, $this->fieldId);
         }
 
-        $field = Craft::$app->getFields()->getFieldById($this->fieldId);
+        if ($asset === null && $this->assetIdByExpression !== null) {
+            $id = (int) $this->evaluateTwigExpression($this->assetIdByExpression, $vars);
 
-        if (! $field) {
-            return;
+            if ($id > 0) {
+                $asset = Asset::findOne($id);
+            }
         }
-
-        /** @var AssetQuery|null $query */
-        $query = $entry->getFieldValues([$field->handle])[$field->handle] ?? null;
-
-        if (! $query) {
-            return;
-        }
-
-        $asset = $query->one();
 
         if (! $asset || ! $asset instanceof Asset) {
             return;
@@ -54,6 +57,24 @@ class AssetLayer extends ImageLayer
 
         $this->assetId = $asset->id;
         $this->asset = $asset;
+    }
+
+    private function fetchAssetFromEntryField(Entry $entry, int $fieldId): ?Asset
+    {
+        $field = Craft::$app->getFields()->getFieldById($fieldId);
+
+        if (! $field) {
+            return null;
+        }
+
+        /** @var AssetQuery|null $query */
+        $query = $entry->getFieldValues([$field->handle])[$field->handle] ?? null;
+
+        if (! $query) {
+            return null;
+        }
+
+        return $query->one();
     }
 
     public function setAssetId($assetId): self
