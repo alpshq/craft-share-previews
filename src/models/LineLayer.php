@@ -13,9 +13,6 @@ class LineLayer extends AbstractLayer
 
     const LINE_TYPE_VERTICAL = 'v';
 
-//    private array $from = [0,630/2];
-//    private array $to = [1200,630/2];
-
     private string $lineType = self::LINE_TYPE_HORIZONTAL;
 
     private int $length = 1200;
@@ -126,24 +123,6 @@ class LineLayer extends AbstractLayer
             'y' => 'height',
         ]);
     }
-
-//    public function scaleTo(int $width, int $height): AbstractLayer
-//    {
-//        $currentWidth = $this->width;
-//        $currentHeight = $this->height;
-//
-//        $this->from = [
-//            $this->scaleProperty($currentWidth, $width, $this->from[0]),
-//            $this->scaleProperty($currentHeight, $height, $this->from[1]),
-//        ];
-//
-//        $this->to = [
-//            $this->scaleProperty($currentWidth, $width, $this->to[0]),
-//            $this->scaleProperty($currentHeight, $height, $this->to[1]),
-//        ];
-//
-//        return parent::scaleTo($width, $height);
-//    }
 
     public function attributes()
     {

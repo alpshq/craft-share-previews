@@ -41,7 +41,6 @@ abstract class AbstractLayer extends Model
                 $instance->{$prop} = $value;
             }
         }
-//        $instance->setAttributes($attributes, false);
 
         return $instance;
     }
