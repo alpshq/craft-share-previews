@@ -10,7 +10,7 @@
     "fontawesome:copy": "copyfiles -F -u 2 \"./node_modules/@fortawesome/*/{css,webfonts}/**/*\" ./dist/build/fortawesome/",
     "fonts:fetch": "node ./bin/fetch-font-data.js",
     "dev": "npm run postcss:dev && concurrently 'npm run postcss:watch' 'npm run webpack:dev'",
-    "build": "npm run webpack:build"
+    "build": "npm run webpack:build && npm run postcss:build"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
