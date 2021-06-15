@@ -153,50 +153,6 @@ class Templates extends Component
         return array_values($existingTemplates);
     }
 
-//    public function getAvailableTemplates(): array
-//    {
-//        return [
-//            0 => 'Foo Template',
-//        ];
-//    }
-//
-//    public function isValidTemplateId(?int $id): bool
-//    {
-//        if ($id === null) {
-//            return false;
-//        }
-//
-//        $id = (int) $id;
-//
-//        $templateIds = array_keys($this->getAvailableTemplates());
-//
-//        return in_array($id, $templateIds);
-//    }
-//
-//    public function getDefaultTemplate(): Image
-//    {
-//        return $this->getTemplate(self::DEFAULT_TEMPLATE_ID);
-//    }
-//
-//    public function getTemplateOrDefault(?int $id): Image
-//    {
-//        if ($id === null) {
-//            return $this->getDefaultTemplate();
-//        }
-//
-//        return $this->getTemplate($id) ?? $this->getDefaultTemplate();
-//    }
-//
-//    public function getTemplate(int $id): ?Image
-//    {
-//        if (!$this->isValidTemplateId($id)) {
-//            return null;
-//        }
-//
-//        return new Image([
-//            'templateId' => $id,
-//        ]);
-//    }
     public function isValidTemplateId(int $id)
     {
         $templateIds = array_map(function (Template $template) {
