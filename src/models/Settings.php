@@ -59,4 +59,14 @@ class Settings extends \craft\base\Model
     {
         return TemplateSelectField::displayName();
     }
+
+    public function rules()
+    {
+        return array_merge(parent::rules(), [
+            ['routePrefix', 'required'],
+            ['routePrefix', 'trim'],
+            ['routePrefix', 'string', 'length' => [1,30]],
+            ['routePrefix', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/i'],
+        ]);
+    }
 }
