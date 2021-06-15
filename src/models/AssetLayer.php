@@ -9,6 +9,9 @@ use craft\elements\db\AssetQuery;
 use craft\elements\Entry;
 use craft\fields\Assets;
 
+/**
+ * @property int $assetId
+ */
 class AssetLayer extends ImageLayer
 {
     private ?int $assetId = null;
