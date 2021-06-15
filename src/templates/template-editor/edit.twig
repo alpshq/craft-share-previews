@@ -55,11 +55,10 @@
                     placeholder: 'Blog',
                 })) }}
 
-                <p class="m-0">
+                <div class="sp-markdown">
                     {{ 'Most people have more than one active template. Use a name which corresponds to the entry types you want to use the template with.
-
-Good starting points are `General`, `Blog` or `News`.'|t('share-previews') }}
-                </p>
+Good starting points are `General`, `Blog` or `News`.'|t('share-previews')|md }}
+                </div>
             </div>
             <div>
                 {{ forms.field({
