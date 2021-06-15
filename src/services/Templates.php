@@ -144,7 +144,7 @@ class Templates extends Component
             : false;
 
         if ($idx === false) {
-            $template->id = empty($ids) ? 1 : max($ids) + 1;
+            $template->id = empty($ids) ? 1001 : max($ids) + 1;
             $idx = count($existingTemplates);
         }
 
