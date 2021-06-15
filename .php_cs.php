@@ -1,7 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->notPath('vendor')
+    ->notPath('vendor/')
     ->notPath('storage')
     ->notPath('tests/_support/')
     ->in(__DIR__)
