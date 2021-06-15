@@ -1,0 +1,83 @@
+{% import '_includes/forms' as forms %}
+
+<h1 class="text-blue-gray-600">
+    {{ '3. Templates'|t('share-previews') }}
+</h1>
+
+<div class="sp-markdown my-8">
+    {{ 'We have pregenerated some templates with the data you provided. Select as many templates as you want to import them to your template library.
+
+Once the templates are imported they\'re freely and completely editable. You can change every little detail of each template. You can also completely delete any, or even all, templates. You can access your templates from the **plugin\'s settings page**.'|t('share-previews')|md }}
+</div>
+
+<div class="
+    my-8 mb-12 p-4 pl-6 bg-indigo-50 rounded
+    border-l-4 border-solid border-indigo-500
+    shadow
+">
+    {{ 'Select all *import checkboxes* of all the templates you want to import to your template library.'|t('share-previews')|md }}
+</div>
+
+<ul class="grid grid-cols-3 gap-8 gap-y-12 text-center">
+    {% for template in model.getTemplates() %}
+        {% set url = template.toImage().getUrl() %}
+        <li>
+            <a
+                class="
+                    block group
+                    bg-blue-gray-200
+                    border border-solid border-transparent
+                    hover:border-blue-gray-400 hover:no-underline
+                    rounded overflow-hidden
+                    hover:text-blue-gray-500
+                "
+                href="{{ url }}"
+                target="_blank"
+            >
+                <span
+                    class="block relative bg-gray-100 overflow-hidden"
+                    style="padding-top: 52.5%;"
+                >
+                    <span class="block -mt-4 absolute inset-0 top-1/2 text-4xl text-blue-gray-400">
+                        <i class="fal fa-spinner-third fa-spin"></i>
+                    </span>
+                    <img
+                        class="
+                            block absolute inset-0 max-w-full w-full h-auto
+                            transform
+                            transition
+                            group-hover:scale-110
+                        "
+                        src="{{ url }}"
+                    />
+                </span>
+
+                <span class="
+                    block my-4
+                    text-blue-gray-500 uppercase tracking-tight text-sm
+                ">
+                    {{ template.getHumanFriendlyName() }}
+                </span>
+            </a>
+            <label class="block mt-3">
+                <input
+                    id="sp-preview-template-{{ template.id }}"
+                    type="checkbox"
+                    name="import[]"
+                    value="{{ template.id }}"
+                >
+                <span class="ml-2 text-blue-gray-500">
+                    {{ 'Import "{name}"'|t('share-previews', {
+                        name: template.getHumanFriendlyName(),
+                    }) }}
+                </span>
+            </label>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="mt-12">
+    <button class="btn submit" type="submit">
+        {{ 'Import selected templates'|t('share-previews') }}
+    </button>
+</div>

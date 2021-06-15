@@ -1,0 +1,32 @@
+{% import '_includes/forms' as forms %}
+
+<h1 class="text-blue-gray-600">
+    {{ '1. Route prefix'|t('share-previews') }}
+</h1>
+
+
+{{ forms.field({
+    label: 'Route Prefix'|t('share-previews'),
+    instructions: 'The route prefix is used to build the URL of each share preview.
+Your current route prefix is **{routePrefix}**, your image URLs will look like this: {urlPreview}
+
+**Keep in mind**: The route prefix is also the name of the folder where your images are cached.
+If you change the prefix you might need to commit the generated .gitignore file.
+Your images are currently cached in **web/{routePrefix}/**'|t('share-previews', {
+        routePrefix: settings.routePrefix,
+        urlPreview: settings.getPreviewUrl(),
+    }),
+    tip: 'You can flush the image cache using [Craft\'s Caches utility]({cachesUtilityUrl}).'|t('share-previews', {
+        'cachesUtilityUrl': urls.cachesUtility(),
+    }),
+    errors: model.getErrors('routePrefix'),
+    required: true,
+}, forms.text({
+    name: 'model[routePrefix]',
+    placeholder: 'previews',
+    value: model.routePrefix,
+})) }}
+
+<button class="btn submit" type="submit">
+    {{ 'Next: Templates'|t('share-previews') }}
+</button>

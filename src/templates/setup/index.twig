@@ -1,0 +1,64 @@
+{% extends '_layouts/cp' %}
+
+{% block actionButton %}{% endblock %}
+
+{% block main %}
+    {{ actionInput('share-previews/set-up/post') }}
+    {{ hiddenInput('modelState', model.toState()) }}
+
+    <div class="rounded-xl overflow-hidden">
+        <div
+            class="bg-fuchsia-600"
+            style="
+                background-image: url({{ thankYouImageUrl }});
+                background-position: bottom;
+                background-size: cover;
+            "
+        >
+            <div class="p-4 pt-12 pb-24 bg-black bg-opacity-10 text-center text-white text-xl">
+                <img class="w-24 h-24 opacity-90" src="{{ iconImageUrl }}" alt="" />
+                <h1
+                    class="mt-10 text-6xl font-bold"
+                    style="text-shadow: 1px 1px 3px rgba(0,0,0,0.15), -1px -1px 3px rgba(0,0,0,0.15)"
+                >
+                    {{ 'You\'re awesome!'|t('share-previews') }}
+                </h1>
+
+                <div
+                    class="mt-24"
+                    style="text-shadow: 1px 1px 3px rgba(0,0,0,0.25), -1px -1px 3px rgba(0,0,0,0.25)"
+                >
+                    <p class="m-0">
+                        {{ 'Thank you for purchasing the Share Previews plugin.'|t('share-previews') }}
+                    </p>
+                    <p class="m-0">
+                        {{ 'We\'ve prepared a short set up wizard which will help you to get your copy of Share Previews up & running in no time.
+    Click on the button below to start the wizard.'|t('share-previews')|nl2br }}
+                    </p>
+                    <div class="mt-24">
+                        <button
+                            class="
+                                appearance-none
+                                py-4 px-8 rounded-md
+                                uppercase text-base font-bold
+                                bg-white text-indigo-700
+                                cursor-pointer
+                                hover:bg-white hover:bg-opacity-80
+                                shadow-md
+                            "
+                        >
+                            {{ 'Start using Share Previews'|t('share-previews') }}
+                        </button>
+                    </div>
+                    <p class="m-0 mt-4 text-base">
+                        {{ 'Make sure to follow the set up instructions as they\'ll greatly enhance your experience using Share Previews.'|t('share-previews')|nl2br }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-right text-xs">
+        Photo by <a href="https://unsplash.com/@fakurian?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Fakurian Design</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Unsplash</a>
+    </p>
+{% endblock %}

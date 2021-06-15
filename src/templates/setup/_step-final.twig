@@ -1,0 +1,126 @@
+{% import '_includes/forms' as forms %}
+
+<h1 class="text-blue-gray-600">
+    {{ '4. You\'re Almost Done'|t('share-previews') }}
+</h1>
+
+<p>
+    {{ 'The last thing you need to do, is adding the preview images to your templates. Optionally add a template selector field to your entries to enable template selection.'|t('share-previews') }}
+</p>
+
+
+<div class="flex items-start mt-10">
+    <div class="flex-1 space-y-14">
+        <div>
+            <h2 class="text-blue-gray-600">
+                {{ 'Add the images to Twig templates'|t('share-preview') }}
+            </h2>
+            <div class="sp-markdown">
+                {{ 'Add the following code to the `head` tag of each page.'|t('share-previews')|md }}
+            </div>
+            <code class="block mt-6 px-4 py-3 bg-blue-gray-800 text-white text-opacity-75 rounded">
+                {{ '<meta name="twitter:card" content="summary_large_image">'|e }} <br>
+                {{ '<meta name="twitter:image" content="{{ entry.getSharePreviewUrl() }}">'|e }} <br>
+                {{ '<meta property="og:image" content="{{ entry.getSharePreviewUrl() }}">'|e }}
+            </code>
+        </div>
+        <div>
+            <h2 class="text-blue-gray-600">
+                {{ 'Using GraphQL?'|t('share-previews') }}
+            </h2>
+
+            <div class="sp-markdown">
+                {{ 'You can fetch the preview URL of an entry using the `sharePreviewUrl` field.
+After fetching the URL you need to add it to your `head` tag as you\'d normally do it with Twig. The exact method varies between frontend frameworks.'|t('share-previews')|md(flavor='gfm-comment') }}
+            </div>
+
+            <code class="block mt-6 px-4 py-3 bg-blue-gray-800 text-white text-opacity-60 rounded">
+                {{ 'query {
+    entries {
+        id
+        title
+        <span class="text-white text-opacity-100">sharePreviewUrl</span>
+    }
+}'|replace({'  ': '&nbsp;&nbsp;'})|raw|nl2br }}
+            </code>
+        </div>
+        <div>
+            <h2 class="text-blue-gray-600">
+                {{ 'Optional: Make your templates selectable in your entries'|t('share-preview') }}
+            </h2>
+            <div class="sp-markdown">
+                {{ 'If you want to select your templates on a per entry basis you need to add a template selection field to your entries.
+
+- **[Create a new field]({newFieldUrl})** with a field type of `{fieldType}` -- choose all the other values as you see them fit
+- Add the **newly created field** to those **entry types** where you want to make a template selectable
+- Next time you edit your entries **you\'ll be able to select** one of your templates'|t('share-previews', {
+                    newFieldUrl: urls.createNewField(),
+                    fieldType: templateSelectFieldName,
+                })|trim_lines|md }}
+            </div>
+        </div>
+    </div>
+    <div class="ml-8 w-1/3">
+        <div class="
+            p-4 pl-6 bg-indigo-50 rounded
+            border-t-4 border-solid border-indigo-500
+            shadow
+        ">
+            <h2 class="text-blue-gray-600">
+                {{ 'Not a developer yourself?'|t('share-previews') }}
+            </h2>
+            <div class="sp-markdown">
+                {{ 'Not an issue! Just send these instructions to your developer and he or she will know what to do.
+
+- Send your developer [an email containing the instructions]({instructionsEmailUrl}) or
+- [Download the instructions]({instructionsFileUrl}) and send it to your developer using your favourite messaging channel.'|t('share-previews', {
+                    instructionsEmailUrl,
+                    instructionsFileUrl: urls.setUpInstructionsDownload(),
+                })|md }}
+            </div>
+        </div>
+
+        <div class="
+            mt-12 p-4 pl-6 bg-indigo-50 rounded
+            border-t-4 border-solid border-indigo-500
+            shadow
+        ">
+            <h2 class="text-blue-gray-600">
+                {{ 'Additional help required?'|t('share-previews') }}
+            </h2>
+            <div class="sp-markdown">
+                {{ 'If you require additional help feel free to reach out to us:
+
+- If you encounter **any issues**, submit them in the [plugin\'s repository]({issueUrl})
+- If you need **additional support**, contact us by email at [support@alps.dev](mailto:support@alps.dev)'|t('share-previews', {
+                    issueUrl: urls.issueUrl(),
+                })|md }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-12">
+
+<h1 class="text-blue-gray-600">
+    {{ 'You\'ve finished the set up!'|t('share-previews') }}
+</h1>
+
+<div class="sp-markdown">
+    {{ 'Congratulations! You\'ve set everything up and you\'re ready to go.
+
+Everything you\'ve configured during set up can be changed in the [plugin\'s settings]({pluginSettingsUrl}). There you can also do the following:
+
+- Update or delete your imported templates
+- Create new templates from scratch
+- Change the route prefix of your images
+- & more'|t('share-previews', {
+        pluginSettingsUrl: urls.settings(),
+    })|md }}
+</div>
+
+<div class="mt-8">
+    <a class="btn" href="{{ urls.settings() }}">
+        {{ 'Go to plugin settings'|t('share-previews') }}
+    </a>
+</div>

@@ -1,0 +1,92 @@
+{% import '_includes/forms' as forms %}
+
+<h1 class="text-blue-gray-600">
+    {{ '2. Templates'|t('share-previews') }}
+</h1>
+
+<div class="sp-markdown">
+    {{ 'Let\'s help you kick starting your copy of the share preview plugin by generating some share preview templates for you. This gives you the ability start using the plugin immediately. Later, when you\'re more familiar with plugin you can customize the generated templates in every detail.
+
+Please tell a little bit about your site, this will make sure the generated templates contain all the necessary details.'|t('share-previews')|md(flavor='gfm-comment') }}
+</div>
+
+<div class="
+    my-8 mb-12 p-4 pl-6 bg-indigo-50 rounded
+    border-l-4 border-solid border-indigo-500
+    shadow
+">
+    {{ 'Click "{skipButtonLabel}" if you want to create your templates from scratch.'|t('share-previews', {
+        skipButtonLabel: 'Skip template generation'|t('share-previews'),
+    })|md }}
+</div>
+
+
+{{ forms.field({
+    label: 'What\'s the name of your site?'|t('share-previews'),
+    instructions: 'Most of the generated templates will contain your site\'s name.'|t('share-previews'),
+    required: true,
+    errors: model.getErrors('siteName'),
+}, forms.text({
+    name: 'model[siteName]',
+    placeholder: 'The Influencer\'s Choice'|t('share-previews'),
+    value: model.siteName,
+})) }}
+
+{{ forms.field({
+    label: 'What\'s the URL of your site?'|t('share-previews'),
+    instructions: 'It\'s recommended you only use your site\'s host name (eg `example.com`) instead of a full URL (eg. `https://example.com`).'|t('share-previews'),
+    required: true,
+    errors: model.getErrors('siteUrl'),
+}, forms.text({
+    name: 'model[siteUrl]',
+    placeholder: 'example.com',
+    value: model.siteUrl,
+})) }}
+
+{{ forms.field({
+    label: 'What\'s the logo of your site?'|t('share-previews'),
+    instructions: 'Polish your previews by adding your logo.'|t('share-previews'),
+    required: true,
+    errors: model.getErrors('logoId'),
+}, forms.elementSelect({
+    elements: [model.logo]|filter,
+    name: 'model[logoId]',
+    elementType: 'craft\\elements\\Asset',
+    criteria: {'kind': 'image'},
+    limit: 1,
+})) }}
+
+{{ forms.field({
+    label: 'Which one of your entry fields holds the main image of an entry?'|t('share-previews'),
+    instructions: 'Some of the generated templates will also contain the image corresponding to an entry.
+The goal of the share preview plugin is to automate the preview generation. This will only work out if the plugin knows where to look for an image.'|t('share-previews'),
+    tip: 'If your entry types use different fields, you can later create additional templates to reflect your various entry types.'|t('share-previews'),
+    required: true,
+    errors: model.getErrors('fieldId'),
+}, forms.select({
+    name: 'model[fieldId]',
+    value: model.fieldId,
+    options: model.getAvailableAssetFieldsAsOptions(),
+})) }}
+
+{{ forms.field({
+    label: 'Select a fallback image'|t('share-previews'),
+    instructions: 'The fallback image will be displayed when corresponding entries do not have an image set in the above field.'|t('share-previews'),
+    required: true,
+    errors: model.getErrors('fallbackId'),
+}, forms.elementSelect({
+    elements: [model.fallback]|filter,
+    name: 'model[fallbackId]',
+    elementType: 'craft\\elements\\Asset',
+    criteria: {'kind': 'image'},
+    limit: 1,
+})) }}
+
+<div class="mt-12">
+    <button class="btn submit" type="submit">
+        {{ 'Next: Generate templates'|t('share-previews') }}
+    </button>
+    <button class="btn" name="op" value="skip">
+        {{ 'Skip template generation'|t('share-previews') }}
+    </button>
+</div>

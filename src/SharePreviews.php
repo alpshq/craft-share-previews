@@ -23,6 +23,7 @@ use craft\events\DefineBehaviorsEvent;
 use craft\events\DefineGqlTypeFieldsEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\TemplateEvent;
@@ -30,6 +31,7 @@ use craft\gql\TypeManager;
 use craft\helpers\FileHelper;
 use craft\services\Fields;
 use craft\utilities\ClearCaches;
+use craft\web\twig\variables\Cp;
 use craft\web\UrlManager;
 use craft\web\View;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -76,7 +78,8 @@ class SharePreviews extends Plugin
             ->registerFields()
             ->registerBehaviors()
             ->registerCacheUtility()
-            ->registerGraphQlField();
+            ->registerGraphQlField()
+            ->registerSetUpWizardNavigationItem();
     }
 
     protected function createSettingsModel()
@@ -115,10 +118,13 @@ class SharePreviews extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules = array_merge($event->rules, [
-                    'share-previews/draft' => 'share-previews/preview/draft',
                     'POST share-previews/template-editor' => 'share-previews/template-editor/post',
                     'GET share-previews/template-editor' => 'share-previews/template-editor/edit',
                     'POST share-previews/template-editor/preview' => 'share-previews/template-editor/preview',
+
+                    'GET share-previews/setup' => 'share-previews/set-up/index',
+                    'POST share-previews/setup' => 'share-previews/set-up/post',
+                    'GET share-previews/setup/instructions' => 'share-previews/set-up/download-instructions',
                 ]);
             }
         );
@@ -255,6 +261,30 @@ class SharePreviews extends Plugin
                         return $source->getSharePreviewUrl();
                     },
                 ];
+            },
+        );
+
+        return $this;
+    }
+
+    private function registerSetUpWizardNavigationItem(): self
+    {
+        if (! $this->settings->showSetUpNavigationItemInCp) {
+            return $this;
+        }
+
+        Event::on(
+            Cp::class,
+            Cp::EVENT_REGISTER_CP_NAV_ITEMS,
+            function (RegisterCpNavItemsEvent $event) {
+                $event->navItems = array_merge($event->navItems, [
+                    [
+                        'url' => $this->urls->setUp(),
+                        'label' => Craft::t('share-previews', 'Share Previews'),
+                        'badgeCount' => 'SETUP',
+                        'icon' => '@share-previews/resources/imgs/setup-wizard-icon.svg',
+                    ],
+                ]);
             },
         );
 

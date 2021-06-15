@@ -1,0 +1,12 @@
+{% extends '_layouts/cp' %}
+
+{% block actionButton %}{% endblock %}
+
+{% block content %}
+    {{ actionInput('share-previews/set-up/post') }}
+    {{ hiddenInput('modelState', model.toState()) }}
+
+    <div class="text-blue-gray-500">
+        {{ include('share-previews/setup/_step-' ~ model.scenario) }}
+    </div>
+{% endblock %}
