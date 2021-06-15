@@ -15,7 +15,7 @@ class SetUpController extends Controller
 {
     public function actionIndex()
     {
-        return $this->renderSetUp(new SetUp(['scenario' => SetUp::SCENARIO_TEMPLATES]));
+        return $this->renderSetUp(new SetUp);
     }
 
     public function actionPost()
