@@ -2,9 +2,9 @@
 
 namespace alps\sharepreviews\services;
 
-use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\models\Template;
+use alps\sharepreviews\models\vendortemplates\AbstractVendorTemplate;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\services\Plugins;
@@ -32,6 +32,13 @@ class Templates extends Component
         return $this->settings->templates;
     }
 
+    public function getVendorTemplates(): array
+    {
+        return array_map(function (string $className) {
+            return new $className;
+        }, AbstractVendorTemplate::getTemplates());
+    }
+
     public function getDefaultTemplate(bool $fallback = false): ?Template
     {
         $templates = array_filter($this->getAvailableTemplates(), function (Template $template) {
@@ -47,7 +54,9 @@ class Templates extends Component
 
     public function getTemplateById(int $id): ?Template
     {
-        $templates = $this->settings->templates;
+        $templates = $id >= 1000
+            ? $this->getAvailableTemplates()
+            : $this->getVendorTemplates();
 
         $templates = array_filter($templates, function (Template $template) use ($id) {
             return $template->id === $id;
