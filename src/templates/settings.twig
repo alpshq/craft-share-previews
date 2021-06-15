@@ -85,20 +85,18 @@
         {% if templates %}
             <div class="
                 sp-markdown
-                mt-8 p-4 pl-6 bg-blue-gray-100 rounded
+                mt-8 p-4 pl-6 bg-indigo-50 rounded
                 text-blue-gray-500
-                border-l-4 border-solid border-blue-gray-500
+                border-l-4 border-solid border-indigo-500
             ">
-                {% apply t('share-previews', {
+                {{ '### Want to select from your templates in your entries?
+
+- **[Create a new field]({newFieldUrl})** with a field type of `{fieldType}` -- choose all the other values as you see them fit
+- **Add the created field** to those **entry types** where you want to make a template selectable
+- Next time you edit your entries **you\'ll be able to select** one of your templates'|t('share-previews', {
                     newFieldUrl: urls.createNewField(),
                     fieldType: templateSelectFieldName,
-                })|trim_lines|md %}
-                    ### Want to select from your templates in your entries?
-
-                    - **[Create a new field]({newFieldUrl})** with a field type of `{fieldType}` -- choose all the other values as you see them fit
-                    - **Add the created field** to those **entry types** where you want to make a template selectable
-                    - Next time you edit your entries **you'll be able to select** one of your templates
-                {% endapply %}
+                })|trim_lines|md }}
             </div>
         {% endif %}
     </section>
