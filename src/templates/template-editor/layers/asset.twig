@@ -30,12 +30,12 @@ Everytime your template is rendered, based on an entry, the image corresponding 
 
 Choose *{noReplacementLabel}* when you always want to render the default image.
 '|t('share-previews', {
-                        'noReplacementLabel': layer.getAvailableAssetFieldsAsOptions()[0].label
+                        'noReplacementLabel': layer.getAvailableAssetFieldsAsOptions(true)[0].label
                     }),
                 }, forms.select({
                     name: namePrefix ~ '[fieldId]',
                     value: layer.fieldId,
-                    options: layer.getAvailableAssetFieldsAsOptions(),
+                    options: layer.getAvailableAssetFieldsAsOptions(true),
                 })) }}
             </div>
 

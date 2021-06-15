@@ -128,7 +128,7 @@ class AssetLayer extends ImageLayer
         return $asset->getImageTransformSourcePath();
     }
 
-    public function getAvailableAssetFieldsAsOptions(): array
+    public function getAvailableAssetFieldsAsOptions(bool $optional = false): array
     {
         $fields = Craft::$app->getFields()->getFieldsByElementType(Entry::class);
 
@@ -146,6 +146,10 @@ class AssetLayer extends ImageLayer
         }, $fields);
 
         $options = SharePreviews::getInstance()->helpers->sortOptions($options);
+
+        if (!$optional) {
+            return $options;
+        }
 
         array_unshift($options, [
             'value' => null,
