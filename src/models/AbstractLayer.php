@@ -5,7 +5,6 @@ namespace alps\sharepreviews\models;
 use alps\sharepreviews\models\concerns\ScalesProperties;
 use Craft;
 use craft\base\Model;
-use craft\elements\Entry;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Palette\RGB as RGBPalette;
@@ -83,9 +82,7 @@ abstract class AbstractLayer extends Model
         try {
             return Craft::$app->getView()->renderString($expression, $vars);
         } catch (RuntimeError $e) {
-            //
         } catch (SyntaxError $e) {
-            //
         }
 
         return $expression;

@@ -147,7 +147,7 @@ class AssetLayer extends ImageLayer
 
         $options = SharePreviews::getInstance()->helpers->sortOptions($options);
 
-        if (!$optional) {
+        if (! $optional) {
             return $options;
         }
 

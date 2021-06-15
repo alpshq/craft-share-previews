@@ -5,7 +5,6 @@ namespace alps\sharepreviews\models;
 use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\SharePreviews;
 use Craft;
-use craft\elements\Entry;
 use Imagine\Gd\Font;
 use Imagine\Image\ImageInterface;
 
