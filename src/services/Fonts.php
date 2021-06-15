@@ -74,7 +74,13 @@ class Fonts extends Component
 
     public function getDefaults(string $familyId = null): array
     {
-        if ($familyId === null || $font = $this->getFontFamily($familyId) === null) {
+        if ($familyId === null) {
+            return ['roboto', 'regular'];
+        }
+
+        $font = $this->getFontFamily($familyId);
+
+        if ($font === null) {
             return ['roboto', 'regular'];
         }
 
