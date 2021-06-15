@@ -10,7 +10,7 @@ use alps\sharepreviews\models\AbstractLayer;
 trait HasLayers
 {
     /** @var AbstractLayer[] */
-    private array $layers = [];
+    protected array $layers = [];
 
     private function getLayersAttributes(): array
     {
