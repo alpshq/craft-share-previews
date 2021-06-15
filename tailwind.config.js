@@ -135,6 +135,7 @@ module.exports = {
       gradientColorStops: ['active'],
       outline: ['active'],
       scale: ['group-hover'],
+      textColor: ['active'],
       translate: ['group-hover'],
     },
   },
