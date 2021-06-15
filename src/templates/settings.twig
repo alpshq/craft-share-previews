@@ -128,6 +128,17 @@ Your images are currently cached in **web/{routePrefix}/**'|t('share-previews', 
                 placeholder: 'previews',
                 value: settings.routePrefix,
             })) }}
+
+
+            {{ forms.field({
+                label: 'Show Set-Up Navigation Item in CP'|t('share-previews'),
+                instructions: 'Do you want to add the Set-Up Wizard navigation item to the CP?
+The item is usually displayed on a fresh plugin install. Once you finish the wizard, the navigation item is hidden.'|t('share-previews'),
+            }, forms.lightswitch({
+                name: 'showSetUpNavigationItemInCp',
+                value: true,
+                on: settings.showSetUpNavigationItemInCp
+            })) }}
         </div>
     </section>
 </div>

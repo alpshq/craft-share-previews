@@ -18,6 +18,8 @@ class Settings extends \craft\base\Model
 
     public string $fontCachePath = '';
 
+    public bool $showSetUpNavigationItemInCp = true;
+
     private array $templates = [];
 
     public function __construct($config = [])
