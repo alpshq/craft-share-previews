@@ -20,8 +20,6 @@ class AssetLayer extends ImageLayer
 
     private ?Asset $asset = null;
 
-    public ?string $assetIdByExpression = null;
-
     public function getTitle(): string
     {
         return Craft::t('share-previews', 'Asset');
@@ -44,14 +42,6 @@ class AssetLayer extends ImageLayer
 
         if ($this->fieldId !== null && $entry instanceof Entry) {
             $asset = $this->fetchAssetFromEntryField($entry, $this->fieldId);
-        }
-
-        if ($asset === null && $this->assetIdByExpression !== null) {
-            $id = (int) $this->evaluateTwigExpression($this->assetIdByExpression, $vars);
-
-            if ($id > 0) {
-                $asset = Asset::findOne($id);
-            }
         }
 
         if (! $asset || ! $asset instanceof Asset) {
