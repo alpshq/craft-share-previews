@@ -6,7 +6,7 @@
   "license": "proprietary",
   "authors": [
     {
-      "name": "Jakub Jozefek",
+      "name": "Alps",
       "homepage": "https://github.com/alpshq/crafts-share-previews"
     }
   ],
@@ -18,7 +18,7 @@
   },
   "require": {
     "ext-json": "*",
-    "craftcms/cms": "^3.5",
+    "craftcms/cms": "^3.0",
     "illuminate/collections": "^8.0.0"
   },
   "autoload": {
