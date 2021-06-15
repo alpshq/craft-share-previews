@@ -11,6 +11,7 @@ use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use ReflectionClass;
 use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 abstract class AbstractLayer extends Model
 {
@@ -82,6 +83,8 @@ abstract class AbstractLayer extends Model
         try {
             return Craft::$app->getView()->renderString($expression, $vars);
         } catch (RuntimeError $e) {
+            //
+        } catch (SyntaxError $e) {
             //
         }
 
