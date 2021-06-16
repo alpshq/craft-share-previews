@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 - 2021-06-16
+
+Cleaned some things up
+
 ## 1.1.1 - 2021-06-16
 
 Craft license added
