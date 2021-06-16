@@ -40,7 +40,6 @@ class Template extends Model
             [
                 'id',
                 'name',
-                'layers',
                 'previewEntryId',
             ]
         );
