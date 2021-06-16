@@ -26,6 +26,22 @@ trait HasLayers
     {
         ksort($layers);
 
+        $layers = array_filter($layers, function($data) {
+            if ($data instanceof AbstractLayer) {
+                return true;
+            }
+
+            if (empty($data)) {
+                return false;
+            }
+
+            if (!is_array($data)) {
+                return false;
+            }
+
+            return true;
+        });
+
         $layers = array_values($layers);
 
         $this->layers = [];
