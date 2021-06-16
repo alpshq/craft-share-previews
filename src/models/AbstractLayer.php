@@ -5,6 +5,7 @@ namespace alps\sharepreviews\models;
 use alps\sharepreviews\models\concerns\ScalesProperties;
 use Craft;
 use craft\base\Model;
+use Exception;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\Color\RGB;
 use Imagine\Image\Palette\RGB as RGBPalette;
@@ -143,7 +144,11 @@ abstract class AbstractLayer extends Model
                 $reflectionProperty = $reflection->getProperty($prop);
 
                 if ($reflectionProperty->isPublic() && $reflectionProperty->hasType()) {
-                    settype($value, $reflectionProperty->getType()->getName());
+                    try {
+                        settype($value, $reflectionProperty->getType()->getName());
+                    } catch (Exception $e) {
+                        //
+                    }
                 }
             }
 
