@@ -132,26 +132,6 @@ abstract class AbstractLayer extends Model
         return new static($this);
     }
 
-//    public function setAttributes($values, $safeOnly = true)
-//    {
-//        $casted = [];
-//
-//        $reflection = new ReflectionClass($this);
-//
-//        foreach ($values as $prop => $value) {
-//            if ($value !== null && $reflection->hasProperty($prop)) {
-//                $reflectionProperty = $reflection->getProperty($prop);
-//
-//                if ($reflectionProperty->isPublic() && $reflectionProperty->hasType()) {
-//                    settype($value, $reflectionProperty->getType()->getName());
-//                }
-//            }
-//
-//            $casted[$prop] = $value;
-//        }
-//
-//        parent::setAttributes($casted, $safeOnly);
-//    }
     private function castAttributes(array $attributes)
     {
         $reflection = new ReflectionClass($this);
