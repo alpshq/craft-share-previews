@@ -54,10 +54,15 @@ module.exports = {
     // defaultLineHeights: true,
     // standardFontWeights: true
   },
-  purge: [
-    './src/templates/**/*.twig',
-    './src/resources/**/*.js',
-  ],
+  purge: {
+    content: [
+      './src/templates/**/*.twig',
+      './src/resources/**/*.js',
+    ],
+    options: {
+      safelist: ['global-container']
+    }
+  },
   corePlugins: {
     preflight: false,
   },
