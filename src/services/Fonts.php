@@ -41,13 +41,17 @@ class Fonts extends Component
     {
         $data = $this->getFonts();
 
-        $font = collect($data)->first(function (array $font) use ($familyId) {
+        $font = array_filter($data, function (array $font) use ($familyId) {
             return $font['id'] === $familyId;
         });
 
-        $variant = collect($font['variants'])->first(function (array $variant) use ($variantId) {
+        $font = array_values($font)[0] ?? null;
+
+        $variant = array_filter($font['variants'], function (array $variant) use ($variantId) {
             return $variant['id'] === $variantId;
         });
+
+        $variant = array_values($variant)[0] ?? null;
 
         return file_get_contents($variant['ttf']);
     }
