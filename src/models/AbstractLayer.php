@@ -147,7 +147,6 @@ abstract class AbstractLayer extends Model
                     try {
                         settype($value, $reflectionProperty->getType()->getName());
                     } catch (Exception $e) {
-                        //
                     }
                 }
             }
