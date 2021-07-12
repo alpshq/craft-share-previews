@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 - 2021-07-12
+
+Removed the illuminate/collections dependency
+
 ## 1.1.2 - 2021-06-16
 
 Cleaned some things up
