@@ -26,7 +26,7 @@ trait HasLayers
     {
         ksort($layers);
 
-        $layers = array_filter($layers, function($data) {
+        $layers = array_filter($layers, function ($data) {
             if ($data instanceof AbstractLayer) {
                 return true;
             }
@@ -35,7 +35,7 @@ trait HasLayers
                 return false;
             }
 
-            if (!is_array($data)) {
+            if (! is_array($data)) {
                 return false;
             }
 
