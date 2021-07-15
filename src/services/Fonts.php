@@ -4,13 +4,10 @@ namespace alps\sharepreviews\services;
 
 use alps\sharepreviews\SharePreviews;
 use Craft;
-use GuzzleHttp\Client;
 use yii\base\Component;
 
 class Fonts extends Component
 {
-    private Client $client;
-
     private ?array $fonts = null;
 
     private Helpers $helpers;
@@ -18,10 +15,6 @@ class Fonts extends Component
     public function __construct($config = [])
     {
         parent::__construct($config);
-
-        $this->client = new Client([
-            'http_errors' => true,
-        ]);
 
         $this->helpers = SharePreviews::getInstance()->helpers;
     }
