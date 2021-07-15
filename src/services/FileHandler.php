@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\models\fonts\AbstractFontVariant;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\SharePreviews;
@@ -21,19 +22,19 @@ class FileHandler extends Component
         $this->settings = SharePreviews::getInstance()->getSettings();
     }
 
-    public function fontExists(string $familyId, string $variantId): bool
+    public function fontExists(AbstractFontVariant $variant): bool
     {
-        return file_exists($this->getFontPath($familyId, $variantId));
+        return file_exists($this->getFontPath($variant));
     }
 
-    public function getFontPath(string $familyId, string $variantId): string
+    public function getFontPath(AbstractFontVariant $variant): string
     {
-        $filename = StringHelper::slugify($familyId . ' ' . $variantId) . '.ttf';
+        $filename = StringHelper::slugify($variant->family->id . ' ' . $variant->id) . '.ttf';
 
         return $this->settings->fontCachePath . '/' . $filename;
     }
 
-    public function saveFont(string $familyId, string $variantId, string $contents): self
+    public function saveFont(AbstractFontVariant $variant, string $contents): self
     {
         $dir = $this->settings->fontCachePath;
 
@@ -41,7 +42,7 @@ class FileHandler extends Component
             ->ensureDirectoryExists($dir)
             ->ensureGitIgnoreExists($dir);
 
-        file_put_contents($this->getFontPath($familyId, $variantId), $contents);
+        file_put_contents($this->getFontPath($variant), $contents);
 
         return $this;
     }

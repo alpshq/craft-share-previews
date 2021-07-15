@@ -38,12 +38,14 @@ class TextLayer extends AbstractRectangleLayer
 
         $fontsService = SharePreviews::getInstance()->fonts;
 
-        if (! $fontsService->isValidVariant($familyId, $variantId)) {
-            [$familyId, $variantId] = $fontsService->getDefaults($familyId);
-        }
+        $family = $fontsService->getFontFamily($familyId) ?? $fontsService->getDefaultFontFamily();
 
-        $this->fontFamily = $familyId;
-        $this->fontVariant = $variantId;
+        $variant = $family->hasVariant($variantId)
+            ? $family->getVariant($variantId)
+            : $family->getDefaultVariant();
+
+        $this->fontFamily = $variant->family->id;
+        $this->fontVariant = $variant->id;
 
         return $this;
     }
@@ -117,23 +119,13 @@ class TextLayer extends AbstractRectangleLayer
 
     private function getFontFile(): string
     {
-        $plugin = SharePreviews::getInstance();
+        $fonts = SharePreviews::getInstance()->fonts;
 
-        $fileHandler = $plugin->fileHandler;
-        $fontFetcher = $plugin->fonts;
+        $family = $fonts->getFontFamily($this->fontFamily) ?? $fonts->getDefaultFontFamily();
 
-        $family = $this->fontFamily;
-        $variant = $this->fontVariant;
-
-        if ($fileHandler->fontExists($family, $variant)) {
-            return $fileHandler->getFontPath($family, $variant);
-        }
-
-        $contents = $fontFetcher->fetch($family, $variant);
-
-        return $fileHandler
-            ->saveFont($family, $variant, $contents)
-            ->getFontPath($family, $variant);
+        return $family
+            ->getVariant($this->fontVariant)
+            ->getPathToFontFile();
     }
 
     protected function getPropertiesWithVariables(): array
