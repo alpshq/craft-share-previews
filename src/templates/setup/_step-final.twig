@@ -46,6 +46,20 @@ After fetching the URL you need to add it to your `head` tag as you\'d normally 
         </div>
         <div>
             <h2 class="text-blue-gray-600">
+                {{ 'Using SEOmatic?'|t('share-previews') }}
+            </h2>
+
+            <div class="sp-markdown">
+                {{ 'Share Previews work great with SEOmatic.
+
+- Navigate to your desired SEO image source section inside of SEOmatic settings
+- Select Custom URL & insert `{entry.getSharePreviewUrl()}`
+- ✔︎ Done
+'|t('share-previews')|md(flavor='gfm-comment') }}
+            </div>
+        </div>
+        <div>
+            <h2 class="text-blue-gray-600">
                 {{ 'Optional: Make your templates selectable in your entries'|t('share-preview') }}
             </h2>
             <div class="sp-markdown">
@@ -113,6 +127,7 @@ Everything you\'ve configured during set up can be changed in the [plugin\'s set
 
 - Update or delete your imported templates
 - Create new templates from scratch
+- Set a path to your custom fonts
 - Change the route prefix of your images
 - & more'|t('share-previews', {
         pluginSettingsUrl: urls.settings(),

@@ -2,17 +2,22 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\models\fonts\AbstractFontVariant;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Settings;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\helpers\StringHelper;
 use Imagine\Image\ImageInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use yii\base\Component;
 
 class FileHandler extends Component
 {
     private Settings $settings;
+
+    private array $fileCount = [];
 
     public function __construct($config = [])
     {
@@ -21,19 +26,37 @@ class FileHandler extends Component
         $this->settings = SharePreviews::getInstance()->getSettings();
     }
 
-    public function fontExists(string $familyId, string $variantId): bool
+    public function getNumberOfFilesAndDirectories(string $path): int
     {
-        return file_exists($this->getFontPath($familyId, $variantId));
+        if (array_key_exists($path, $this->fileCount)) {
+            return $this->fileCount[$path];
+        }
+
+        if (! is_dir($path)) {
+            return $this->fileCount[$path] = 0;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        return $this->fileCount[$path] = iterator_count($iterator);
     }
 
-    public function getFontPath(string $familyId, string $variantId): string
+    public function fontExists(AbstractFontVariant $variant): bool
     {
-        $filename = StringHelper::slugify($familyId . ' ' . $variantId) . '.ttf';
+        return file_exists($this->getFontPath($variant));
+    }
+
+    public function getFontPath(AbstractFontVariant $variant): string
+    {
+        $filename = StringHelper::slugify($variant->family->id . ' ' . $variant->id) . '.ttf';
 
         return $this->settings->fontCachePath . '/' . $filename;
     }
 
-    public function saveFont(string $familyId, string $variantId, string $contents): self
+    public function saveFont(AbstractFontVariant $variant, string $contents): self
     {
         $dir = $this->settings->fontCachePath;
 
@@ -41,7 +64,7 @@ class FileHandler extends Component
             ->ensureDirectoryExists($dir)
             ->ensureGitIgnoreExists($dir);
 
-        file_put_contents($this->getFontPath($familyId, $variantId), $contents);
+        file_put_contents($this->getFontPath($variant), $contents);
 
         return $this;
     }

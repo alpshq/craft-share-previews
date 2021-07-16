@@ -3,6 +3,7 @@
 namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\fields\TemplateSelectField;
+use alps\sharepreviews\SharePreviews;
 use Craft;
 
 /**
@@ -20,6 +21,8 @@ class Settings extends \craft\base\Model
 
     public bool $showSetUpNavigationItemInCp = true;
 
+    private ?string $customFontsPath;
+
     private array $templates = [];
 
     public function __construct($config = [])
@@ -32,7 +35,8 @@ class Settings extends \craft\base\Model
     public function attributes()
     {
         return array_merge(parent::attributes(), [
-           'templates',
+            'templates',
+            'customFontsPath',
         ]);
     }
 
@@ -46,6 +50,27 @@ class Settings extends \craft\base\Model
         $this->templates = array_map(function ($template) {
             return new Template($template);
         }, $templates);
+
+        return $this;
+    }
+
+    public function getCustomFontsPath(): ?string
+    {
+        return $this->customFontsPath;
+    }
+
+    public function setCustomFontsPath(?string $customFontsPath): self
+    {
+        if ($customFontsPath === null) {
+            $this->customFontsPath = null;
+
+            return $this;
+        }
+
+        $customFontsPath = ltrim($customFontsPath, '/');
+        $customFontsPath = rtrim($customFontsPath, '/');
+
+        $this->customFontsPath = $customFontsPath;
 
         return $this;
     }
@@ -67,6 +92,32 @@ class Settings extends \craft\base\Model
             ['routePrefix', 'trim'],
             ['routePrefix', 'string', 'length' => [1, 30]],
             ['routePrefix', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/i'],
+            ['customFontsPath', 'validateCustomFontsPath'],
         ]);
+    }
+
+    public function validateCustomFontsPath(string $attribute, $params, $validator)
+    {
+        $plugin = SharePreviews::getInstance();
+
+        $relative = $this->{$attribute};
+        $path = $plugin->fonts->getPathToCustomFonts($relative);
+
+        $numberOfFiles = $plugin->fileHandler->getNumberOfFilesAndDirectories($path);
+
+        if ($numberOfFiles < 1000) {
+            return;
+        }
+
+        $this->addError(
+            $attribute,
+            Craft::t(
+                'share-previews',
+                'The specified path contains {numberOfFiles} files. Please be more specific.',
+                [
+                    'numberOfFiles' => number_format($numberOfFiles),
+                ]
+            ),
+        );
     }
 }

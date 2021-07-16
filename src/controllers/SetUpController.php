@@ -209,6 +209,12 @@ query {
 }
 ```
 
+# Are we using SEOmatic?
+
+- Navigate to the desired SEO image source section inside of SEOmatic settings
+- Select Custom URL & insert `{entry.getSharePreviewUrl()}`
+- ✔︎ Done
+
 If you require additional help feel free to reach out to the plugin creators:
 
 - If you encounter **any issues**, submit them in the plugin\'s repository: {issueUrl}

@@ -2,111 +2,176 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\models\fonts\AbstractFontFamily;
+use alps\sharepreviews\models\fonts\AbstractFontVariant;
+use alps\sharepreviews\models\fonts\CustomFontFamily;
+use alps\sharepreviews\models\fonts\GoogleFontFamily;
 use alps\sharepreviews\SharePreviews;
 use Craft;
-use GuzzleHttp\Client;
+use craft\helpers\FileHelper;
+use SplFileInfo;
 use yii\base\Component;
 
 class Fonts extends Component
 {
-    private Client $client;
-
     private ?array $fonts = null;
 
     private Helpers $helpers;
+
+    private FileHandler $fileHandler;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
 
-        $this->client = new Client([
-            'http_errors' => true,
-        ]);
+        $plugin = SharePreviews::getInstance();
 
-        $this->helpers = SharePreviews::getInstance()->helpers;
+        $this->helpers = $plugin->helpers;
+        $this->fileHandler = $plugin->fileHandler;
     }
 
+    /**
+     * @return AbstractFontFamily[]
+     */
     private function getFonts(): array
     {
         if ($this->fonts) {
             return $this->fonts;
         }
 
+        return $this->fonts = array_merge(
+            $this->getCustomFonts(),
+            $this->getGoogleFonts()
+        );
+    }
+
+    public function getPathToCustomFonts(string $relative = null): ?string
+    {
+        $customFontPath = $relative ?? SharePreviews::getInstance()->settings->customFontsPath;
+
+        if (empty($customFontPath)) {
+            return null;
+        }
+
+        return Craft::getAlias('@root/' . $customFontPath, false);
+    }
+
+    public function getCustomFonts(): array
+    {
+        $path = $this->getPathToCustomFonts();
+
+        if (! $path) {
+            return [];
+        }
+
+        if (! is_dir($path)) {
+            return [];
+        }
+
+        if ($this->fileHandler->getNumberOfFilesAndDirectories($path) > 1000) {
+            return [];
+        }
+
+        $files = array_map(function (string $file) {
+            return new SplFileInfo($file);
+        }, FileHelper::findFiles($path));
+
+        $grouped = [];
+        foreach ($files as $file) {
+            $ext = $file->getExtension();
+
+            if (empty($ext)) {
+                continue;
+            }
+
+            if (! array_key_exists($ext, $grouped)) {
+                $grouped[$ext] = [];
+            }
+
+            $grouped[$ext][] = $file;
+        }
+
+        $filtered = [];
+        $existing = [];
+
+        foreach (['ttf', 'otf', 'woff2', 'woff'] as $type) {
+            if (! array_key_exists($type, $grouped)) {
+                continue;
+            }
+
+            foreach ($grouped[$type] as $file) {
+                $name = strtolower($file->getBasename('.' . $file->getExtension()));
+
+                if (in_array($name, $existing)) {
+                    continue;
+                }
+
+                $existing[] = $name;
+                $filtered[] = $file;
+            }
+        }
+
+        return array_map(function (SplFileInfo $file) {
+            return CustomFontFamily::fromFileInfo($file);
+        }, $filtered);
+    }
+
+    private function getGoogleFonts(): array
+    {
         $json = file_get_contents(__DIR__ . '/../../dist/fonts.json');
 
-        return $this->fonts = json_decode($json, true);
-    }
+        $fonts = json_decode($json, true);
 
-    public function fetch(string $familyId, string $variantId): string
-    {
-        $data = $this->getFonts();
-
-        $font = array_filter($data, function (array $font) use ($familyId) {
-            return $font['id'] === $familyId;
-        });
-
-        $font = array_values($font)[0] ?? null;
-
-        $variant = array_filter($font['variants'], function (array $variant) use ($variantId) {
-            return $variant['id'] === $variantId;
-        });
-
-        $variant = array_values($variant)[0] ?? null;
-
-        return file_get_contents($variant['ttf']);
-    }
-
-    public function isValidVariant(string $familyId, string $variantId): bool
-    {
-        $font = $this->getFontFamily($familyId);
-
-        if (! $font) {
-            return false;
-        }
-
-        $variant = array_filter($font['variants'], function (array $variant) use ($variantId) {
-            return $variant['id'] === $variantId;
-        });
-
-        return count($variant) > 0;
-    }
-
-    public function isValidFamily(string $familyId): bool
-    {
-        return $this->getFontFamily($familyId) !== null;
-    }
-
-    public function getDefaults(string $familyId = null): array
-    {
-        if ($familyId === null) {
-            return ['roboto', 'regular'];
-        }
-
-        $font = $this->getFontFamily($familyId);
-
-        if ($font === null) {
-            return ['roboto', 'regular'];
-        }
-
-        return [$familyId, $font['defaultVariant']];
+        return array_map(function (array $data) {
+            return GoogleFontFamily::fromArray($data);
+        }, $fonts);
     }
 
     public function getAvailableFontFamiliesAsOptions(): array
     {
-        $families = array_map(function (array $font) {
-            return [
-                'value' => $font['id'],
-                'label' => $font['family'],
-            ];
-        }, $this->getFonts());
+        $families = [];
 
-        return $this->helpers->sortOptions($families);
+        foreach ($this->getFonts() as $font) {
+            $type = $font->getTypeLabel();
+
+            if (! array_key_exists($type, $families)) {
+                $families[$type] = [];
+            }
+
+            $families[$type][] = [
+                'value' => $font->id,
+                'label' => $font->family,
+            ];
+        }
+
+        if (count($families) === 1) {
+            return $this->helpers->sortOptions(
+                array_values($families)[0]
+            );
+        }
+
+        $options = [];
+
+        foreach ($families as $type => $fontOptions) {
+            $options = array_merge(
+                $options,
+                [['optgroup' => $type]],
+                $this->helpers->sortOptions($fontOptions)
+            );
+        }
+
+        return $options;
     }
 
-    private function getFontFamily(string $id): ?array
+    public function getDefaultFontFamily(): AbstractFontFamily
     {
-        $fonts = array_filter($this->getFonts(), function (array $font) use ($id) {
-            return $font['id'] === $id;
+        return $this->getFontFamily('roboto') ?? $this->getFonts()[0];
+    }
+
+    public function getFontFamily(string $id): ?AbstractFontFamily
+    {
+        $fonts = array_filter($this->getFonts(), function (AbstractFontFamily $font) use ($id) {
+            return $font->id === $id;
         });
 
         return array_values($fonts)[0] ?? null;
@@ -120,13 +185,13 @@ class Fonts extends Component
             return [];
         }
 
-        return array_map(function (array $variant) use ($font) {
+        return array_map(function (AbstractFontVariant $variant) {
             return [
-                'value' => $variant['id'],
-                'label' => $this->getVariantLabel($variant),
-                'default' => $variant['id'] === $font['defaultVariant'],
+                'value' => $variant->id,
+                'label' => $variant->getVariantLabel(),
+                'default' => $variant->isDefault,
             ];
-        }, $font['variants']);
+        }, $font->variants);
     }
 
     public function getAvailableVariantsAsOptions(): array
@@ -134,60 +199,15 @@ class Fonts extends Component
         $hashmap = [];
 
         foreach ($this->getFonts() as $font) {
-            $variants = array_map(function (array $variant) use ($font) {
+            $hashmap[$font->id] = array_map(function (AbstractFontVariant $variant) {
                 return [
-                    'value' => $variant['id'],
-                    'label' => $this->getVariantLabel($variant),
-                    'default' => $variant['id'] === $font['defaultVariant'],
+                    'value' => $variant->id,
+                    'label' => $variant->getVariantLabel(),
+                    'default' => $variant->isDefault,
                 ];
-            }, $font['variants']);
-
-            $hashmap[$font['id']] = $variants;
+            }, $font->variants);
         }
 
         return $hashmap;
-    }
-
-    private function getVariantLabel(array $variant): string
-    {
-        ['weight' => $weight, 'style' => $style] = $variant;
-
-        $label = [];
-
-        switch ($weight) {
-            case '100':
-                $label[] = Craft::t('share-previews', 'Thin');
-                break;
-            case '200':
-                $label[] = Craft::t('share-previews', 'Ultra Light');
-                break;
-            case '300':
-                $label[] = Craft::t('share-previews', 'Light');
-                break;
-            case '400':
-                $label[] = Craft::t('share-previews', 'Regular');
-                break;
-            case '500':
-                $label[] = Craft::t('share-previews', 'Medium');
-                break;
-            case '600':
-                $label[] = Craft::t('share-previews', 'Semi Bold');
-                break;
-            case '700':
-                $label[] = Craft::t('share-previews', 'Bold');
-                break;
-            case '800':
-                $label[] = Craft::t('share-previews', 'Extra Bold');
-                break;
-            case '900':
-                $label[] = Craft::t('share-previews', 'Black');
-                break;
-        }
-
-        if ($style === 'italic') {
-            $label[] = Craft::t('share-previews', 'Italic');
-        }
-
-        return implode(' ', $label);
     }
 }
