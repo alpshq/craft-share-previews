@@ -11,12 +11,13 @@ Autogenerate share preview images for social media for your entries.
 - Layers support:
   - Colors & Gradients
   - Lines & (rounded) boxes
-  - Texts with Twig expressions & support for all Google Fonts baked right in
+  - Texts with Twig expressions & support for all Google Fonts & also custom fonts baked right in
   - Assets
 - Or use your custom images as a base for your previews
 - Everything is **thoroughly documented** inline -- right there when you need it
 - Support for **GraphQL** based frontends
 - Generated images are cached
+- [Works great](https://github.com/alpshq/craft-share-previews/issues/1) with SEOmatic
 - Cache reset is integrated right into Craft's utility section
 
 ## Where to Start?
