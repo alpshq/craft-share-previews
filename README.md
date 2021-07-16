@@ -11,7 +11,7 @@ Autogenerate share preview images for social media for your entries.
 - Layers support:
   - Colors & Gradients
   - Lines & (rounded) boxes
-  - Texts with Twig expressions & support for all Google Fonts & also custom fonts baked right in
+  - Texts with Twig expressions & support for all Google Fonts & also [custom fonts](https://github.com/alpshq/craft-share-previews/pull/4) baked right in
   - Assets
 - Or use your custom images as a base for your previews
 - Everything is **thoroughly documented** inline -- right there when you need it
