@@ -108,29 +108,31 @@
             {{ 'General settings'|t('share-previews') }}
         </h2>
 
-        <div class="mt-10">
-            {{ forms.field({
-                label: 'Route Prefix'|t('share-previews'),
-                instructions: 'The route prefix is used to build the URL of each share preview.
+        <div class="mt-10 space-y-14">
+            <div>
+                {{ forms.field({
+                    label: 'Route Prefix'|t('share-previews'),
+                    instructions: 'The route prefix is used to build the URL of each share preview.
 Your current route prefix is **{routePrefix}**, your image URLs will look like this: {urlPreview}
 
 **Keep in mind**: The route prefix is also the name of the folder where your images are cached.
 If you change the prefix you might need to commit the generated .gitignore file.
 Your images are currently cached in **web/{routePrefix}/**'|t('share-previews', {
-                    routePrefix: settings.routePrefix,
-                    urlPreview: settings.getPreviewUrl(),
-                }),
-                tip: 'You can flush the image cache using [Craft\'s Caches utility]({cachesUtilityUrl}).'|t('share-previews', {
-                    'cachesUtilityUrl': urls.cachesUtility(),
-                }),
-            }, forms.text({
-                name: 'routePrefix',
-                placeholder: 'previews',
-                value: settings.routePrefix,
-            })) }}
-
-            {{ forms.field({
-                label: 'Location of Custom Fonts'|t('share-previews'),
+                        routePrefix: settings.routePrefix,
+                        urlPreview: settings.getPreviewUrl(),
+                    }),
+                    tip: 'You can flush the image cache using [Craft\'s Caches utility]({cachesUtilityUrl}).'|t('share-previews', {
+                        'cachesUtilityUrl': urls.cachesUtility(),
+                    }),
+                }, forms.text({
+                    name: 'routePrefix',
+                    placeholder: 'previews',
+                    value: settings.routePrefix,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Location of Custom Fonts'|t('share-previews'),
                 instructions: 'Add your custom fonts by setting the path to the directory where you keep them. All found fonts will be selectable in the template editor.
 Supported formats depend on how your PHP runtime was compiled. Usually `.ttf`, `.otf`, `.woff2` & `.woff` are supported.
 If your font is not working, consider transforming it to `.ttf` format.
@@ -139,49 +141,50 @@ If your font is not working, consider transforming it to `.ttf` format.
 E.g.: If your fonts are located in `{path}/config/fonts` use the value `config/fonts`
 
 **Important notice:** In order to reduce file & directory scans, please be as specific as possible with your path.'|t('share-previews', {
-                    'path': alias('@root'),
-                }),
-                tip: 'Only directories with no more than 1,000 files will be scanned.'|t('share-previews', {
-                    'path': alias('@root'),
-                }),
-                errors: settings.getErrors('customFontsPath'),
-            }, forms.text({
-                prepend: 'foo',
-                name: 'customFontsPath',
-                placeholder: '',
-                value: settings.customFontsPath,
-            })) }}
+                        'path': alias('@root'),
+                    }),
+                    tip: 'Only directories with no more than 1,000 files will be scanned.'|t('share-previews', {
+                        'path': alias('@root'),
+                    }),
+                    errors: settings.getErrors('customFontsPath'),
+                }, forms.text({
+                    prepend: 'foo',
+                    name: 'customFontsPath',
+                    placeholder: '',
+                    value: settings.customFontsPath,
+                })) }}
 
-            {% if (settings.validate() and settings.customFontsPath) %}
-                <div class="sp-markdown">
-                    {{ '{numberOfScannedFiles} scans required to find **{numberOfFonts}** custom fonts in path: `{path}`.'|t('share-previews', {
-                        numberOfScannedFiles: customFontsNumberOfScannedFiles,
-                        numberOfFonts: customFonts|length,
-                        path: customFontsFullPath,
-                    })|md }}
+                {% if (settings.validate() and settings.customFontsPath) %}
+                    <div class="sp-markdown">
+                        {{ '{numberOfScannedFiles} scans required to find **{numberOfFonts}** custom fonts in path: `{path}`.'|t('share-previews', {
+                            numberOfScannedFiles: customFontsNumberOfScannedFiles,
+                            numberOfFonts: customFonts|length,
+                            path: customFontsFullPath,
+                        })|md }}
 
-                    {% if customFonts %}
-                        <ul>
-                            {% for font in customFonts %}
-                                <li>
-                                    {{ font.family }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-
-            {{ forms.field({
-                label: 'Show Set-Up Navigation Item in CP'|t('share-previews'),
-                instructions: 'Do you want to add the Set-Up Wizard navigation item to the CP?
+                        {% if customFonts %}
+                            <ul>
+                                {% for font in customFonts %}
+                                    <li>
+                                        {{ font.family }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Show Set-Up Navigation Item in CP'|t('share-previews'),
+                    instructions: 'Do you want to add the Set-Up Wizard navigation item to the CP?
 The item is usually displayed on a fresh plugin install. Once you finish the wizard, the navigation item is hidden.'|t('share-previews'),
-            }, forms.lightswitch({
-                name: 'showSetUpNavigationItemInCp',
-                value: true,
-                on: settings.showSetUpNavigationItemInCp
-            })) }}
+                }, forms.lightswitch({
+                    name: 'showSetUpNavigationItemInCp',
+                    value: true,
+                    on: settings.showSetUpNavigationItemInCp
+                })) }}
+            </div>
         </div>
     </section>
 </div>
