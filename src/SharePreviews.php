@@ -89,10 +89,17 @@ class SharePreviews extends Plugin
 
     protected function settingsHtml()
     {
+        $customFontsPath = $this->fonts->getPathToCustomFonts();
+
         return Craft::$app->getView()->renderTemplate('share-previews/settings', [
             'settings' => $this->getSettings(),
             'templateSelectFieldName' => TemplateSelectField::displayName(),
             'urls' => $this->urls,
+            'customFonts' => $this->fonts->getCustomFonts(),
+            'customFontsFullPath' => $customFontsPath,
+            'customFontsNumberOfScannedFiles' => $customFontsPath
+                ? $this->fileHandler->getNumberOfFilesAndDirectories($customFontsPath)
+                : 0,
         ]);
     }
 

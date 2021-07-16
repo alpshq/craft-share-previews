@@ -129,6 +129,49 @@ Your images are currently cached in **web/{routePrefix}/**'|t('share-previews', 
                 value: settings.routePrefix,
             })) }}
 
+            {{ forms.field({
+                label: 'Location of Custom Fonts'|t('share-previews'),
+                instructions: 'Add your custom fonts by setting the path to the directory where you keep them. All found fonts will be selectable in the template editor.
+Supported formats depend on how your PHP runtime was compiled. Usually `.ttf`, `.otf`, `.woff2` & `.woff` are supported.
+If your font is not working, consider transforming it to `.ttf` format.
+
+**Relative path required:** Use a path which is relative to your project root -- current project root is: {path}
+E.g.: If your fonts are located in `{path}/config/fonts` use the value `config/fonts`
+
+**Important notice:** In order to reduce file & directory scans, please be as specific as possible with your path.'|t('share-previews', {
+                    'path': alias('@root'),
+                }),
+                tip: 'Only directories with no more than 1,000 files will be scanned.'|t('share-previews', {
+                    'path': alias('@root'),
+                }),
+                errors: settings.getErrors('customFontsPath'),
+            }, forms.text({
+                prepend: 'foo',
+                name: 'customFontsPath',
+                placeholder: '',
+                value: settings.customFontsPath,
+            })) }}
+
+            {% if (settings.validate() and settings.customFontsPath) %}
+                <div class="sp-markdown">
+                    {{ '{numberOfScannedFiles} scans required to find **{numberOfFonts}** custom fonts in path: `{path}`.'|t('share-previews', {
+                        numberOfScannedFiles: customFontsNumberOfScannedFiles,
+                        numberOfFonts: customFonts|length,
+                        path: customFontsFullPath,
+                    })|md }}
+
+                    {% if customFonts %}
+                        <ul>
+                            {% for font in customFonts %}
+                                <li>
+                                    {{ font.family }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
+
 
             {{ forms.field({
                 label: 'Show Set-Up Navigation Item in CP'|t('share-previews'),

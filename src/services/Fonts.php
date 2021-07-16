@@ -18,11 +18,16 @@ class Fonts extends Component
 
     private Helpers $helpers;
 
+    private FileHandler $fileHandler;
+
     public function __construct($config = [])
     {
         parent::__construct($config);
 
-        $this->helpers = SharePreviews::getInstance()->helpers;
+        $plugin = SharePreviews::getInstance();
+
+        $this->helpers = $plugin->helpers;
+        $this->fileHandler = $plugin->fileHandler;
     }
 
     /**
@@ -40,9 +45,9 @@ class Fonts extends Component
         );
     }
 
-    public function getPathToCustomFonts(): ?string
+    public function getPathToCustomFonts(string $relative = null): ?string
     {
-        $customFontPath = SharePreviews::getInstance()->settings->customFontsPath;
+        $customFontPath = $relative ?? SharePreviews::getInstance()->settings->customFontsPath;
 
         if (empty($customFontPath)) {
             return null;
@@ -51,7 +56,7 @@ class Fonts extends Component
         return Craft::getAlias('@root/' . $customFontPath, false);
     }
 
-    private function getCustomFonts(): array
+    public function getCustomFonts(): array
     {
         $path = $this->getPathToCustomFonts();
 
@@ -60,6 +65,10 @@ class Fonts extends Component
         }
 
         if (! is_dir($path)) {
+            return [];
+        }
+
+        if ($this->fileHandler->getNumberOfFilesAndDirectories($path) > 1000) {
             return [];
         }
 
