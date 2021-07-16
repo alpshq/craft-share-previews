@@ -20,7 +20,7 @@ class Settings extends \craft\base\Model
 
     public bool $showSetUpNavigationItemInCp = true;
 
-    public string $customFontsPath = '';
+    private ?string $customFontsPath;
 
     private array $templates = [];
 
@@ -48,6 +48,27 @@ class Settings extends \craft\base\Model
         $this->templates = array_map(function ($template) {
             return new Template($template);
         }, $templates);
+
+        return $this;
+    }
+
+    public function getCustomFontsPath(): ?string
+    {
+        return $this->customFontsPath;
+    }
+
+    public function setCustomFontsPath(?string $customFontsPath): self
+    {
+        if ($customFontsPath === null) {
+            $this->customFontsPath = null;
+
+            return $this;
+        }
+
+        $customFontsPath = ltrim($customFontsPath, '/');
+        $customFontsPath = rtrim($customFontsPath, '/');
+
+        $this->customFontsPath = $customFontsPath;
 
         return $this;
     }
