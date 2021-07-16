@@ -9,17 +9,39 @@ use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\helpers\StringHelper;
 use Imagine\Image\ImageInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use yii\base\Component;
 
 class FileHandler extends Component
 {
     private Settings $settings;
 
+    private array $fileCount = [];
+
     public function __construct($config = [])
     {
         parent::__construct($config);
 
         $this->settings = SharePreviews::getInstance()->getSettings();
+    }
+
+    public function getNumberOfFilesAndDirectories(string $path): int
+    {
+        if (array_key_exists($path, $this->fileCount)) {
+            return $this->fileCount[$path];
+        }
+
+        if (! is_dir($path)) {
+            return $this->fileCount[$path] = 0;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        return $this->fileCount[$path] = iterator_count($iterator);
     }
 
     public function fontExists(AbstractFontVariant $variant): bool
