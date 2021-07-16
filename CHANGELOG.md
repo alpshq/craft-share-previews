@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 - 2021-07-16
+
+Added support for **custom fonts** 🥳
+
 ## 1.2.0 - 2021-07-12
 
 Removed the illuminate/collections dependency
