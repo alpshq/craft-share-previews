@@ -34,7 +34,7 @@ class Settings extends \craft\base\Model
     public function attributes()
     {
         return array_merge(parent::attributes(), [
-           'templates',
+            'templates',
         ]);
     }
 
