@@ -21,7 +21,7 @@ class Settings extends \craft\base\Model
 
     public bool $showSetUpNavigationItemInCp = true;
 
-    private ?string $customFontsPath;
+    private ?string $customFontsPath = null;
 
     private array $templates = [];
 
