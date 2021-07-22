@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 - 2021-07-22
+
+Fixed a bug which came from a missing default value.
+
 ## 1.3.0 - 2021-07-16
 
 Added support for **custom fonts** 🥳
