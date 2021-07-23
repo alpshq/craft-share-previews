@@ -16,9 +16,9 @@ class Template extends Model
 {
     use HasLayers;
 
-    private int $width = 1200;
+    public int $width = 1200;
 
-    private int $height = 630;
+    public int $height = 630;
 
     private ?int $id = null;
 
@@ -140,6 +140,8 @@ class Template extends Model
     {
         return new Image([
             'templateId' => $this->id,
+            'width' => $this->width,
+            'height' => $this->height,
             'layers' => $this->toArray(['layers'])['layers'],
             'variables' => $this->variables,
         ]);

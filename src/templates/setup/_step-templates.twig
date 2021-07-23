@@ -36,7 +36,7 @@ Once the templates are imported they\'re freely and completely editable. You can
             >
                 <span
                     class="block relative bg-gray-100 overflow-hidden"
-                    style="padding-top: 52.5%;"
+                    style="padding-top: {{ 100 / (template.width / template.height) }}%;"
                 >
                     <span class="block -mt-4 absolute inset-0 top-1/2 text-4xl text-blue-gray-400">
                         <i class="fal fa-spinner-third fa-spin"></i>

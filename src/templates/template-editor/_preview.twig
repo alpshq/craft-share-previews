@@ -5,7 +5,7 @@
         <a
             id="preview-anchor"
             class="relative block overflow-hidden bg-blue-gray-100"
-            style="padding-top: 52.5%;"
+            style="padding-top: {{ 100 / (template.width / template.height) }}%;"
             href="{{ template.toPreviewImage().getUrl() }}"
             target="_blank"
         >
