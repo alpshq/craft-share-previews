@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0 - 2021-07-23
+
+Added the possibility to make a template's width and height configurable through config file.
+
 ## 1.3.1 - 2021-07-22
 
 Fixed a bug which came from a missing default value.
