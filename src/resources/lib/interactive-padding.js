@@ -17,6 +17,8 @@ const triggerChangeEvent = (win, editor) => {
 const setUpInteractivePadding = (win, editor, area) => {
   const wrapper = area.parentNode;
   const namePrefix = area.getAttribute('data-name-prefix');
+  const layerWidth = area.getAttribute('data-width');
+  const layerHeight = area.getAttribute('data-height');
   const fieldWrapper = editor.querySelector(`.padding[data-name-prefix="${namePrefix}"]`);
   const dimensionsWrapper = area.firstElementChild;
 
@@ -30,8 +32,8 @@ const setUpInteractivePadding = (win, editor, area) => {
   let width = wrapper.offsetWidth;
   let height = wrapper.offsetHeight;
 
-  let multiplierWidth = 1200 / width;
-  let multiplierHeight = 630 / height;
+  let multiplierWidth = layerWidth / width;
+  let multiplierHeight = layerHeight / height;
 
   let padding = {};
 
@@ -53,8 +55,8 @@ const setUpInteractivePadding = (win, editor, area) => {
 
     const upscaled = upscale(padding);
 
-    const realWidth = 1200 - upscaled.left - upscaled.right;
-    const realHeight = 630 - upscaled.top - upscaled.bottom;
+    const realWidth = layerWidth - upscaled.left - upscaled.right;
+    const realHeight = layerHeight - upscaled.top - upscaled.bottom;
 
     dimensionsWrapper.textContent = `${realWidth}x${realHeight}`;
   };

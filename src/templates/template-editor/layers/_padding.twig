@@ -29,7 +29,7 @@ Values are only validated server side. If you encounter an unexpected preview, h
                     name: namePrefix ~ '[paddingTop]',
                     type: 'number',
                     min: 0,
-                    max: 1200,
+                    max: template.height,
                     unit: 'px',
                     value: layer.paddingTop,
                 })) }}
@@ -42,7 +42,7 @@ Values are only validated server side. If you encounter an unexpected preview, h
                         name: namePrefix ~ '[paddingLeft]',
                         type: 'number',
                         min: 0,
-                        max: 1200,
+                        max: template.width,
                         unit: 'px',
                         value: layer.paddingLeft,
                     })) }}
@@ -67,7 +67,7 @@ Values are only validated server side. If you encounter an unexpected preview, h
                     name: namePrefix ~ '[paddingBottom]',
                     type: 'number',
                     min: 0,
-                    max: 1200,
+                    max: template.height,
                     unit: 'px',
                     value: layer.paddingBottom,
                 })) }}
@@ -76,11 +76,13 @@ Values are only validated server side. If you encounter an unexpected preview, h
 
         <div
             class="interactive-padding relative bg-white mt-8"
-            style="padding-top: 52.5%;"
+            style="padding-top: {{ 100 / (template.width / template.height) }}%;"
         >
             <div
                 class="absolute left-0 top-0 bg-gray-100 border border-dashed border-gray-400"
                 data-name-prefix="{{ namePrefix }}"
+                data-width="{{ template.width }}"
+                data-height="{{ template.height }}"
             >
                 <div class="
                     absolute left-1/2 top-1/2
