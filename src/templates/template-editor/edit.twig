@@ -40,6 +40,9 @@
     {{ hiddenInput('template[id]', template.id) }}
 
     <div class="sp-template-editor">
+        {{ hiddenInput('template[width]', template.width) }}
+        {{ hiddenInput('template[height]', template.height) }}
+        
         <h2 class="mb-8">
             {{ 'General Template Settings'|t('share-previews') }}
         </h2>
