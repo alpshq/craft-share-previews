@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1 - 2021-11-17
+
+- Fixed class import & property issues
+
 ## 1.5.0 - 2021-11-17
 
 - There is now an ImageBeforeRenderEvent when an image is about to render.
