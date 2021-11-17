@@ -32,7 +32,7 @@ Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/
     {% endapply %}
 
     {% apply tabs_section(tabId, 'Font'|t('share-previews')) %}
-        <div class="grid grid-cols-3 gap-x-6">
+        <div class="grid grid-cols-2 gap-6">
             <div>
                 {{ forms.field({
                     label: 'Font Family'|t('share-previews'),
@@ -68,6 +68,18 @@ Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/
                     max: 100,
                     unit: 'px',
                     value: layer.maxFontSize,
+                })) }}
+            </div>
+            <div>
+                {{ forms.field({
+                    label: 'Line Height'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[lineHeight]',
+                    type: 'number',
+                    min: 10,
+                    max: 300,
+                    unit: '%',
+                    value: layer.lineHeight,
                 })) }}
             </div>
         </div>
