@@ -4,9 +4,14 @@ namespace alps\sharepreviews\models;
 
 use alps\sharepreviews\behaviors\HasColors;
 use alps\sharepreviews\SharePreviews;
+use alps\sharepreviews\TextDrawer;
 use Craft;
 use Imagine\Gd\Font;
+use Imagine\Image\AbstractFont;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Palette\Color\ColorInterface;
+use Imagine\Image\Palette\Color\RGB as RGBColor;
+use Imagine\Image\PointInterface;
 
 class TextLayer extends AbstractRectangleLayer
 {
@@ -19,6 +24,8 @@ class TextLayer extends AbstractRectangleLayer
     public int $maxFontSize = 60;
 
     public bool $shrinkToFit = true;
+
+    public int $lineHeight = 100;
 
     public function getTitle(): string
     {
@@ -50,6 +57,11 @@ class TextLayer extends AbstractRectangleLayer
         return $this;
     }
 
+    private function isDefaultLineHeight(): bool
+    {
+        return $this->lineHeight === 100;
+    }
+
     public function apply(ImageInterface $image): ImageInterface
     {
         if (empty($this->content)) {
@@ -58,11 +70,20 @@ class TextLayer extends AbstractRectangleLayer
 
         [$font, $content] = $this->getFont();
 
-        $box = $font->box($content);
+        $box = $this->isDefaultLineHeight()
+            ? $font->box($content)
+            : (new TextDrawer)->fontBox($font, $content, $this->lineHeight / 100);
 
         $point = $this->getAlignedOriginPoint($box->getWidth(), $box->getHeight());
 
-        $image->draw()->text($content, $font, $point);
+        if ($this->isDefaultLineHeight()) {
+            $image->draw()->text($content, $font, $point);
+
+            return $image;
+        }
+
+        $drawer = new TextDrawer($image->getGdResource());
+        $drawer->text($content, $font, $point, 0, null, $this->lineHeight / 100);
 
         return $image;
     }
@@ -77,13 +98,20 @@ class TextLayer extends AbstractRectangleLayer
         $color = $this->toColor($this->color);
         $shrinkToFit = $this->shrinkToFit;
 
+        $customDrawer = new TextDrawer;
+
+        $lineSpacing = $this->lineHeight / 100;
         if ($shrinkToFit) {
             $maxFontSize += 5;
 
             do {
                 $maxFontSize -= 5;
                 $font = new Font($fontFile, $maxFontSize, $color);
-                $box = $font->box(wordwrap($content, 1));
+                $wrappedContent = wordwrap($content, 1);
+
+                $box = $this->isDefaultLineHeight()
+                    ? $font->box($wrappedContent)
+                    : $customDrawer->fontBox($font, $wrappedContent, $lineSpacing);
 
                 if ($maxFontSize <= 10) {
                     break;
@@ -102,7 +130,11 @@ class TextLayer extends AbstractRectangleLayer
 
             do {
                 $wrapAfter -= 10;
-                $box = $font->box(wordwrap($content, $wrapAfter));
+                $wrappedContent = wordwrap($content, $wrapAfter);
+
+                $box = $this->isDefaultLineHeight()
+                    ? $font->box($wrappedContent)
+                    : $customDrawer->fontBox($font, $wrappedContent, $lineSpacing);
 
                 if ($wrapAfter <= 10) {
                     break;
