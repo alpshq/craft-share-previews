@@ -13,6 +13,7 @@ use Imagine\Image\PointInterface;
 class TextDrawer
 {
     private $resource;
+    private array $info;
 
     public function __construct($resource = null)
     {
