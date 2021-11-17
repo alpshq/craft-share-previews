@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\models;
 
+use alps\sharepreviews\ImageBeforeRenderEvent;
 use alps\sharepreviews\models\concerns\HasLayers;
 use alps\sharepreviews\SharePreviews;
 use craft\base\Model;
@@ -13,6 +14,8 @@ use Imagine\Image\ImageInterface;
 class Image extends Model
 {
     use HasLayers;
+
+    const EVENT_BEFORE_RENDER = 'beforeRender';
 
     const PNG_COMPRESSION_LEVEL = 5;
 
@@ -77,6 +80,8 @@ class Image extends Model
         );
 
         $this->willRender();
+
+        $this->trigger(self::EVENT_BEFORE_RENDER, new ImageBeforeRenderEvent);
 
         foreach ($this->layers as $layer) {
             $image = $layer->apply($image);
