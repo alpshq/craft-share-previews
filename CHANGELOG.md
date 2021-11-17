@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0 - 2021-11-17
+
+- There is now an ImageBeforeRenderEvent when an image is about to render.
+- Added support for specifying a font's line height.
+
 ## 1.4.1 - 2021-07-27
 
 Fixed some compatibility issues with templates using non default dimensions.
