@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.4 - 2021-11-18
+
+- More enhancements on text fitting algorithm
+
 ## 1.5.3 - 2021-11-18
 
 - Enhanced text fitting algorithm
