@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.3 - 2021-11-18
+
+- Enhanced text fitting algorithm
+
 ## 1.5.2 - 2021-11-18
 
 - Resolved `Headers already sent` issue
