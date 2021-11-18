@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.2 - 2021-11-18
+
+- Resolved `Headers already sent` issue
+
 ## 1.5.1 - 2021-11-17
 
 - Fixed class import & property issues

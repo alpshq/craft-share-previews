@@ -8,6 +8,7 @@ use alps\sharepreviews\models\Template;
 use alps\sharepreviews\SharePreviews;
 use Craft;
 use craft\web\Controller;
+use yii\web\Response;
 
 class TemplateEditorController extends Controller
 {
@@ -57,9 +58,12 @@ class TemplateEditorController extends Controller
             $this->request->getBodyParam('template', [])
         );
 
-        $image = $template->toPreviewImage();
+        $this->response->headers->add('Content-Type', 'image/png');
+        $this->response->format = Response::FORMAT_RAW;
 
-        $image->render()->show('png', [
+        $image = $template->toPreviewImage()->render();
+
+        return $image->get('png', [
             'png_compression_level' => Image::PNG_COMPRESSION_LEVEL,
         ]);
     }

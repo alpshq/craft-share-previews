@@ -5,6 +5,7 @@ namespace alps\sharepreviews\controllers;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\SharePreviews;
 use craft\web\Controller;
+use yii\web\Response;
 
 class PreviewController extends Controller
 {
@@ -24,7 +25,10 @@ class PreviewController extends Controller
             $plugin->fileHandler->saveImage($image, $data);
         }
 
-        $image->show('png', [
+        $this->response->headers->add('Content-Type', 'image/png');
+        $this->response->format = Response::FORMAT_RAW;
+
+        return $image->get('png', [
             'png_compression_level' => Image::PNG_COMPRESSION_LEVEL,
         ]);
     }
