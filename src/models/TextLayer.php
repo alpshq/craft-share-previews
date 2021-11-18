@@ -105,7 +105,7 @@ class TextLayer extends AbstractRectangleLayer
             $maxFontSize += 5;
 
             do {
-                $maxFontSize -= 5;
+                $maxFontSize -= 3;
                 $font = new Font($fontFile, $maxFontSize, $color);
                 $wrappedContent = wordwrap($content, 1);
 
@@ -129,7 +129,7 @@ class TextLayer extends AbstractRectangleLayer
             $wrapAfter = 110;
 
             do {
-                $wrapAfter -= 10;
+                $wrapAfter -= 3;
                 $wrappedContent = wordwrap($content, $wrapAfter);
 
                 $box = $this->isDefaultLineHeight()
