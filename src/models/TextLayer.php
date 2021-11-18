@@ -102,10 +102,10 @@ class TextLayer extends AbstractRectangleLayer
 
         $lineSpacing = $this->lineHeight / 100;
         if ($shrinkToFit) {
-            $maxFontSize += 5;
+            $maxFontSize += 1;
 
             do {
-                $maxFontSize -= 3;
+                $maxFontSize -= 1;
                 $font = new Font($fontFile, $maxFontSize, $color);
                 $wrappedContent = wordwrap($content, 1);
 
@@ -119,10 +119,10 @@ class TextLayer extends AbstractRectangleLayer
             } while ($box->getWidth() > $maxWidth);
         }
 
-        $maxFontSize += 5;
+        $maxFontSize += 1;
 
         do {
-            $maxFontSize -= 5;
+            $maxFontSize -= 1;
 
             $font = new Font($fontFile, $maxFontSize, $color);
 
