@@ -9,7 +9,7 @@
     {% apply tabs_section(tabId, 'Text'|t('share-previews')) %}
         {{ forms.field({
             label: 'Content'|t('share-previews'),
-            instructions: 'The text will be rendered using Twig. You can implement expressions or access an entry\'s data. Just make sure all your expression evaluate to plain text.
+            instructions: 'The text will be rendered using Twig. You can implement expressions or access an entry\'s data. Just make sure all your expressions evaluate to plain text.
 
 Everytime your template is rendered based on an entry, the `entry` variable will correspond to that entry.'|t('share-previews'),
         }, forms.text({
