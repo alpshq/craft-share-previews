@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.0 - 2022-02-03
+
+- It's now possible to use Twig expressions within asset layers
+
 ## 1.5.4 - 2021-11-18
 
 - More enhancements on text fitting algorithm

@@ -92,7 +92,7 @@ abstract class AbstractLayer extends Model
     public function willRender(array $vars)
     {
         foreach ($this->getPropertiesWithVariables() as $prop) {
-            if ($prop === null) {
+            if ($this->{$prop} === null) {
                 continue;
             }
 
