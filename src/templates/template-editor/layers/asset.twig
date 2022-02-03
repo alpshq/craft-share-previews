@@ -23,7 +23,7 @@
 
             <div>
                 {{ forms.field({
-                    label: 'Replace default image'|t('share-previews'),
+                    label: 'Replace default image by field'|t('share-previews'),
                     instructions: 'Select one of your entry\'s field which contain an image based asset.
 
 Everytime your template is rendered, based on an entry, the image corresponding to the selected field will replace the above default image.
@@ -37,6 +37,32 @@ Choose *{noReplacementLabel}* when you always want to render the default image.
                     value: layer.fieldId,
                     options: layer.getAvailableAssetFieldsAsOptions(true),
                 })) }}
+            </div>
+
+            <div>
+                {{ forms.field({
+                    label: 'Replace default image by a Twig expression'|t('share-previews'),
+                    instructions: 'In case you want to resolve an asset using a Twig expression, look no further. Just make sure your expression **returns a valid asset ID**.
+
+**Important:** The expression takes precedence over the above field based replacement.
+
+Everytime your template is rendered based on an entry, the `entry` variable will correspond to that entry.'|t('share-previews'),
+                }, forms.text({
+                    name: namePrefix ~ '[expression]',
+                    placeholder: '{{ entry.image.one().id }}',
+                    value: layer.expression,
+                })) }}
+
+                <div class="sp-markdown">
+                    {{ '### Twig examples:
+
+- `{{ entry.image.one().id }}` will return the asset ID corresponding to your `image` field.
+- `{{ entry.image.one().id ?? entry.parent.image.one().id }}` access the parent\'s `image` field if the currently rendered entry does not have an image.
+
+Explore more in [Craft\'s Entry API reference](https://docs.craftcms.com/api/v3/craft-elements-entry.html). You can access all public properties and all public methods.'|t('share-previews', {
+                        'defaultTitle': 'Default title'|t('share-previews'),
+                    })|md }}
+                </div>
             </div>
 
             <div>

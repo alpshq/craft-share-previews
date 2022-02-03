@@ -18,6 +18,8 @@ class AssetLayer extends ImageLayer
 
     public ?int $fieldId = null;
 
+    public ?string $expression = null;
+
     private ?Asset $asset = null;
 
     public function getTitle(): string
@@ -32,15 +34,23 @@ class AssetLayer extends ImageLayer
 
     public function getPropertiesWithVariables(): array
     {
-        return array_merge(parent::getPropertiesWithVariables());
+        return array_merge(parent::getPropertiesWithVariables(), [
+            'expression',
+        ]);
     }
 
     public function willRender(array $vars)
     {
+        parent::willRender($vars);
+
         $asset = null;
         $entry = $vars['entry'] ?? null;
 
-        if ($this->fieldId !== null && $entry instanceof Entry) {
+        if ($this->expression !== null && $entry instanceof Entry) {
+            $asset = $this->fetchAssetFromExpression($this->expression);
+        }
+
+        if (!$asset && $this->fieldId !== null && $entry instanceof Entry) {
             $asset = $this->fetchAssetFromEntryField($entry, $this->fieldId);
         }
 
@@ -68,6 +78,17 @@ class AssetLayer extends ImageLayer
         }
 
         return $query->one();
+    }
+
+    private function fetchAssetFromExpression(string $expression = null): ?Asset
+    {
+        $potentialId = (int) $expression;
+
+        if ($potentialId < 1) {
+            return null;
+        }
+
+        return Asset::findOne($potentialId);
     }
 
     public function setAssetId($assetId): self
