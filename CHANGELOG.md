@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0 - 2022-02-04
+
+- The `fontCachePath` property was removed from the settings model -- [#9](https://github.com/alpshq/craft-share-previews/pull/9)
+- The namespace of `alps\sharepreviews\ImageBeforeRenderEvent` changed to `alps\sharepreviews\events\ImageBeforeRenderEvent` -- [1c9846f](https://github.com/alpshq/craft-share-previews/commit/1c9846f6343682bb5e19524b2df99c8e7c051042)
+
 ## 1.6.0 - 2022-02-03
 
 - It's now possible to use Twig expressions within asset layers
