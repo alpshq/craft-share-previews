@@ -17,20 +17,11 @@ class Settings extends \craft\base\Model
 
     public bool $disableImageCache = false;
 
-    public string $fontCachePath = '';
-
     public bool $showSetUpNavigationItemInCp = true;
 
     private ?string $customFontsPath = null;
 
     private array $templates = [];
-
-    public function __construct($config = [])
-    {
-        parent::__construct($config);
-
-        $this->fontCachePath = Craft::$app->path->getRuntimePath() . '/spfonts';
-    }
 
     public function attributes()
     {

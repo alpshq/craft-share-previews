@@ -2,6 +2,7 @@
 
 namespace alps\sharepreviews\services;
 
+use alps\sharepreviews\events\ResolveFontCachePathEvent;
 use alps\sharepreviews\models\fonts\AbstractFontVariant;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Settings;
@@ -15,9 +16,13 @@ use yii\base\Component;
 
 class FileHandler extends Component
 {
+    const EVENT_RESOLVE_FONT_CACHE_PATH = 'resolveFontCachePath';
+
     private Settings $settings;
 
     private array $fileCount = [];
+
+    private ?string $fontCachePath = null;
 
     public function __construct($config = [])
     {
@@ -49,16 +54,29 @@ class FileHandler extends Component
         return file_exists($this->getFontPath($variant));
     }
 
+    private function getFontCachePath(): string
+    {
+        if ($this->fontCachePath) {
+            return $this->fontCachePath;
+        }
+
+        $event = new ResolveFontCachePathEvent;
+
+        $this->trigger(self::EVENT_RESOLVE_FONT_CACHE_PATH, $event);
+
+        return $this->fontCachePath = $event->path ?? Craft::$app->path->getRuntimePath() . '/spfonts';
+    }
+
     public function getFontPath(AbstractFontVariant $variant): string
     {
         $filename = StringHelper::slugify($variant->family->id . ' ' . $variant->id) . '.ttf';
 
-        return $this->settings->fontCachePath . '/' . $filename;
+        return $this->getFontCachePath() . '/' . $filename;
     }
 
     public function saveFont(AbstractFontVariant $variant, string $contents): self
     {
-        $dir = $this->settings->fontCachePath;
+        $dir = $this->getFontCachePath();
 
         $this
             ->ensureDirectoryExists($dir)
