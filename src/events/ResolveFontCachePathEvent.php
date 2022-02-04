@@ -3,7 +3,6 @@
 namespace alps\sharepreviews\events;
 
 use alps\sharepreviews\services\FileHandler;
-use Craft;
 
 /**
  * @property FileHandler $sender
