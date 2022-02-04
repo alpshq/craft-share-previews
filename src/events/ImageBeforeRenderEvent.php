@@ -1,6 +1,6 @@
 <?php
 
-namespace alps\sharepreviews;
+namespace alps\sharepreviews\events;
 
 use alps\sharepreviews\models\Image;
 

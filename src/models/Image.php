@@ -2,7 +2,7 @@
 
 namespace alps\sharepreviews\models;
 
-use alps\sharepreviews\ImageBeforeRenderEvent;
+use alps\sharepreviews\events\ImageBeforeRenderEvent;
 use alps\sharepreviews\models\concerns\HasLayers;
 use alps\sharepreviews\SharePreviews;
 use craft\base\Model;
