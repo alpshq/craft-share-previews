@@ -2,7 +2,7 @@
 
 ## 1.7.1 - 2022-02-07
 
-- Fix issue obtaining local copy of assets stored on S3 volumes -- [17614cc](https://github.com/alpshq/craft-share-previews/commit/17614cc)
+- Fixed an issue obtaining local copy of assets stored on S3 volumes -- [17614cc](https://github.com/alpshq/craft-share-previews/commit/17614cc)
 - Slightly enhanced wording of an assets layer's Twig expression instructions -- [321e0f8](https://github.com/alpshq/craft-share-previews/commit/321e0f8)
 - The Twig expression of an asset layer is evaluated even if no entry was supplied -- [55cec76](https://github.com/alpshq/craft-share-previews/commit/55cec76)
 
