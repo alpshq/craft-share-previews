@@ -146,7 +146,7 @@ class AssetLayer extends ImageLayer
             return null;
         }
 
-        return $asset->getImageTransformSourcePath();
+        return $asset->getTransformSource();
     }
 
     public function getAvailableAssetFieldsAsOptions(bool $optional = false): array
