@@ -46,7 +46,7 @@ class AssetLayer extends ImageLayer
         $asset = null;
         $entry = $vars['entry'] ?? null;
 
-        if ($this->expression !== null && $entry instanceof Entry) {
+        if ($this->expression !== null) {
             $asset = $this->fetchAssetFromExpression($this->expression);
         }
 
