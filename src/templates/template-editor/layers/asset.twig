@@ -42,7 +42,7 @@ Choose *{noReplacementLabel}* when you always want to render the default image.
             <div>
                 {{ forms.field({
                     label: 'Replace default image by a Twig expression'|t('share-previews'),
-                    instructions: 'In case you want to resolve an asset using a Twig expression, look no further. Just make sure your expression **returns a valid asset ID**.
+                    instructions: 'In case you want to resolve an asset using a Twig expression, look no further. Just make sure your expression **evaluates to a valid asset ID**.
 
 **Important:** The expression takes precedence over the above field based replacement.
 
