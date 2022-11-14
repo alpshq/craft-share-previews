@@ -64,7 +64,7 @@ class FileHandler extends Component
 
         $this->trigger(self::EVENT_RESOLVE_FONT_CACHE_PATH, $event);
 
-        return $this->fontCachePath = $event->path ?? Craft::$app->path->getRuntimePath() . '/spfonts';
+        return $this->fontCachePath = $event->path ?? Craft::$app->path->getRuntimePath() . '/share-previews/fonts';
     }
 
     public function getFontPath(AbstractFontVariant $variant): string
