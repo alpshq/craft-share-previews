@@ -9,7 +9,7 @@ trait HidesFields
         return [];
     }
 
-    public function fields()
+    public function fields(): array
     {
         $fields = $this->attributes();
         $fields = $this->removeHiddenFields($fields);

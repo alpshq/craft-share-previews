@@ -49,7 +49,7 @@ class SetUp extends \craft\base\Model
         return new self($attributes);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -93,7 +93,7 @@ class SetUp extends \craft\base\Model
         ]);
     }
 
-    public function rules()
+    public function rules(): array
     {
         return array_merge(parent::rules(), [
             [['routePrefix', 'siteName', 'siteUrl', 'logoId', 'fieldId', 'fallbackId'], 'required'],

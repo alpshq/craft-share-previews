@@ -146,12 +146,13 @@ class AssetLayer extends ImageLayer
             return null;
         }
 
-        return $asset->getTransformSource();
+        return $asset->getImageTransformSourcePath();
     }
 
     public function getAvailableAssetFieldsAsOptions(bool $optional = false): array
     {
-        $fields = Craft::$app->getFields()->getFieldsByElementType(Entry::class);
+
+        $fields = Craft::$app->getFields()->getAllFields(false);
 
         $fields = array_filter($fields, function ($field) {
             return $field instanceof Assets;

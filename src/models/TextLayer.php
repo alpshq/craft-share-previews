@@ -175,7 +175,7 @@ class TextLayer extends AbstractRectangleLayer
         );
     }
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(parent::behaviors(), [
             ['class' => HasColors::class, 'properties' => ['color']],

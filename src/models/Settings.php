@@ -39,6 +39,10 @@ class Settings extends \craft\base\Model
     public function setTemplates(array $templates): self
     {
         $this->templates = array_map(function ($template) {
+            if ($template instanceof Template) {
+                return $template;
+            }
+
             return new Template($template);
         }, $templates);
 
@@ -76,7 +80,7 @@ class Settings extends \craft\base\Model
         return TemplateSelectField::displayName();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return array_merge(parent::rules(), [
             ['routePrefix', 'required'],

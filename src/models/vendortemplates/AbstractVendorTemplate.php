@@ -28,7 +28,7 @@ abstract class AbstractVendorTemplate extends \alps\sharepreviews\models\Templat
         ];
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

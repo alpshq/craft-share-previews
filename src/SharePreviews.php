@@ -52,7 +52,7 @@ use yii\base\Event;
  */
 class SharePreviews extends Plugin
 {
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     public function init()
     {
@@ -82,12 +82,12 @@ class SharePreviews extends Plugin
             ->registerSetUpWizardNavigationItem();
     }
 
-    protected function createSettingsModel()
+    protected function createSettingsModel(): Settings
     {
         return new Settings;
     }
 
-    protected function settingsHtml()
+    protected function settingsHtml(): string|null
     {
         $customFontsPath = $this->fonts->getPathToCustomFonts();
 

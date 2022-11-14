@@ -9,7 +9,7 @@ use alps\sharepreviews\models\TextLayer;
 
 class SimpleImageBlack extends AbstractVendorTemplate
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 
