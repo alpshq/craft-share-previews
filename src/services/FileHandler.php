@@ -105,7 +105,7 @@ class FileHandler extends Component
         return $this;
     }
 
-    private function ensureDirectoryExists(string $dir): self
+    public function ensureDirectoryExists(string $dir): self
     {
         if (is_dir($dir)) {
             return $this;
@@ -116,7 +116,7 @@ class FileHandler extends Component
         return $this;
     }
 
-    private function ensureGitIgnoreExists(string $dir): self
+    public function ensureGitIgnoreExists(string $dir): self
     {
         $ensure = $this->settings->ensureGitignoreExists;
 

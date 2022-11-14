@@ -12,6 +12,7 @@ use alps\sharepreviews\services\Fonts;
 use alps\sharepreviews\services\Helpers;
 use alps\sharepreviews\services\ImageDiffer;
 use alps\sharepreviews\services\Images;
+use alps\sharepreviews\services\SvgTransformer;
 use alps\sharepreviews\services\Templates;
 use alps\sharepreviews\services\Urls;
 use alps\sharepreviews\twig\PreviewExtension;
@@ -39,14 +40,15 @@ use GraphQL\Type\Definition\Type;
 use yii\base\Event;
 
 /**
- * @property FileHandler $fileHandler
- * @property Fonts       $fonts
- * @property Helpers     $helpers
- * @property ImageDiffer $imageDiffer
- * @property Images      $images
- * @property Settings    $settings
- * @property Templates   $templates
- * @property Urls        $urls
+ * @property FileHandler    $fileHandler
+ * @property Fonts          $fonts
+ * @property Helpers        $helpers
+ * @property ImageDiffer    $imageDiffer
+ * @property Images         $images
+ * @property Settings       $settings
+ * @property SvgTransformer $svgTransformer
+ * @property Templates      $templates
+ * @property Urls           $urls
  *
  * @method Settings getSettings
  */
@@ -66,6 +68,7 @@ class SharePreviews extends Plugin
             'helpers' => Helpers::class,
             'imageDiffer' => ImageDiffer::class,
             'images' => Images::class,
+            'svgTransformer' => SvgTransformer::class,
             'templates' => Templates::class,
             'urls' => Urls::class,
         ]);
