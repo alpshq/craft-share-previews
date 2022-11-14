@@ -146,6 +146,12 @@ class AssetLayer extends ImageLayer
             return null;
         }
 
+        if (stristr($asset->mimeType, 'svg') !== false) {
+            return SharePreviews::getInstance()
+                ->svgTransformer
+                ->getPathToTransformedSvg($asset);
+        }
+
         return $asset->getImageTransformSourcePath();
     }
 
