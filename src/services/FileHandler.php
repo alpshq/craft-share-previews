@@ -3,6 +3,7 @@
 namespace alps\sharepreviews\services;
 
 use alps\sharepreviews\events\ResolveFontCachePathEvent;
+use alps\sharepreviews\events\ResolveSvgCachePathEvent;
 use alps\sharepreviews\models\fonts\AbstractFontVariant;
 use alps\sharepreviews\models\Image;
 use alps\sharepreviews\models\Settings;
@@ -18,11 +19,15 @@ class FileHandler extends Component
 {
     const EVENT_RESOLVE_FONT_CACHE_PATH = 'resolveFontCachePath';
 
+    const EVENT_RESOLVE_SVG_CACHE_PATH = 'resolveSvgCachePath';
+
     private Settings $settings;
 
     private array $fileCount = [];
 
     private ?string $fontCachePath = null;
+
+    private ?string $svgCachePath = null;
 
     public function __construct($config = [])
     {
@@ -65,6 +70,19 @@ class FileHandler extends Component
         $this->trigger(self::EVENT_RESOLVE_FONT_CACHE_PATH, $event);
 
         return $this->fontCachePath = $event->path ?? Craft::$app->path->getRuntimePath() . '/share-previews/fonts';
+    }
+
+    public function getSvgCachePath(): string
+    {
+        if ($this->svgCachePath) {
+            return $this->svgCachePath;
+        }
+
+        $event = new ResolveSvgCachePathEvent;
+
+        $this->trigger(self::EVENT_RESOLVE_SVG_CACHE_PATH, $event);
+
+        return $this->svgCachePath = $event->path ?? Craft::$app->path->getRuntimePath() . '/share-previews/svgs';
     }
 
     public function getFontPath(AbstractFontVariant $variant): string
