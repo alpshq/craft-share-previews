@@ -4,6 +4,8 @@
 
 - 🎉 Added support for Craft 4 -- [0a80d66](https://github.com/alpshq/craft-share-previews/commit/0a80d66)
 
+Please report any issues associated with Craft 4 in [the issue tracker at GitHub](https://github.com/alpshq/craft-share-previews/issues).
+
 ## 1.7.1 - 2022-02-07
 
 - Fixed an issue obtaining local copy of assets stored on S3 volumes -- [17614cc](https://github.com/alpshq/craft-share-previews/commit/17614cc)
