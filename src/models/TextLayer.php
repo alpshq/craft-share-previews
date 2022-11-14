@@ -7,11 +7,7 @@ use alps\sharepreviews\SharePreviews;
 use alps\sharepreviews\TextDrawer;
 use Craft;
 use Imagine\Gd\Font;
-use Imagine\Image\AbstractFont;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\Palette\Color\ColorInterface;
-use Imagine\Image\Palette\Color\RGB as RGBColor;
-use Imagine\Image\PointInterface;
 
 class TextLayer extends AbstractRectangleLayer
 {
@@ -102,10 +98,10 @@ class TextLayer extends AbstractRectangleLayer
 
         $lineSpacing = $this->lineHeight / 100;
         if ($shrinkToFit) {
-            $maxFontSize += 1;
+            ++$maxFontSize;
 
             do {
-                $maxFontSize -= 1;
+                --$maxFontSize;
                 $font = new Font($fontFile, $maxFontSize, $color);
                 $wrappedContent = wordwrap($content, 1);
 
@@ -119,10 +115,10 @@ class TextLayer extends AbstractRectangleLayer
             } while ($box->getWidth() > $maxWidth);
         }
 
-        $maxFontSize += 1;
+        ++$maxFontSize;
 
         do {
-            $maxFontSize -= 1;
+            --$maxFontSize;
 
             $font = new Font($fontFile, $maxFontSize, $color);
 

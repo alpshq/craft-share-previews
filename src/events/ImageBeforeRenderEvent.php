@@ -9,5 +9,4 @@ use alps\sharepreviews\models\Image;
  */
 class ImageBeforeRenderEvent extends \yii\base\Event
 {
-
 }

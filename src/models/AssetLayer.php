@@ -50,7 +50,7 @@ class AssetLayer extends ImageLayer
             $asset = $this->fetchAssetFromExpression($this->expression);
         }
 
-        if (!$asset && $this->fieldId !== null && $entry instanceof Entry) {
+        if (! $asset && $this->fieldId !== null && $entry instanceof Entry) {
             $asset = $this->fetchAssetFromEntryField($entry, $this->fieldId);
         }
 
@@ -157,7 +157,6 @@ class AssetLayer extends ImageLayer
 
     public function getAvailableAssetFieldsAsOptions(bool $optional = false): array
     {
-
         $fields = Craft::$app->getFields()->getAllFields(false);
 
         $fields = array_filter($fields, function ($field) {

@@ -9,7 +9,7 @@ use yii\web\Response;
 
 class PreviewController extends Controller
 {
-    public int|bool|array $allowAnonymous = true;
+    public int | bool | array $allowAnonymous = true;
 
     public function actionIndex(string $data)
     {

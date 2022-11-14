@@ -9,8 +9,6 @@ use alps\sharepreviews\services\FileHandler;
  */
 class ResolveFontCachePathEvent extends \yii\base\Event
 {
-    /**
-     * @var string|null The path where you want to cache fonts.
-     */
+    /** @var string|null the path where you want to cache fonts */
     public ?string $path = null;
 }

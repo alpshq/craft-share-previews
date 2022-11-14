@@ -90,7 +90,7 @@ class SharePreviews extends Plugin
         return new Settings;
     }
 
-    protected function settingsHtml(): string|null
+    protected function settingsHtml(): string | null
     {
         $customFontsPath = $this->fonts->getPathToCustomFonts();
 
