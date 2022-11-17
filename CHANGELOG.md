@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 - 2022-11-17
+
+- Fixes issue related to Craft 4 -- [cc762a9](https://github.com/alpshq/craft-share-previews/commit/cc762a9)
+
 ## 2.1.0 - 2022-11-14
 
 - Added support for SVGs in `Asset` layers. Make sure `inkscape` is installed on your server -- it's required to pre-transform the SVGs. -- [#13](https://github.com/alpshq/craft-share-previews/pull/13)
