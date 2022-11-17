@@ -59,7 +59,7 @@ class Images extends Component
             return null;
         }
 
-        $fields = $fieldLayout->getFields();
+        $fields = $fieldLayout->getCustomFields();
 
         if (empty($fields)) {
             return null;
