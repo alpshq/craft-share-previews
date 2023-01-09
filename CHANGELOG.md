@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.2 - 2023-01-09
+
+- Fixed an issue where no template operations (Save, Delete, Layer-Adjustments) could be performed in Chrome -- [0bdbf40](https://github.com/alpshq/craft-share-previews/commit/0bdbf40)
+- Usage of title case in actions -- [fd8448f](https://github.com/alpshq/craft-share-previews/commit/fd8448f)
+
 ## 2.1.1 - 2022-11-17
 
 - Fixes issue related to Craft 4 -- [cc762a9](https://github.com/alpshq/craft-share-previews/commit/cc762a9)
