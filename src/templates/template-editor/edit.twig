@@ -14,6 +14,8 @@
 {% set docTitle = title ~ ' - ' ~ 'Plugins'|t('app') %}
 
 {% block actionButton %}
+    {{ hiddenInput('op', '') }}
+
     <div class="relative">
         <button type="submit" name="op" value="save" class="absolute left-0 top-0 invisible"></button>
 
